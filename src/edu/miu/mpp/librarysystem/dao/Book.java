@@ -5,7 +5,7 @@ import java.util.List;
 public class Book {
 
     private String title;
-    private String ISBNnumber;
+    private String isbn;
     private String availability;
     private List<BookCopy> bookCopies;
     private List<Author> authors;
@@ -16,9 +16,9 @@ public class Book {
     }
 
 
-    public String getISBNnumber() {
+    public String getIsbn() {
 
-        return ISBNnumber;
+        return isbn;
     }
 
 
@@ -46,9 +46,9 @@ public class Book {
     }
 
 
-    public void setISBNnumber( String iSBNnumber ) {
+    public void setIsbn( String isbn ) {
 
-        ISBNnumber = iSBNnumber;
+        this.isbn = isbn;
     }
 
 
