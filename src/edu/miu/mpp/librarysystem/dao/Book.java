@@ -69,4 +69,12 @@ public class Book {
         this.authors = authors;
     }
 
+
+    @Override
+    public String toString() {
+
+        return "Book [title=" + title + ", isbn=" + isbn + ", availability=" + availability
+                + ", bookCopies=" + bookCopies + ", authors=" + authors + "]";
+    }
+
 }
