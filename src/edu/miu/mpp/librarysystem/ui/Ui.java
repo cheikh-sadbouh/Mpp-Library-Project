@@ -135,7 +135,6 @@ public class Ui {
 
     public void checkOut() {
 
-        Scanner scanner = new Scanner( System.in );
         String userResponse = "";
 
         System.out.println( "Current Screen :CheckOut" );
@@ -169,7 +168,6 @@ public class Ui {
     public void addNewBook() {
 
         System.out.println( "-------Add new book-------" );
-        Scanner scanner = new Scanner( System.in );
         System.out.println( "Type book title:" );
         String title = scanner.next();
         System.out.println( "Type book isbn:" );
@@ -197,7 +195,6 @@ public class Ui {
     public LibraryMember addLibraryMember() {
 
         System.out.println( "-------Add libray member-------" );
-        Scanner scanner = new Scanner( System.in );
 
         System.out.println( "Type memberId:" );
         String memberId = scanner.nextLine();
@@ -231,8 +228,6 @@ public class Ui {
         List<Book> books = new ArrayList<>();
         books.add( book );
 
-        Scanner scanner = new Scanner( System.in );
-
         System.out.println( "Type author first name:" );
         String firstName = scanner.nextLine();
 
@@ -257,7 +252,6 @@ public class Ui {
     private Address createAddress() {
 
         System.out.println( "-------Add member address-------" );
-        Scanner scanner = new Scanner( System.in );
 
         System.out.println( "Type street:" );
         String street = scanner.nextLine();
