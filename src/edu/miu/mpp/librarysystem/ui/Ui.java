@@ -1,13 +1,11 @@
 package edu.miu.mpp.librarysystem.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 import edu.miu.mpp.librarysystem.controller.LibrarianController;
 import edu.miu.mpp.librarysystem.controller.Response;
 import edu.miu.mpp.librarysystem.dao.model.*;
+import edu.miu.mpp.librarysystem.service.Auth;
 
 enum UserInputType{
     STRING, INTEGER;
@@ -41,10 +39,9 @@ public class Ui {
 
         response = librarianController.authenticateUser(userID, password);
         if (response.status()){
-            /**
-             * Next Stage
-             */
+            Ui.displayConsole(response.message()+"\n");
             user = (User)response.data();
+            displayUserMenu();
         }else{
             Ui.displayConsole(response.message());
         }
@@ -63,6 +60,54 @@ public class Ui {
             default:  return scanner.nextLine();
         }
     }
+
+    /**
+     * User List Menu
+     */
+    public void displayUserMenu(){
+        List<String> allList = new ArrayList<>();
+        Collections.addAll(allList, "Calculate Late Fee", "Check Book Status");
+
+        List<String> adminList = Arrays.asList("Add Book", "Add New Library Member", "Add a Book Copy");
+        List<String> libList = Arrays.asList("Check Out Book", "Search Member");
+
+        if (user.getUserRole() == Auth.BOTH){
+            allList.addAll(adminList);
+            allList.addAll(libList);
+        }else if (user.getUserRole() == Auth.ADMIN){
+            allList.addAll(adminList);
+
+        }else if (user.getUserRole() == Auth.LIBRARIAN) {
+            allList.addAll(libList);
+        }
+
+        StringBuilder output = new StringBuilder("Select from the Menu\nEnter the number to select\n");
+        for (int i = 0; i < allList.size(); i++) {
+            output.append(i+1).append(". ").append(allList.get(i)).append("\n");
+        }
+
+        Ui.displayConsole(output.toString());
+        Integer menuSelection = (Integer) Ui.userInput(UserInputType.INTEGER);
+
+        Ui.displayConsole("You selected: "+menuSelection+". "+allList.get(menuSelection-1));
+        menuSelection(allList.get(menuSelection-1));
+    }
+
+    public void menuSelection(String menuSelection){
+        switch (menuSelection){
+            case "Check Out Book":
+                checkOut();
+                break;
+            case "Add Book":
+                addNewBook();
+                break;
+            default:
+                Ui.displayConsole("You entered an invalid menu selection\n Try again");
+                displayUserMenu();
+
+        }
+    }
+
 
 
     public static void checkOut() {
