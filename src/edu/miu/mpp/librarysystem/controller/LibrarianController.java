@@ -37,4 +37,7 @@ public class LibrarianController {
         return  null;
 
     }
+    public String getBookCopiesWithCheckoutRecord(String isbn){
+        return userService.getBookCopiesWithCheckoutRecord(isbn);
+    }
 }

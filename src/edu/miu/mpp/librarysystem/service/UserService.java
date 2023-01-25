@@ -7,10 +7,7 @@ import edu.miu.mpp.librarysystem.dao.model.CheckoutRecord;
 import edu.miu.mpp.librarysystem.dao.model.CheckoutRecordEntry;
 import edu.miu.mpp.librarysystem.dao.model.User;
 
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class UserService implements Librarian {
 
@@ -60,11 +57,41 @@ public class UserService implements Librarian {
         else return Optional.empty();
     }
 
+    @Override
+    public String getBookCopiesWithCheckoutRecord(String isbn) {
 
+        StringBuilder responseBuilder = new StringBuilder();
+          if(!isIsbnExist(isbn)) {
+              System.out.println(isbn+" there is no book match this ISBN");
+              return  null;
+          }else{
+              Book foundBook =  dao.getBook(isbn);
+
+              responseBuilder.append("book Isbn | book Title | Total Copies");
+              responseBuilder.append(foundBook.getIsbn()+" | "+foundBook.getTitle()+" | "+foundBook.getBookCopies().size());
+              if(!foundBook.getBookCopies().isEmpty()) responseBuilder.append("CopyId | CheckoutBy |  Due Date");
+
+            List<BookCopy> bookCopies = foundBook.getBookCopies();
+                    bookCopies.forEach(bookCopy -> {
+                        HashMap<String, String> bookCopyCheckoutRecord = getBookCopyCheckoutRecord(bookCopy);
+                        String[] recordValues = Optional.ofNullable( (String[]) bookCopyCheckoutRecord.values().toArray()).orElseGet(null);
+                        responseBuilder.append(bookCopy.getBookCopyId()+" | "+(Objects.isNull(recordValues[0])?"non":recordValues[0])+" | "+(Objects.isNull(recordValues[1])?"non":recordValues[1]));
+
+                    });
+          }
+
+          return  responseBuilder.toString();
+
+    }
+
+    @Override
+    public HashMap<String, String> getBookCopyCheckoutRecord(BookCopy bookCopy) {
+        return dao.getBookCopyCheckoutRecord(bookCopy);
+    }
 
 
     @Override
-    public boolean addNewBookCopy(String isbn, String bookCopyId) {
+    public boolean addNewBookCopy(String isbn,String bookCopyId) {
         Book foundBook= dao.getBook(isbn);
         if(Objects.nonNull(foundBook)){
               foundBook.getBookCopies().add(new BookCopy(UUID.fromString(bookCopyId),foundBook));
