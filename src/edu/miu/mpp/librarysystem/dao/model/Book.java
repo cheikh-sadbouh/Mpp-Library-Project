@@ -1,8 +1,10 @@
 package edu.miu.mpp.librarysystem.dao.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public class Book implements Serializable {
 
@@ -20,6 +22,14 @@ public class Book implements Serializable {
         this.bookCopies = bookCopies;
         this.authors = authors;
         this.maxBookCheckout = maxBookCheckout;
+    }
+
+    public Book(String isbn, String title, MaxBookCheckout maxBookCheckout, List<Author> authors) {
+        this.isbn = isbn;
+        this.title = title;
+        this.maxBookCheckout = maxBookCheckout;
+        this.authors = authors;
+        this.bookCopies = new ArrayList<>();
     }
 
     public String getTitle() {
@@ -62,6 +72,10 @@ public class Book implements Serializable {
         this.maxBookCheckout = maxBookCheckout;
     }
 
+    public void addCopy() {
+        bookCopies.add(new BookCopy(UUID.randomUUID(),this));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -77,7 +91,6 @@ public class Book implements Serializable {
         return "Book{" +
                 "title='" + title + '\'' +
                 ", isbn='" + isbn + '\'' +
-                ", bookCopies=" + bookCopies +
                 ", authors=" + authors +
                 ", maxBookCheckout=" + maxBookCheckout +
                 '}';
