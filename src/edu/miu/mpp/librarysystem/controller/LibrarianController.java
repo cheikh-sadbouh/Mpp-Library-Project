@@ -19,22 +19,25 @@ public class LibrarianController {
         return new Response("Invalid Credentials", false, null);
     }
 
-    public CheckoutRecord Checkout(String memberId, String Isbn) {
+    public Response Checkout(String memberId, String Isbn) {
 
         //check permission
 
-        if(!userService.isMember(memberId)){
-          System.out.println(memberId+" you are not yet a member ");
-        } else if(!userService.isIsbnExist(Isbn)){
-            System.out.println(Isbn+" there is no book match this ISBN");
-        } else if(!userService.isBookAvailable(Isbn)){
-            System.out.println(Isbn+" no available copy at the moment");
-        }else{
-            return userService.createCheckoutRecord(Isbn,memberId);
+          Response response =  new Response();
 
+        if(!userService.isMember(memberId)){
+            response.setMessage(memberId+" you are not yet a member \n");
+        } else if(!userService.isIsbnExist(Isbn)){
+            response.setMessage(response.getMessage() + Isbn+" there is no book match this ISBN \n");
+        } else if(!userService.isBookAvailable(Isbn)){
+            response.setMessage(response.getMessage() + Isbn+" no available copy at the moment \n");
+        }else{
+             response.setData(userService.createCheckoutRecord(Isbn,memberId).toString());
+             response.setStatus(true);
         }
 
-        return  null;
+
+        return response;
 
     }
     public String getBookCopiesWithCheckoutRecord(String isbn){
