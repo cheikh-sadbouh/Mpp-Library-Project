@@ -17,6 +17,12 @@ public class Author extends Person implements Serializable {
 
     public Author(){}
 
+    public Author(String firstName, String lastName, String phone, Address address, String bio, List<Book> books) {
+    super(firstName,lastName,phone,address);
+        this.bio = bio;
+        this.books = new ArrayList<>();
+    }
+
     public String getBio() {
         return bio;
     }
