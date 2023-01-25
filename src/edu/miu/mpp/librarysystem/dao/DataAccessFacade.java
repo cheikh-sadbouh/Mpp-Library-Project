@@ -26,7 +26,8 @@ public class DataAccessFacade implements DataAccess {
     }
 
     public static final String OUTPUT_DIR = System.getProperty( "user.dir" )
-            + "\\src\\dataaccess\\storage";
+            // todo: change file path for OS
+            + "/src/edu/miu/mpp/librarysystem/dao/storage";
     public static final String DATE_PATTERN = "MM/dd/yyyy";
 
     //implement: other save operations
