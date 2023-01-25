@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import edu.miu.mpp.librarysystem.dao.Address;
+import edu.miu.mpp.librarysystem.dao.model.Address;
+//import edu.miu.mpp.librarysystem.dao.Address;
 //import edu.miu.mpp.librarysystem.dao.Author;
 //import edu.miu.mpp.librarysystem.dao.Book;
-import edu.miu.mpp.librarysystem.dao.LibraryMember;
+//import edu.miu.mpp.librarysystem.dao.model.LibraryMember;
 import edu.miu.mpp.librarysystem.dao.model.Author;
 import edu.miu.mpp.librarysystem.dao.model.Book;
+import edu.miu.mpp.librarysystem.dao.model.LibraryMember;
 
 public class ui {
 
