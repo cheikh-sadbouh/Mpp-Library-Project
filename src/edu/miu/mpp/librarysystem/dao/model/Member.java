@@ -1,4 +1,4 @@
-package edu.miu.mpp.librarysystem.dao;
+package edu.miu.mpp.librarysystem.dao.model;
 
 import java.util.List;
 

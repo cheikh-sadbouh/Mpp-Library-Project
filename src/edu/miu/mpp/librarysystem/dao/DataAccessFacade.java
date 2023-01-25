@@ -1,5 +1,9 @@
 package edu.miu.mpp.librarysystem.dao;
 
+import edu.miu.mpp.librarysystem.dao.model.Book;
+import edu.miu.mpp.librarysystem.dao.model.LibraryMember;
+import edu.miu.mpp.librarysystem.dao.model.User;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

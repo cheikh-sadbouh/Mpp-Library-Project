@@ -1,4 +1,6 @@
-package edu.miu.mpp.librarysystem.dao;
+package edu.miu.mpp.librarysystem.dao.model;
+
+import edu.miu.mpp.librarysystem.dao.model.Address;
 
 public abstract class Person {
 
