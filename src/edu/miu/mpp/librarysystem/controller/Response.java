@@ -3,9 +3,9 @@ package edu.miu.mpp.librarysystem.controller;
 import java.util.Objects;
 
 public final class Response {
-    private final String message;
-    private final Boolean status;
-    private final Object data;
+    private  String message;
+    private  Boolean status;
+    private  Object data;
 
     Response(String message, Boolean status, Object data) {
         this.message = message;
@@ -13,16 +13,28 @@ public final class Response {
         this.data = data;
     }
 
-    public String message() {
+    public String getMessage() {
         return message;
     }
 
-    public Boolean status() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public Object data() {
+    public Object getData() {
         return data;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
     }
 
     @Override
