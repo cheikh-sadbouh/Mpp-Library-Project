@@ -7,10 +7,7 @@ import edu.miu.mpp.librarysystem.dao.model.CheckoutRecord;
 import edu.miu.mpp.librarysystem.dao.model.CheckoutRecordEntry;
 import edu.miu.mpp.librarysystem.dao.model.User;
 
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 
 public class UserService implements Librarian{

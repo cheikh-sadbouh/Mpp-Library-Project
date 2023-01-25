@@ -67,26 +67,7 @@ public class DataAccessFacade implements DataAccess {
         }
     }
 
-    static Object readFromStorage(StorageType type) {
 
-        ObjectInputStream in = null;
-        Object retVal = null;
-        try {
-            Path path = FileSystems.getDefault().getPath(OUTPUT_DIR, type.toString());
-            in = new ObjectInputStream(Files.newInputStream(path));
-            retVal = in.readObject();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (Exception e) {
-                }
-            }
-        }
-        return retVal;
-    }
 
     @Override
     public void saveNewLibraryMember(LibraryMember member) {
@@ -258,7 +239,6 @@ public class DataAccessFacade implements DataAccess {
         }
         return retVal;
     }
-
     final static class Pair<S, T> implements Serializable {
 
         S first;
