@@ -16,10 +16,10 @@ public class LibrarianController {
     public Response authenticateUser(String Id, String password){
         Optional<User> user = userService.authenticateUser(Id, password);
         if (user.isPresent()) return new Response("Successfully Logged In", true, user.get());
-        return new Response("Error logging in", false, null);
+        return new Response("Invalid Credentials", false, null);
     }
 
-    public CheckoutRecord getCheckoutController(String memberId,String Isbn) {
+    public CheckoutRecord Checkout(String memberId, String Isbn) {
 
         //check permission
 

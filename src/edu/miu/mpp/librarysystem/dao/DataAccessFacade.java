@@ -45,6 +45,14 @@ public class DataAccessFacade implements DataAccess {
     }
 
     @Override
+    public void addBookCopy(Book book) {
+        HashMap<String, Book> bookMap = readBooksMap();
+        String isbn = book.getIsbn();
+        bookMap.replace(isbn,book);
+        saveToStorage(StorageType.BOOKS, bookMap);
+    }
+
+    @Override
     public void addNewCheckoutRecord(CheckoutRecord record) {
         HashMap<String, CheckoutRecord> checkoutRecordMap = readCheckoutRecordMap();
         checkoutRecordMap.put(record.getCheckoutId(), record);
