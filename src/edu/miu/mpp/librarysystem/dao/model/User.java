@@ -1,14 +1,18 @@
 package edu.miu.mpp.librarysystem.dao.model;
 
+import edu.miu.mpp.librarysystem.service.Auth;
+
 import java.io.Serializable;
 import java.util.Objects;
 
 public class User extends Person implements Serializable {
 
+    private static int uniqueID = 1;
+
     private String id;
     private String username;
     private String password;
-    private Role userRole;
+    private Auth userRole;
 
     public User( String username, String password ) {
 
@@ -16,11 +20,19 @@ public class User extends Person implements Serializable {
         this.password = password;
     }
 
-    public Role getUserRole() {
+    public User( String username, String password, Auth userRole ) {
+
+        this.username = username;
+        this.password = password;
+        this.userRole = userRole;
+        this.id = Integer.toString(User.uniqueID++);
+    }
+
+    public Auth getUserRole() {
         return userRole;
     }
 
-    public void setUserRole(Role userRole) {
+    public void setUserRole(Auth userRole) {
         this.userRole = userRole;
     }
 
