@@ -16,6 +16,14 @@ public class Ui {
 
     static LibrarianController librarianController = new LibrarianController();
 
+    public void adminLoginUi() {
+
+        System.out.println(
+                "1. Add new book\n" + "2. Add library member\n"
+                        + "3. Edit library member\n" + "0. Exit" );
+    }
+
+
     public static void checkOut() {
 
         Scanner scanner = new Scanner( System.in );
@@ -44,14 +52,6 @@ public class Ui {
             checkOut();
         }
 
-    }
-
-
-    public void adminLoginUi() {
-
-        System.out.println(
-                "1. Add new book\n" + "2. Add library member\n"
-                        + "3. Edit library member\n" + "0. Exit" );
     }
 
 
