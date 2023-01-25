@@ -7,6 +7,13 @@ public class Author extends Person {
     private String bio;
     private List<Book> books;
 
+    public Author( String bio, List<Book> books ) {
+
+        this.bio = bio;
+        this.books = books;
+    }
+
+
     public String getBio() {
 
         return bio;

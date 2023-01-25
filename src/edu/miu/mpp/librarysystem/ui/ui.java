@@ -30,6 +30,15 @@ public class ui {
         book.setIsbn( isbn );
         book.setAvailability( availability );
 
+        //Add authors
+        System.out.println( "Do you want to add authors to this book: (yes/no)" );
+        String addAuthor = scanner.next();
+
+        if ( addAuthor == "yes" ) {
+
+            Author author = new Author();
+        }
+
         System.out.println( book );
     }
 
