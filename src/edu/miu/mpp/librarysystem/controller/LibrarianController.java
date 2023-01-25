@@ -1,9 +1,9 @@
 package edu.miu.mpp.librarysystem.controller;
 
-import edu.miu.mpp.librarysystem.dao.model.CheckoutRecord;
 import edu.miu.mpp.librarysystem.dao.model.User;
 import edu.miu.mpp.librarysystem.service.UserService;
 
+import java.util.Objects;
 import java.util.Optional;
 
 public class LibrarianController {
@@ -40,7 +40,30 @@ public class LibrarianController {
         return response;
 
     }
-    public String getBookCopiesWithCheckoutRecord(String isbn){
-        return userService.getBookCopiesWithCheckoutRecord(isbn);
+
+    public Response getBookCopiesWithCheckoutRecord(String isbn){
+        //check permission
+        Response response =  new Response();
+       String serviceResponse = userService.getBookCopiesWithCheckoutRecord(isbn);
+           if(Objects.isNull(serviceResponse)) response.setMessage("book was not found");
+           else {
+               response.setData(serviceResponse);
+               response.setStatus(true);
+           }
+        return  response;
+    }
+
+    public  Response  addNewBookCopy(String isbn, String bookCopyId){
+        //check permission
+        Response response =  new Response();
+
+        if(userService.addNewBookCopy(isbn, bookCopyId)){
+            response.setData("mew Book Copy has been added !");
+            response.setStatus(true);
+        }else {
+            response.setMessage("internal server error , bookCopy has not been added ");
+        }
+        return  response;
+
     }
 }
