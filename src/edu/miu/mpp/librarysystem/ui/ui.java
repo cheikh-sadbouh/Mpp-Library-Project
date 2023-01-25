@@ -15,7 +15,7 @@ import edu.miu.mpp.librarysystem.dao.model.LibraryMember;
 
 public class ui {
 
-    public static void adminLoginUi() {
+    public void adminLoginUi() {
 
         System.out.println(
                 "1. Add new book\n" + "2. Add library member\n"
@@ -23,7 +23,7 @@ public class ui {
     }
 
 
-    public static void addNewBook() {
+    public void addNewBook() {
 
         System.out.println( "-------Add new book-------" );
         Scanner scanner = new Scanner( System.in );
@@ -54,7 +54,7 @@ public class ui {
     }
 
 
-    public static LibraryMember adLibraryMember() {
+    public LibraryMember adLibraryMember() {
 
         Scanner scanner = new Scanner( System.in );
 
@@ -83,7 +83,7 @@ public class ui {
     }
 
 
-    private static Author addAuthor( Book book ) {
+    private Author addAuthor( Book book ) {
 
         //Add book
         List<Book> books = new ArrayList<>();
@@ -110,7 +110,7 @@ public class ui {
     }
 
 
-    private static Address createAddress() {
+    private Address createAddress() {
 
         Scanner scanner = new Scanner( System.in );
 
@@ -133,6 +133,6 @@ public class ui {
 
     public static void main( String[] args ) {
 
-        addNewBook();
+        //addNewBook();
     }
 }
