@@ -116,9 +116,11 @@ public class Ui {
             String memberId = scanner.next();
             System.out.println( "Enter book ISBN " );
             String bookIsbn = scanner.next();
-            CheckoutRecord record = librarianController.Checkout( memberId, bookIsbn );
-            if ( Objects.nonNull( record ) ) {
-                System.out.println( record );
+            Response recordResponse = librarianController.Checkout( memberId, bookIsbn );
+            if ( recordResponse.getStatus()) {
+                System.out.println( recordResponse.getData() );
+            }else{
+                System.out.println(recordResponse.getMessage());
             }
 
         }

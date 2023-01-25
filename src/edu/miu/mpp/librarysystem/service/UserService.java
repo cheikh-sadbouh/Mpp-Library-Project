@@ -96,11 +96,8 @@ public class UserService implements Librarian {
         if(Objects.nonNull(foundBook)){
               foundBook.getBookCopies().add(new BookCopy(UUID.fromString(bookCopyId),foundBook));
                dao.addBookCopy(foundBook);
-            System.out.println("new bookCopy has been added successfully");
             return  true;
         }else{
-            System.out.println("book was not found");
-
             return false;
         }
 
