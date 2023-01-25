@@ -24,7 +24,21 @@ public class Ui {
     }
 
 
-    public static void checkOut() {
+    public void librarianLoginUi() {
+
+        System.out.println(
+                "1. Checkout book\n" + "2. Search for library member\n"
+                        + "0. Exit" );
+    }
+
+
+    public LibraryMember getLibraryMemberById( String memberId ) {
+
+        return null;
+    }
+
+
+    public void checkOut() {
 
         Scanner scanner = new Scanner( System.in );
         String userResponse = "";
