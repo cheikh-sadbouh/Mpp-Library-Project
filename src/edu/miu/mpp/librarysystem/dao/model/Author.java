@@ -13,6 +13,10 @@ public class Author extends Person {
         this.books = books;
     }
 
+    public Author() {
+
+    }
+
 
     public String getBio() {
 

@@ -2,7 +2,8 @@ package edu.miu.mpp.librarysystem.ui;
 
 import java.util.Scanner;
 
-import edu.miu.mpp.librarysystem.dao.Book;
+import edu.miu.mpp.librarysystem.dao.model.Author;
+import edu.miu.mpp.librarysystem.dao.model.Book;
 
 public class ui {
 
