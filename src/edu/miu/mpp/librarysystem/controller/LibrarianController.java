@@ -6,7 +6,7 @@ import edu.miu.mpp.librarysystem.service.UserService;
 public class LibrarianController {
     private UserService userService = new UserService();
 
-    public CheckoutRecord getCheckoutController(String memberId,String Isbn) {
+    public CheckoutRecord Checkout(String memberId, String Isbn) {
 
         //check permission
 

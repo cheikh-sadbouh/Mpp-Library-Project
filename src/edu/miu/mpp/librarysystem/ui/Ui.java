@@ -34,7 +34,7 @@ public class Ui {
             String memberId = scanner.next();
             System.out.println( "Enter book ISBN " );
             String bookIsbn = scanner.next();
-            CheckoutRecord record = librarianController.getCheckoutController( memberId, bookIsbn );
+            CheckoutRecord record = librarianController.Checkout( memberId, bookIsbn );
             if ( Objects.nonNull( record ) ) {
                 System.out.println( record );
             }
