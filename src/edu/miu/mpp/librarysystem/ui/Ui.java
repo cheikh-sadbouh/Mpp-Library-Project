@@ -73,13 +73,15 @@ public class Ui {
         System.out.println( "Type member phone:" );
         String phone = scanner.nextLine();
 
-        scanner.close();
+        //scanner.close();
 
         Address address = createAddress();
 
         LibraryMember libraryMember = new LibraryMember( memberId,
                 firstName, lastName, phone,
                 address );
+
+        System.out.println( libraryMember );
 
         return libraryMember;
     }
@@ -105,7 +107,7 @@ public class Ui {
         System.out.println( "Type author phone:" );
         String phone = scanner.nextLine();
 
-        scanner.close();
+        //scanner.close();
 
         Address address = null;
 
@@ -131,7 +133,7 @@ public class Ui {
         System.out.println( "Type zip:" );
         String zip = scanner.nextLine();
 
-        scanner.close();
+        //scanner.close();
 
         Address address = new Address( street, city, state, zip );
         return address;

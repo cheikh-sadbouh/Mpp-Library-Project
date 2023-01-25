@@ -25,4 +25,11 @@ public class LibraryMember extends Person {
         this.memberId = memberId;
     }
 
+
+    @Override
+    public String toString() {
+
+        return "LibraryMember [memberId=" + memberId + "]";
+    }
+
 }
