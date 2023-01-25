@@ -10,7 +10,15 @@ import edu.miu.mpp.librarysystem.service.Auth;
 enum UserInputType{
     STRING, INTEGER;
 }
-
+enum DisplayMenu{
+    Add_Book,
+    Add_New_Library_Member,
+    Add_a_Book_Copy,
+    Check_Out_Book,
+    Search_Member,
+    Calculate_Late_Fee,
+    Check_Book_Status
+}
 public class Ui {
 
     private static Scanner scanner;
@@ -88,11 +96,11 @@ public class Ui {
      * User List Menu
      */
     public void displayUserMenu(){
-        List<String> allList = new ArrayList<>();
-        Collections.addAll(allList, "Calculate Late Fee", "Check Book Status");
+        List<DisplayMenu> allList = new ArrayList<>();
+        Collections.addAll(allList, DisplayMenu.Calculate_Late_Fee, DisplayMenu.Check_Book_Status);
 
-        List<String> adminList = Arrays.asList("Add Book", "Add New Library Member", "Add a Book Copy");
-        List<String> libList = Arrays.asList("Check Out Book", "Search Member");
+        List<DisplayMenu> adminList = Arrays.asList(DisplayMenu.Add_Book, DisplayMenu.Add_New_Library_Member, DisplayMenu.Add_a_Book_Copy);
+        List<DisplayMenu> libList = Arrays.asList(DisplayMenu.Check_Out_Book, DisplayMenu.Search_Member);
 
         if (user.getUserRole() == Auth.BOTH){
             allList.addAll(adminList);
@@ -116,12 +124,12 @@ public class Ui {
         menuSelection(allList.get(menuSelection-1));
     }
 
-    public void menuSelection(String menuSelection){
+    public void menuSelection(DisplayMenu menuSelection){
         switch (menuSelection){
-            case "Check Out Book":
+            case Check_Out_Book:
                 checkOut();
                 break;
-            case "Add Book":
+            case Add_Book:
                 addNewBook();
                 break;
             default:
