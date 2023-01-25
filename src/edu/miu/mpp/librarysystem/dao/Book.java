@@ -74,7 +74,7 @@ public class Book {
     public String toString() {
 
         return "Book [title=" + title + ", isbn=" + isbn + ", availability=" + availability
-                + ", bookCopies=" + bookCopies + ", authors=" + authors + "]";
+                + "]";
     }
 
 }
