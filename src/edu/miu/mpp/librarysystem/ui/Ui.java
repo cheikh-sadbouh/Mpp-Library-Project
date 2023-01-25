@@ -143,27 +143,24 @@ public class Ui {
 
     public void checkOut() {
 
-        Scanner scanner = new Scanner( System.in );
-        String userResponse = "";
+        Ui.displayConsole("Current Screen :CheckOut\n");
+        Ui.displayConsole("1. start Checkout   |   " + "0. Exit" );
 
-        System.out.println( "Current Screen :CheckOut" );
-        System.out.println( "1. start Checkout\n" + "0. Exit" );
-        userResponse = scanner.next();
+        String userResponse =  (String) Ui.userInput(UserInputType.STRING);
 
         if ( userResponse.equalsIgnoreCase( "0" ) ) {
             // call main screen
 
-        }
-        else if ( userResponse.equalsIgnoreCase( "1" ) ) {
-            System.out.println( "Enter MemberId" );
-            String memberId = scanner.next();
-            System.out.println( "Enter book ISBN " );
-            String bookIsbn = scanner.next();
+        } else if ( userResponse.equalsIgnoreCase( "1" ) ) {
+            Ui.displayConsole("Enter MemberId\n");
+            String memberId =   (String) Ui.userInput(UserInputType.STRING);
+            Ui.displayConsole("Enter book ISBN\n");
+            String bookIsbn =  (String) Ui.userInput(UserInputType.STRING);
             Response recordResponse = librarianController.Checkout( memberId, bookIsbn );
             if ( recordResponse.getStatus()) {
-                System.out.println( recordResponse.getData() );
+                Ui.displayConsole( recordResponse.getData().toString() );
             }else{
-                System.out.println(recordResponse.getMessage());
+                Ui.displayConsole(recordResponse.getMessage());
             }
 
         }
