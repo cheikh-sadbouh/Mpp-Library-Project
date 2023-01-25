@@ -20,4 +20,7 @@ public interface DataAccess {
 	public void saveNewBook(Book book);
 	public void addBookCopy(Book book);
 	public void addNewCheckoutRecord(CheckoutRecord record);
+	HashMap<String,String> getBookCopyCheckoutRecord(BookCopy bookCopy);
+
+
 }

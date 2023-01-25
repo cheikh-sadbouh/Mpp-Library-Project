@@ -1,7 +1,10 @@
 package edu.miu.mpp.librarysystem.controller;
 
+import edu.miu.mpp.librarysystem.dao.model.BookCopy;
 import edu.miu.mpp.librarysystem.dao.model.CheckoutRecord;
 import edu.miu.mpp.librarysystem.service.UserService;
+
+import java.util.List;
 
 public class LibrarianController {
     private UserService userService = new UserService();
@@ -23,5 +26,8 @@ public class LibrarianController {
 
         return  null;
 
+    }
+    public String getBookCopiesWithCheckoutRecord(String isbn){
+        return userService.getBookCopiesWithCheckoutRecord(isbn);
     }
 }
