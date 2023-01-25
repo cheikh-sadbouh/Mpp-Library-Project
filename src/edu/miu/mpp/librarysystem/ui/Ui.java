@@ -42,12 +42,12 @@ public class Ui {
         String password = ( String )Ui.userInput( UserInputType.STRING );
 
         response = librarianController.authenticateUser(userID, password);
-        if (response.status()){
-            Ui.displayConsole(response.message()+"\n");
-            user = (User)response.data();
+        if (response.getStatus()){
+            Ui.displayConsole(response.getMessage()+"\n");
+            user = (User)response.getData();
             displayUserMenu();
         }else{
-            Ui.displayConsole(response.message());
+            Ui.displayConsole(response.getMessage());
         }
 
     }
