@@ -15,4 +15,5 @@ public interface Librarian {
     String getBookCopiesWithCheckoutRecord(String Isbn);
     HashMap<String,String> getBookCopyCheckoutRecord(BookCopy bookCopy);
 
+    boolean addNewBookCopy(String isbn, String bookCopyId);
 }
