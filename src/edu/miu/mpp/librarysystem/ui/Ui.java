@@ -1,12 +1,44 @@
 package edu.miu.mpp.librarysystem.ui;
 
+import java.util.Objects;
 import java.util.Scanner;
 
+import edu.miu.mpp.librarysystem.controller.LibrarianController;
 import edu.miu.mpp.librarysystem.dao.model.Author;
 import edu.miu.mpp.librarysystem.dao.model.Book;
+import edu.miu.mpp.librarysystem.dao.model.CheckoutRecord;
 
-public class ui {
+public class Ui {
+    static  LibrarianController  librarianController = new LibrarianController();
 
+    public  static  void checkOut(){
+
+
+        Scanner scanner = new Scanner( System.in );
+        String  userResponse ="";
+
+            System.out.println("Current Screen :CheckOut");
+            System.out.println("1. start Checkout\n"  + "0. Exit" );
+            userResponse = scanner.next();
+
+            if(userResponse.equalsIgnoreCase("0")){
+                // call main screen
+
+            }else if(userResponse.equalsIgnoreCase("1")){
+                System.out.println("Enter MemberId");
+                String memberId = scanner.next();
+                System.out.println("Enter book ISBN ");
+                String bookIsbn = scanner.next();
+             CheckoutRecord record= librarianController.getCheckoutController(memberId,bookIsbn);
+             if(Objects.nonNull(record)){
+                 System.out.println(record);
+             }
+
+            }else{
+                checkOut();
+            }
+
+    }
     public static void adminLoginUi() {
 
         System.out.println(

@@ -5,6 +5,7 @@ public class User extends Person {
     private String id;
     private String username;
     private String password;
+    private Role userRole;
 
     public User( String username, String password ) {
 
@@ -12,6 +13,13 @@ public class User extends Person {
         this.password = password;
     }
 
+    public Role getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(Role userRole) {
+        this.userRole = userRole;
+    }
 
     public String getId() {
 

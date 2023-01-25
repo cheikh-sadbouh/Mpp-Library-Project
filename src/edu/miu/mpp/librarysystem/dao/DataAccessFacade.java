@@ -1,35 +1,33 @@
 package edu.miu.mpp.librarysystem.dao;
 
-import edu.miu.mpp.librarysystem.dao.model.Book;
-import edu.miu.mpp.librarysystem.dao.model.LibraryMember;
-import edu.miu.mpp.librarysystem.dao.model.User;
+import edu.miu.mpp.librarysystem.dao.model.*;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
-//import business.Book;
-//import business.BookCopy;
-//import business.LibraryMember;
-//import dataaccess.DataAccessFacade.StorageType;
 
 public class DataAccessFacade implements DataAccess {
 
     enum StorageType {
-        BOOKS, MEMBERS, USERS;
+        BOOKS, MEMBERS, USERS,CHECKOUT_RECORD;
     }
 
     public static final String OUTPUT_DIR = System.getProperty( "user.dir" )
-            + "\\src\\dataaccess\\storage";
+            + "edu"+ File.separator
+            +"miu"+ File.separator
+            +"mpp"+ File.separator
+            +"librarysystem"+ File.separator
+            +"dao"+ File.separator
+            +"storage";
     public static final String DATE_PATTERN = "MM/dd/yyyy";
 
     //implement: other save operations
+    @Override
     public void saveNewMember( LibraryMember member ) {
 
         HashMap<String, LibraryMember> mems = readMemberMap();
@@ -38,6 +36,79 @@ public class DataAccessFacade implements DataAccess {
         saveToStorage( StorageType.MEMBERS, mems );
     }
 
+    @Override
+    public void saveNewBook(Book book) {
+        HashMap<String, Book> bookMap = readBooksMap();
+        String isbn = book.getIsbn();
+        bookMap.put(isbn, book);
+        saveToStorage(StorageType.BOOKS, bookMap);
+    }
+
+    @Override
+    public void addNewCheckoutRecord(CheckoutRecord record) {
+        HashMap<String, CheckoutRecord> checkoutRecordMap = readCheckoutRecordMap();
+        checkoutRecordMap.put(record.getCheckoutId(), record);
+        saveToStorage(StorageType.CHECKOUT_RECORD, checkoutRecordMap);
+    }
+
+    @Override
+    public  User getUser(String username, String pass) {
+        try {
+            HashMap<String, User> users = (HashMap<String, User>) readFromStorage(StorageType.USERS);
+            if (users.containsKey(username)) {
+                var u = users.get(username);
+                if (u.getPassword().equals(pass)) {
+                    return u;
+                }
+            }
+
+        } catch (Exception e) {
+            return null;
+        }
+
+        return null;
+
+    }
+    @Override
+    public  Member getMember(String memberId) {
+        HashMap<String, Member> members = (HashMap<String, Member>) readFromStorage(StorageType.MEMBERS);
+        if (members.containsKey(memberId)) {
+            return members.get(memberId);
+        }
+        return null;
+    }
+    @Override
+    public  Book getBook(String isbn) {
+        HashMap<String, Book> books = (HashMap<String, Book>) readFromStorage(StorageType.BOOKS);
+        if (books.containsKey(isbn)) {
+            return books.get(isbn);
+        }
+        return null;
+    }
+    @Override
+    public BookCopy getBookCopy(String isbn) {
+
+        HashMap<String, Book> books = (HashMap<String, Book>) readFromStorage(StorageType.BOOKS);
+        for(Book b : books.values()) {
+            if(b.getIsbn()!=null && b.getIsbn().equals(isbn.trim())) {
+                for(BookCopy bc : b.getBookCopies()) {
+                    if(bc.isAvailable()) {
+                        return bc;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+    @Override
+    public  List<Book> getAllBook() {
+        HashMap<String, Book> allBookMap = (HashMap<String, Book>) readFromStorage(StorageType.BOOKS);
+        List<Book> books = allBookMap.values()
+                .stream()
+                .collect(Collectors.toList());
+        return books;
+    }
 
     @SuppressWarnings( "unchecked" )
     public HashMap<String, Book> readBooksMap() {
@@ -45,6 +116,11 @@ public class DataAccessFacade implements DataAccess {
         //Returns a Map with name/value pairs being
         //   isbn -> Book
         return ( HashMap<String, Book> )readFromStorage( StorageType.BOOKS );
+    }
+
+    @Override
+    public HashMap<String, CheckoutRecord> readCheckoutRecordMap() {
+        return ( HashMap<String, CheckoutRecord> )readFromStorage( StorageType.CHECKOUT_RECORD );
     }
 
 
