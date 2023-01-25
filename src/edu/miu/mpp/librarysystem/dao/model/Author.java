@@ -1,4 +1,4 @@
-package edu.miu.mpp.librarysystem.dao;
+package edu.miu.mpp.librarysystem.dao.model;
 
 import java.util.List;
 
@@ -13,6 +13,10 @@ public class Author extends Person {
         super( firstName, lastName, phone, address );
         this.bio = bio;
         this.books = books;
+    }
+
+    public Author() {
+
     }
 
 
