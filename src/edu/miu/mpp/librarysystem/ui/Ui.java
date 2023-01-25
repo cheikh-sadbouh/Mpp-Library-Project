@@ -61,7 +61,6 @@ public class Ui {
         Book book = new Book();
         book.setTitle( title );
         book.setIsbn( isbn );
-        book.setAvailability( availability );
 
         //Add authors
         System.out.println( "Do you want to add authors to this book: (yes/no)" );

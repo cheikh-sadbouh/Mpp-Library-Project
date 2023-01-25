@@ -1,7 +1,6 @@
 package edu.miu.mpp.librarysystem.dao.model;
 
 public enum BookType {
-
-    POPULABOOK,
-    NOT_POPULAR;
+    POPULAR_BOOK,
+    NOT_POPULAR_BOOK;
 }

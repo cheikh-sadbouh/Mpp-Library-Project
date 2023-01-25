@@ -1,6 +1,9 @@
 package edu.miu.mpp.librarysystem.dao.model;
 
-public class User extends Person {
+import java.io.Serializable;
+import java.util.Objects;
+
+public class User extends Person implements Serializable {
 
     private String id;
     private String username;
@@ -55,5 +58,25 @@ public class User extends Person {
 
         this.password = password;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", userRole=" + userRole +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        if (!super.equals(o)) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(password, user.password) && userRole == user.userRole;
+    }
+
 
 }
