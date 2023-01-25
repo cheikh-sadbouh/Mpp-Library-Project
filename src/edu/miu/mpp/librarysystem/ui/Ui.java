@@ -24,18 +24,22 @@ public class Ui {
         scanner = new Scanner(System.in);
     }
 
-    public void start(){
+
+    public void start() {
+
         userLogin();
     }
 
-    public void userLogin(){
-        String output = "Welcome to the Library System\nLogin to Continue";
-        Ui.displayConsole(output);
 
-        Ui.displayConsole("Enter ID: ");
-        String userID = (String)Ui.userInput(UserInputType.STRING);
-        Ui.displayConsole("Enter Password: ");
-        String password = (String)Ui.userInput(UserInputType.STRING);
+    public void userLogin() {
+
+        String output = "Welcome to the Library System\nLogin to Continue";
+        Ui.displayConsole( output );
+
+        Ui.displayConsole( "Enter ID: " );
+        String userID = ( String )Ui.userInput( UserInputType.STRING );
+        Ui.displayConsole( "Enter Password: " );
+        String password = ( String )Ui.userInput( UserInputType.STRING );
 
         response = librarianController.authenticateUser(userID, password);
         if (response.status()){
@@ -48,17 +52,36 @@ public class Ui {
 
     }
 
-    public static void displayConsole(String message){
-        System.out.println(message);
+
+    public static void displayConsole( String message ) {
+
+        System.out.println( message );
     }
 
-    public static Object userInput(UserInputType inputType){
 
-        switch (inputType){
-            case INTEGER : return scanner.nextInt();
+    public static Object userInput( UserInputType inputType ) {
 
-            default:  return scanner.nextLine();
+        switch ( inputType ) {
+            case INTEGER:
+                return scanner.nextInt();
+
+            default:
+                return scanner.nextLine();
         }
+    }
+
+
+    public void librarianLoginUi() {
+
+        System.out.println(
+                "1. Checkout book\n" + "2. Search for library member\n"
+                        + "0. Exit" );
+    }
+
+
+    public LibraryMember getLibraryMemberById( String memberId ) {
+
+        return null;
     }
 
     /**
@@ -110,7 +133,7 @@ public class Ui {
 
 
 
-    public static void checkOut() {
+    public void checkOut() {
 
         Scanner scanner = new Scanner( System.in );
         String userResponse = "";
@@ -128,9 +151,11 @@ public class Ui {
             String memberId = scanner.next();
             System.out.println( "Enter book ISBN " );
             String bookIsbn = scanner.next();
-            CheckoutRecord record = librarianController.Checkout( memberId, bookIsbn );
-            if ( Objects.nonNull( record ) ) {
-                System.out.println( record );
+            Response recordResponse = librarianController.Checkout( memberId, bookIsbn );
+            if ( recordResponse.getStatus()) {
+                System.out.println( recordResponse.getData() );
+            }else{
+                System.out.println(recordResponse.getMessage());
             }
 
         }

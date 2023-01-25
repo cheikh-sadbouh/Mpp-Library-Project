@@ -1,9 +1,9 @@
 package edu.miu.mpp.librarysystem.controller;
 
-import edu.miu.mpp.librarysystem.dao.model.CheckoutRecord;
 import edu.miu.mpp.librarysystem.dao.model.User;
 import edu.miu.mpp.librarysystem.service.UserService;
 
+import java.util.Objects;
 import java.util.Optional;
 
 public class LibrarianController {
@@ -19,22 +19,51 @@ public class LibrarianController {
         return new Response("Invalid Credentials", false, null);
     }
 
-    public CheckoutRecord Checkout(String memberId, String Isbn) {
+    public Response Checkout(String memberId, String Isbn) {
 
         //check permission
 
-        if(!userService.isMember(memberId)){
-          System.out.println(memberId+" you are not yet a member ");
-        } else if(!userService.isIsbnExist(Isbn)){
-            System.out.println(Isbn+" there is no book match this ISBN");
-        } else if(!userService.isBookAvailable(Isbn)){
-            System.out.println(Isbn+" no available copy at the moment");
-        }else{
-            return userService.createCheckoutRecord(Isbn,memberId);
+          Response response =  new Response();
 
+        if(!userService.isMember(memberId)){
+            response.setMessage(memberId+" you are not yet a member \n");
+        } else if(!userService.isIsbnExist(Isbn)){
+            response.setMessage(response.getMessage() + Isbn+" there is no book match this ISBN \n");
+        } else if(!userService.isBookAvailable(Isbn)){
+            response.setMessage(response.getMessage() + Isbn+" no available copy at the moment \n");
+        }else{
+             response.setData(userService.createCheckoutRecord(Isbn,memberId).toString());
+             response.setStatus(true);
         }
 
-        return  null;
+
+        return response;
+
+    }
+
+    public Response getBookCopiesWithCheckoutRecord(String isbn){
+        //check permission
+        Response response =  new Response();
+       String serviceResponse = userService.getBookCopiesWithCheckoutRecord(isbn);
+           if(Objects.isNull(serviceResponse)) response.setMessage("book was not found");
+           else {
+               response.setData(serviceResponse);
+               response.setStatus(true);
+           }
+        return  response;
+    }
+
+    public  Response  addNewBookCopy(String isbn, String bookCopyId){
+        //check permission
+        Response response =  new Response();
+
+        if(userService.addNewBookCopy(isbn, bookCopyId)){
+            response.setData("mew Book Copy has been added !");
+            response.setStatus(true);
+        }else {
+            response.setMessage("internal server error , bookCopy has not been added ");
+        }
+        return  response;
 
     }
 }
