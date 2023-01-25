@@ -1,4 +1,4 @@
 package edu.miu.mpp.librarysystem.utility;
 
-public class utility {
+public class Utility {
 }

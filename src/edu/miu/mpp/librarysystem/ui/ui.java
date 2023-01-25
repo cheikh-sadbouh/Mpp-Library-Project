@@ -13,7 +13,7 @@ import edu.miu.mpp.librarysystem.dao.model.Author;
 import edu.miu.mpp.librarysystem.dao.model.Book;
 import edu.miu.mpp.librarysystem.dao.model.LibraryMember;
 
-public class ui {
+public class Ui {
 
     public void adminLoginUi() {
 
@@ -28,11 +28,11 @@ public class ui {
         System.out.println( "-------Add new book-------" );
         Scanner scanner = new Scanner( System.in );
         System.out.println( "Type book title:" );
-        String title = scanner.next();
+        String title = scanner.nextLine();
         System.out.println( "Type book isbn:" );
-        String isbn = scanner.next();
+        String isbn = scanner.nextLine();
         System.out.println( "Is the book available: (yes/no)" );
-        String availability = scanner.next();
+        String availability = scanner.nextLine();
 
         Book book = new Book();
         List<Author> authors = new ArrayList<>();
@@ -42,7 +42,9 @@ public class ui {
 
         //Add authors
         System.out.println( "Do you want to add authors to this book: (yes/no)" );
-        String addAuthor = scanner.next();
+        String addAuthor = scanner.nextLine();
+
+        scanner.close();
 
         if ( addAuthor.equals( "yes" ) ) {
             authors.add( addAuthor( book ) );
@@ -54,24 +56,24 @@ public class ui {
     }
 
 
-    public LibraryMember adLibraryMember() {
+    public LibraryMember addLibraryMember() {
 
+        System.out.println( "-------Add libray member-------" );
         Scanner scanner = new Scanner( System.in );
 
         System.out.println( "Type memberId:" );
-        String memberId = scanner.next();
+        String memberId = scanner.nextLine();
 
-        System.out.println( "Type author first name:" );
-        String firstName = scanner.next();
+        System.out.println( "Type member first name:" );
+        String firstName = scanner.nextLine();
 
-        System.out.println( "Type author last name:" );
-        String lastName = scanner.next();
+        System.out.println( "Type member last name:" );
+        String lastName = scanner.nextLine();
 
-        System.out.println( "Type author biography:" );
-        String bio = scanner.next();
+        System.out.println( "Type member phone:" );
+        String phone = scanner.nextLine();
 
-        System.out.println( "Type author phone:" );
-        String phone = scanner.next();
+        scanner.close();
 
         Address address = createAddress();
 
@@ -92,16 +94,18 @@ public class ui {
         Scanner scanner = new Scanner( System.in );
 
         System.out.println( "Type author first name:" );
-        String firstName = scanner.next();
+        String firstName = scanner.nextLine();
 
         System.out.println( "Type author last name:" );
-        String lastName = scanner.next();
+        String lastName = scanner.nextLine();
 
         System.out.println( "Type author biography:" );
-        String bio = scanner.next();
+        String bio = scanner.nextLine();
 
         System.out.println( "Type author phone:" );
-        String phone = scanner.next();
+        String phone = scanner.nextLine();
+
+        scanner.close();
 
         Address address = null;
 
@@ -112,19 +116,22 @@ public class ui {
 
     private Address createAddress() {
 
+        System.out.println( "-------Add member address-------" );
         Scanner scanner = new Scanner( System.in );
 
         System.out.println( "Type street:" );
-        String street = scanner.next();
+        String street = scanner.nextLine();
 
         System.out.println( "Type city:" );
-        String city = scanner.next();
+        String city = scanner.nextLine();
 
         System.out.println( "Type state:" );
-        String state = scanner.next();
+        String state = scanner.nextLine();
 
         System.out.println( "Type zip:" );
-        String zip = scanner.next();
+        String zip = scanner.nextLine();
+
+        scanner.close();
 
         Address address = new Address( street, city, state, zip );
         return address;
@@ -133,6 +140,8 @@ public class ui {
 
     public static void main( String[] args ) {
 
-        //addNewBook();
+        Ui ui = new Ui();
+        ui.addLibraryMember();
+
     }
 }
