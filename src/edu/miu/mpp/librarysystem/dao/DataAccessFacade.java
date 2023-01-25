@@ -18,6 +18,7 @@ public class DataAccessFacade implements DataAccess {
     }
 
     public static final String OUTPUT_DIR = System.getProperty( "user.dir" )
+            + File.separator + "src"+ File.separator
             + "edu"+ File.separator
             +"miu"+ File.separator
             +"mpp"+ File.separator
