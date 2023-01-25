@@ -1,8 +1,11 @@
 package edu.miu.mpp.librarysystem;
 
+import edu.miu.mpp.librarysystem.ui.Ui;
+
 public class Main {
 
     public static void main(String[] args) {
-	// write your code here
+	    Ui app = new Ui();
+        app.start();
     }
 }

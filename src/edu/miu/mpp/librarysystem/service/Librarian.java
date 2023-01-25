@@ -9,4 +9,5 @@ public interface Librarian {
     boolean isBookAvailable(String Isbn);
     CheckoutRecord createCheckoutRecord(String Isbn,String MemberId);
 
+    boolean addNewBookCopy(String isbn, String bookCopyId);
 }

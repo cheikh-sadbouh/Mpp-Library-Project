@@ -6,21 +6,81 @@ import java.util.Objects;
 import java.util.Scanner;
 
 import edu.miu.mpp.librarysystem.controller.LibrarianController;
-import edu.miu.mpp.librarysystem.dao.model.Address;
-import edu.miu.mpp.librarysystem.dao.model.Author;
-import edu.miu.mpp.librarysystem.dao.model.Book;
-import edu.miu.mpp.librarysystem.dao.model.CheckoutRecord;
-import edu.miu.mpp.librarysystem.dao.model.LibraryMember;
+import edu.miu.mpp.librarysystem.controller.Response;
+import edu.miu.mpp.librarysystem.dao.model.*;
+
+enum UserInputType {
+    STRING, INTEGER;
+}
 
 public class Ui {
 
-    static LibrarianController librarianController = new LibrarianController();
+    private static Scanner scanner;
+    private User user;
+    private Response response;
 
-    public void adminLoginUi() {
+    static LibrarianController librarianController;
 
-        System.out.println(
-                "1. Add new book\n" + "2. Add library member\n"
-                        + "3. Edit library member\n" + "0. Exit" );
+    public Ui() {
+
+        librarianController = new LibrarianController();
+        scanner = new Scanner( System.in );
+    }
+
+
+    public void start() {
+
+        userLogin();
+    }
+
+
+    public void userLogin() {
+
+        String output = "Welcome to the Library System\nLogin to Continue";
+        Ui.displayConsole( output );
+
+        Ui.displayConsole( "Enter ID: " );
+        String userID = ( String )Ui.userInput( UserInputType.STRING );
+        Ui.displayConsole( "Enter Password: " );
+        String password = ( String )Ui.userInput( UserInputType.STRING );
+
+        response = librarianController.authenticateUser( userID, password );
+        if ( response.status() ) {
+            /**
+             * Next Stage
+             */
+            user = ( User )response.data();
+
+            if ( user.getUserRole().name() == Role.ADMIN.name() ) {
+                //Navigate to admin screen
+            }
+
+            if ( user.getUserRole().name() == Role.LIBRARIAN.name() ) {
+                //Navigate to librarian screen
+            }
+        }
+        else {
+            Ui.displayConsole( response.message() );
+        }
+
+    }
+
+
+    public static void displayConsole( String message ) {
+
+        System.out.println( message );
+    }
+
+
+    public static Object userInput( UserInputType inputType ) {
+
+        switch ( inputType ) {
+            case INTEGER:
+                return scanner.nextInt();
+
+            default:
+                return scanner.nextLine();
+        }
     }
 
 
@@ -56,7 +116,7 @@ public class Ui {
             String memberId = scanner.next();
             System.out.println( "Enter book ISBN " );
             String bookIsbn = scanner.next();
-            CheckoutRecord record = librarianController.getCheckoutController( memberId, bookIsbn );
+            CheckoutRecord record = librarianController.Checkout( memberId, bookIsbn );
             if ( Objects.nonNull( record ) ) {
                 System.out.println( record );
             }
@@ -178,13 +238,5 @@ public class Ui {
 
         Address address = new Address( street, city, state, zip );
         return address;
-    }
-
-
-    public static void main( String[] args ) {
-
-        Ui ui = new Ui();
-        ui.addLibraryMember();
-
     }
 }

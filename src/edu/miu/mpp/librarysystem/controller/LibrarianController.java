@@ -1,12 +1,25 @@
 package edu.miu.mpp.librarysystem.controller;
 
 import edu.miu.mpp.librarysystem.dao.model.CheckoutRecord;
+import edu.miu.mpp.librarysystem.dao.model.User;
 import edu.miu.mpp.librarysystem.service.UserService;
 
-public class LibrarianController {
-    private UserService userService = new UserService();
+import java.util.Optional;
 
-    public CheckoutRecord getCheckoutController(String memberId,String Isbn) {
+public class LibrarianController {
+    private UserService userService;
+
+    public LibrarianController(){
+        userService = new UserService();
+    }
+
+    public Response authenticateUser(String Id, String password){
+        Optional<User> user = userService.authenticateUser(Id, password);
+        if (user.isPresent()) return new Response("Successfully Logged In", true, user.get());
+        return new Response("Invalid Credentials", false, null);
+    }
+
+    public CheckoutRecord Checkout(String memberId, String Isbn) {
 
         //check permission
 
