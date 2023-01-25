@@ -26,9 +26,8 @@ public class DataAccessFacade implements DataAccess {
             +"storage";
     public static final String DATE_PATTERN = "MM/dd/yyyy";
 
-    //implement: other save operations
     @Override
-    public void saveNewMember( LibraryMember member ) {
+    public void saveNewLibraryMember( LibraryMember member ) {
 
         HashMap<String, LibraryMember> mems = readMemberMap();
         String memberId = member.getMemberId();
@@ -69,14 +68,16 @@ public class DataAccessFacade implements DataAccess {
         return null;
 
     }
+
     @Override
-    public  Member getMember(String memberId) {
-        HashMap<String, Member> members = (HashMap<String, Member>) readFromStorage(StorageType.MEMBERS);
-        if (members.containsKey(memberId)) {
-            return members.get(memberId);
+    public LibraryMember getLibraryMember(String LibraryMemberId) {
+        HashMap<String, LibraryMember> members = (HashMap<String, LibraryMember>) readFromStorage(StorageType.MEMBERS);
+        if (members.containsKey(LibraryMemberId)) {
+            return members.get(LibraryMemberId);
         }
         return null;
     }
+
     @Override
     public  Book getBook(String isbn) {
         HashMap<String, Book> books = (HashMap<String, Book>) readFromStorage(StorageType.BOOKS);
@@ -141,6 +142,13 @@ public class DataAccessFacade implements DataAccess {
         //   userId -> User
         return ( HashMap<String, User> )readFromStorage( StorageType.USERS );
     }
+
+    @Override
+    public HashMap<String, LibraryMember> readLibraryMemberMap() {
+        return null;
+    }
+
+
 
     /////load methods - these place test data into the storage area
     ///// - used just once at startup  

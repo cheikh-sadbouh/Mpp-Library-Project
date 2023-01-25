@@ -2,7 +2,10 @@ package edu.miu.mpp.librarysystem.dao.model;
 
 import edu.miu.mpp.librarysystem.dao.model.Address;
 
-public abstract class Person {
+import java.io.Serializable;
+import java.util.Objects;
+
+public abstract class Person  implements Serializable {
 
     private String firstName;
     private String lastName;
@@ -14,7 +17,11 @@ public abstract class Person {
     }
 
 
-    public Person( String firstName, String lastName, String phone, Address address ) {
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public Person(String firstName, String lastName, String phone, Address address ) {
 
         super();
         this.firstName = firstName;
@@ -64,5 +71,24 @@ public abstract class Person {
 
         return address;
     }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address=" + address +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Person)) return false;
+        Person person = (Person) o;
+        return Objects.equals(firstName, person.firstName) && Objects.equals(lastName, person.lastName) && Objects.equals(phone, person.phone) && Objects.equals(address, person.address);
+    }
+
 
 }
