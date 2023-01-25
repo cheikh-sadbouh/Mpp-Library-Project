@@ -80,7 +80,7 @@ public class Book implements Serializable {
     public String toString() {
 
         return "Book [title=" + title + ", isbn=" + isbn + ", availability=" + availability
-                + ", bookCopies=" + bookCopies + ", authors=" + authors + "]";
+                + "]";
     }
 
 }
