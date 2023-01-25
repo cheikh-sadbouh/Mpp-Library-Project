@@ -6,10 +6,10 @@ import edu.miu.mpp.librarysystem.service.UserService;
 import java.util.Objects;
 import java.util.Optional;
 
-public class LibrarianController {
+public class SystemController {
     private UserService userService;
 
-    public LibrarianController(){
+    public SystemController(){
         userService = new UserService();
     }
 

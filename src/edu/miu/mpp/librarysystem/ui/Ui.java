@@ -2,7 +2,7 @@ package edu.miu.mpp.librarysystem.ui;
 
 import java.util.*;
 
-import edu.miu.mpp.librarysystem.controller.LibrarianController;
+import edu.miu.mpp.librarysystem.controller.SystemController;
 import edu.miu.mpp.librarysystem.controller.Response;
 import edu.miu.mpp.librarysystem.dao.model.*;
 import edu.miu.mpp.librarysystem.service.Auth;
@@ -25,10 +25,10 @@ public class Ui {
     private User user;
     private Response response;
 
-    static LibrarianController librarianController;
+    static SystemController systemController;
 
     public Ui(){
-        librarianController = new LibrarianController();
+        systemController = new SystemController();
         scanner = new Scanner(System.in);
     }
 
@@ -49,7 +49,7 @@ public class Ui {
         Ui.displayConsole( "Enter Password: " );
         String password = ( String )Ui.userInput( UserInputType.STRING );
 
-        response = librarianController.authenticateUser(userID, password);
+        response = systemController.authenticateUser(userID, password);
         if (response.getStatus()){
             Ui.displayConsole(response.getMessage()+"\n");
             user = (User)response.getData();
@@ -150,13 +150,13 @@ public class Ui {
 
         if ( userResponse.equalsIgnoreCase( "0" ) ) {
             // call main screen
-
+            displayUserMenu();
         } else if ( userResponse.equalsIgnoreCase( "1" ) ) {
             Ui.displayConsole("Enter MemberId\n");
             String memberId =   (String) Ui.userInput(UserInputType.STRING);
             Ui.displayConsole("Enter book ISBN\n");
             String bookIsbn =  (String) Ui.userInput(UserInputType.STRING);
-            Response recordResponse = librarianController.Checkout( memberId, bookIsbn );
+            Response recordResponse = systemController.Checkout( memberId, bookIsbn );
             if ( recordResponse.getStatus()) {
                 Ui.displayConsole( recordResponse.getData().toString() );
             }else{
