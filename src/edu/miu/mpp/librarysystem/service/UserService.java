@@ -137,22 +137,14 @@ public class UserService implements Librarian, Administrator {
     public boolean addLibraryMember( String memberId, String firstName, String lastName,
             String phone, Address address ) {
 
-        boolean addedMember = false;
+        boolean addedMember = true;
 
         LibraryMember libraryMember = new LibraryMember( memberId,
                 firstName, lastName, phone,
                 address );
 
-        //Check if library memberid already exists before saving
-        boolean memberIdExists = isMember( memberId );
-
-        if ( !memberIdExists ) {
-            dao.saveNewLibraryMember( libraryMember );
-            addedMember = true;
-        }
-        else {
-            System.out.println( "A library member with this id already exits" );
-        }
+        dao.saveNewLibraryMember( libraryMember );
+        addedMember = true;
 
         return addedMember;
     }

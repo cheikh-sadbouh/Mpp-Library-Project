@@ -6,6 +6,7 @@ import edu.miu.mpp.librarysystem.controller.SystemController;
 import edu.miu.mpp.librarysystem.controller.Response;
 import edu.miu.mpp.librarysystem.dao.model.*;
 import edu.miu.mpp.librarysystem.service.Auth;
+import edu.miu.mpp.librarysystem.service.UserService;
 
 enum UserInputType {
     STRING, INTEGER;
@@ -27,6 +28,7 @@ public class Ui {
     private static Scanner scanner;
     private User user;
     private Response response;
+    private UserService userService;
 
     static SystemController systemController;
 
@@ -34,6 +36,7 @@ public class Ui {
 
         systemController = new SystemController();
         scanner = new Scanner( System.in );
+        userService = new UserService();
     }
 
 
@@ -274,6 +277,15 @@ public class Ui {
 
         System.out.println( "Type memberId:" );
         String memberId = scanner.nextLine();
+
+        //Check if memberId exists before adding more data
+        if ( memberId.length() > 0 ) {
+            while ( userService.isMember( memberId ) ) {
+                System.out.println( "MemberId: " + memberId
+                        + " is already taken. Please select another Id" );
+                memberId = scanner.nextLine();
+            }
+        }
 
         String firstName = scanner.nextLine();
         System.out.println( "Type member first name:" );
