@@ -18,7 +18,8 @@ enum DisplayMenu {
     Check_Out_Book,
     Search_Member,
     Calculate_Late_Fee,
-    Check_Book_Status
+    Check_Book_Status,
+    Find_Over_Due_Book
 }
 
 public class Ui {
@@ -106,10 +107,8 @@ public class Ui {
         Collections.addAll( allList, DisplayMenu.Calculate_Late_Fee,
                 DisplayMenu.Check_Book_Status );
 
-        List<DisplayMenu> adminList = Arrays.asList( DisplayMenu.Add_Book,
-                DisplayMenu.Add_New_Library_Member, DisplayMenu.Add_a_Book_Copy );
-        List<DisplayMenu> libList = Arrays.asList( DisplayMenu.Check_Out_Book,
-                DisplayMenu.Search_Member );
+        List<DisplayMenu> adminList = Arrays.asList(DisplayMenu.Add_Book, DisplayMenu.Add_New_Library_Member, DisplayMenu.Add_a_Book_Copy);
+        List<DisplayMenu> libList = Arrays.asList(DisplayMenu.Check_Out_Book, DisplayMenu.Search_Member,DisplayMenu.Find_Over_Due_Book);
 
         if ( user.getUserRole() == Auth.BOTH ) {
             allList.addAll( adminList );
@@ -147,6 +146,12 @@ public class Ui {
             case Add_Book:
                 addNewBook();
                 break;
+            case  Find_Over_Due_Book :
+                findOverDueBookCopies();
+                break;
+            case  Add_a_Book_Copy:
+                addBooCopy();
+                break;
             default:
                 Ui.displayConsole( "You entered an invalid menu selection\n Try again" );
                 displayUserMenu();
@@ -157,20 +162,17 @@ public class Ui {
 
     public void checkOut() {
 
-        Ui.displayConsole( "Current Screen :CheckOut\n" );
-        Ui.displayConsole( "1. start Checkout   |   " + "0. Exit" );
+        Ui.displayConsole("Current Screen :CheckOut\n");
+        Ui.displayConsole("0. Navigate Back\n" );
 
-        String userResponse = ( String )Ui.userInput( UserInputType.STRING );
-
-        if ( userResponse.equalsIgnoreCase( "0" ) ) {
+        Ui.displayConsole("Enter MemberId\n");
+        String memberId =   (String) Ui.userInput(UserInputType.STRING);
+        if ( memberId.equalsIgnoreCase( "0" ) ) {
             // call main screen
             displayUserMenu();
-        }
-        else if ( userResponse.equalsIgnoreCase( "1" ) ) {
-            Ui.displayConsole( "Enter MemberId\n" );
-            String memberId = ( String )Ui.userInput( UserInputType.STRING );
-            Ui.displayConsole( "Enter book ISBN\n" );
-            String bookIsbn = ( String )Ui.userInput( UserInputType.STRING );
+        } else  {
+            Ui.displayConsole("Enter book ISBN\n");
+            String bookIsbn =  (String) Ui.userInput(UserInputType.STRING);
             Response recordResponse = systemController.Checkout( memberId, bookIsbn );
             if ( recordResponse.getStatus() ) {
                 Ui.displayConsole( recordResponse.getData().toString() );
@@ -179,10 +181,48 @@ public class Ui {
                 Ui.displayConsole( recordResponse.getMessage() );
             }
         }
-        else {
-            checkOut();
+
+
+    }
+    public  void findOverDueBookCopies(){
+        Ui.displayConsole("Current Screen :Find Over Due Book\n");
+        Ui.displayConsole("0. Navigate Back\n" );
+
+        Ui.displayConsole("Enter book ISBN\n");
+        String bookIsbn =  (String) Ui.userInput(UserInputType.STRING);
+
+        if ( bookIsbn.equalsIgnoreCase( "0" ) ) {
+            // call main screen
+            displayUserMenu();
+        } else {
+            Response recordResponse = systemController.getBookCopiesWithCheckoutRecord(bookIsbn);
+            if ( recordResponse.getStatus()) {
+                Ui.displayConsole( recordResponse.getData().toString() );
+            }else{
+                Ui.displayConsole(recordResponse.getMessage());
+            }
+
         }
 
+    }
+    public  void addBooCopy(){
+        Ui.displayConsole("Current Screen : Add a  Book Copy\n");
+        Ui.displayConsole("0. Navigate Back\n" );
+
+        Ui.displayConsole("Enter book ISBN\n");
+        String bookIsbn =  (String) Ui.userInput(UserInputType.STRING);
+        if ( bookIsbn.equalsIgnoreCase( "0" ) ) {
+            // call main screen
+            displayUserMenu();
+        } else {
+            Response recordResponse = systemController.addNewBookCopy(bookIsbn,UUID.randomUUID().toString());
+            if ( recordResponse.getStatus()) {
+                Ui.displayConsole( recordResponse.getData().toString() );
+            }else{
+                Ui.displayConsole(recordResponse.getMessage());
+            }
+
+        }
     }
 
 

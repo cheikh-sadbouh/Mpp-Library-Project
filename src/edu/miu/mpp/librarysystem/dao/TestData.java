@@ -86,8 +86,13 @@ public class TestData {
     @SuppressWarnings("serial")
     List<User> allUsers = new ArrayList<>() {
         {
+            //ID: 1, password: xyz
             add(new User("101", "xyz", Auth.LIBRARIAN));
+            
+            //ID: 2, password: abc
             add(new User("102", "abc", Auth.ADMIN));
+            
+            //ID: 3, password: 111
             add(new User("103", "111", Auth.BOTH));
         }
     };
