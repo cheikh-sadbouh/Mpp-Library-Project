@@ -75,6 +75,11 @@ public class Ui {
     }
 
 
+    public  static  void displayScreenHeader(String currentScreen){
+        Ui.displayConsole("+-------------------------------------------------------------------------------------------------------------+");
+        Ui.displayConsole("|  Current Screen : "+currentScreen+" | 0. Navigate Back                                                     |");
+        Ui.displayConsole("+-------------------------------------------------------------------------------------------------------------+");
+    }
     public static Object userInput( UserInputType inputType ) {
 
         //Redirect user to the main menu if input is zero
