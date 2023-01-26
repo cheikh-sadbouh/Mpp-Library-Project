@@ -1,5 +1,6 @@
 package edu.miu.mpp.librarysystem.service;
 
+import edu.miu.mpp.librarysystem.controller.Response;
 import edu.miu.mpp.librarysystem.dao.model.BookCopy;
 import edu.miu.mpp.librarysystem.dao.model.CheckoutRecord;
 
@@ -12,13 +13,18 @@ public interface Librarian {
 
 
     boolean isIsbnExist( String Isbn );
-    String createCheckoutRecord(String Isbn, String MemberId);
+
+
+    String createCheckoutRecord( String Isbn, String MemberId );
 
 
     boolean isBookAvailable( String Isbn );
 
 
-    List<CheckoutRecord> getMemberCheckoutRecords( String MemberId );
+    Response getMemberCheckoutRecords( String memberId );
+
+
+    Response findMemberById( String memberId );
 
 
     String getBookCopiesWithCheckoutRecord( String Isbn );

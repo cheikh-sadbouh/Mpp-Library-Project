@@ -167,10 +167,9 @@ public class UserService implements Librarian, Administrator {
 
 
     @Override
-    public List<CheckoutRecord> getMemberCheckoutRecords( String MemberId ) {
+    public Response getMemberCheckoutRecords( String MemberId ) {
 
-        // TODO Auto-generated method stub
-        return null;
+        return dao.getMemberCheckoutRecords( MemberId );
     }
 
 
@@ -180,5 +179,13 @@ public class UserService implements Librarian, Administrator {
 
         dao.saveNewBook( new Book( isbn, title, maxBookCheckout, authors, numberOfCopies ) );
         return true;
+    }
+
+
+    @Override
+    public Response findMemberById( String memberId ) {
+
+        // TODO Auto-generated method stub
+        return dao.findMemberById( memberId );
     }
 }

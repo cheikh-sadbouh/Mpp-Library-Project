@@ -35,13 +35,16 @@ public class Ui {
     public Ui() {
 
         systemController = new SystemController();
-        scanner = new Scanner( System.in ).useDelimiter("\\n");
+        scanner = new Scanner( System.in ).useDelimiter( "\\n" );
         userService = new UserService();
     }
 
+
     public void start() {
+
         userLogin();
     }
+
 
     public void userLogin() {
 
@@ -64,9 +67,12 @@ public class Ui {
         }
     }
 
+
     public static void displayConsole( String message ) {
+
         System.out.println( message );
     }
+
 
     public static Object userInput( UserInputType inputType ) {
 
@@ -88,6 +94,7 @@ public class Ui {
         }
     }
 
+
     public void librarianLoginUi() {
 
         System.out.println(
@@ -95,9 +102,12 @@ public class Ui {
                         + "0. Exit" );
     }
 
+
     public LibraryMember getLibraryMemberById( String memberId ) {
+
         return null;
     }
+
 
     /**
      * User List Menu
@@ -157,6 +167,9 @@ public class Ui {
             case Add_New_Library_Member:
                 addLibraryMember();
                 break;
+            case Search_Member:
+                searchMember();
+                break;
             default:
                 Ui.displayConsole( "You entered an invalid menu selection\n Try again" );
                 displayUserMenu();
@@ -167,14 +180,14 @@ public class Ui {
 
     public void checkOut() {
 
-        Ui.displayConsole("+---------------------------------------------+");
-        Ui.displayConsole("| Current Screen :CheckOut | 0. Navigate Back |");
-        Ui.displayConsole("+---------------------------------------------+");
+        Ui.displayConsole( "+---------------------------------------------+" );
+        Ui.displayConsole( "| Current Screen :CheckOut | 0. Navigate Back |" );
+        Ui.displayConsole( "+---------------------------------------------+" );
 
-        Ui.displayConsole("Enter MemberId");
-        scanner.skip("(\n)?");//consume \n from previous line
+        Ui.displayConsole( "Enter MemberId" );
+        scanner.skip( "(\n)?" );//consume \n from previous line
 
-        String memberId =   (String) Ui.userInput(UserInputType.STRING);
+        String memberId = ( String )Ui.userInput( UserInputType.STRING );
         if ( memberId.equalsIgnoreCase( "0" ) ) {
 
             displayUserMenu();
@@ -194,6 +207,7 @@ public class Ui {
         checkOut();
 
     }
+
 
     public void findOverDueBookCopies() {
 
@@ -245,58 +259,65 @@ public class Ui {
         }
     }
 
-    public void addBook(){
+
+    public void addBook() {
+
         String title, isbn;
         MaxBookCheckout maxBookCheckout;
         Integer numberOfCopies, authorCount;
         List<Author> authors = new ArrayList<>();
 
-        Ui.displayConsole("Enter details to add a new Book");
-        Ui.displayConsole("");
+        Ui.displayConsole( "Enter details to add a new Book" );
+        Ui.displayConsole( "" );
 
-        Ui.displayConsole("ISBN: ");
-        isbn = (String) Ui.userInput(UserInputType.STRING);
+        Ui.displayConsole( "ISBN: " );
+        isbn = ( String )Ui.userInput( UserInputType.STRING );
 
-        Ui.displayConsole("Title: ");
-        title = (String) Ui.userInput(UserInputType.STRING);
+        Ui.displayConsole( "Title: " );
+        title = ( String )Ui.userInput( UserInputType.STRING );
 
-        Ui.displayConsole("Enter Number of Authors ");
-        authorCount = (Integer) Ui.userInput(UserInputType.INTEGER);
-        for (int i = 1; i <= authorCount; i++) {
-            Ui.displayConsole(i+".");
-            Ui.displayConsole("Enter first name of Author: ");
-            String firstName = (String) Ui.userInput(UserInputType.STRING);
+        Ui.displayConsole( "Enter Number of Authors " );
+        authorCount = ( Integer )Ui.userInput( UserInputType.INTEGER );
+        for ( int i = 1; i <= authorCount; i++ ) {
+            Ui.displayConsole( i + "." );
+            Ui.displayConsole( "Enter first name of Author: " );
+            String firstName = ( String )Ui.userInput( UserInputType.STRING );
 
-            Ui.displayConsole("Enter last name of Author: ");
-            String lastName = (String) Ui.userInput(UserInputType.STRING);
+            Ui.displayConsole( "Enter last name of Author: " );
+            String lastName = ( String )Ui.userInput( UserInputType.STRING );
 
-            Ui.displayConsole("Enter phone of Author: ");
-            String phone = (String) Ui.userInput(UserInputType.STRING);
+            Ui.displayConsole( "Enter phone of Author: " );
+            String phone = ( String )Ui.userInput( UserInputType.STRING );
 
-            authors.add(new Author(firstName, lastName, phone, null, null));
-            Ui.displayConsole("-----------------------------------------------");
+            authors.add( new Author( firstName, lastName, phone, null, null ) );
+            Ui.displayConsole( "-----------------------------------------------" );
         }
 
-        Ui.displayConsole("Number of Copies: ");
-        numberOfCopies = (Integer) Ui.userInput(UserInputType.INTEGER);
+        Ui.displayConsole( "Number of Copies: " );
+        numberOfCopies = ( Integer )Ui.userInput( UserInputType.INTEGER );
 
-        Ui.displayConsole("Select max checkout length");
-        List<MaxBookCheckout> maxBookCheckoutList = Arrays.asList(MaxBookCheckout.SEVEN_DAYS, MaxBookCheckout.TWENTY_ONE_DAYS);
+        Ui.displayConsole( "Select max checkout length" );
+        List<MaxBookCheckout> maxBookCheckoutList = Arrays.asList( MaxBookCheckout.SEVEN_DAYS,
+                MaxBookCheckout.TWENTY_ONE_DAYS );
         StringBuilder maxOutput = new StringBuilder();
-        for (int i = 0; i < maxBookCheckoutList.size(); i++) {
-            maxOutput.append(i+1).append(". ").append(maxBookCheckoutList.get(i).getDays()).append("\n");
+        for ( int i = 0; i < maxBookCheckoutList.size(); i++ ) {
+            maxOutput.append( i + 1 ).append( ". " ).append( maxBookCheckoutList.get( i )
+                    .getDays() ).append( "\n" );
         }
-        Ui.displayConsole(String.valueOf(maxOutput));
-        Integer maxMenuSelection = (Integer) Ui.userInput(UserInputType.INTEGER);
-        Ui.displayConsole("You selected "+maxBookCheckoutList.get(maxMenuSelection-1).getDays());
-        maxBookCheckout = maxBookCheckoutList.get(maxMenuSelection-1);
+        Ui.displayConsole( String.valueOf( maxOutput ) );
+        Integer maxMenuSelection = ( Integer )Ui.userInput( UserInputType.INTEGER );
+        Ui.displayConsole( "You selected " + maxBookCheckoutList.get( maxMenuSelection - 1 )
+                .getDays() );
+        maxBookCheckout = maxBookCheckoutList.get( maxMenuSelection - 1 );
 
-        response = systemController.addBook(isbn, title, maxBookCheckout, authors, numberOfCopies);
-        Ui.displayConsole(response.getMessage());
+        response = systemController.addBook( isbn, title, maxBookCheckout, authors,
+                numberOfCopies );
+        Ui.displayConsole( response.getMessage() );
 
         displayUserMenu();
 
     }
+
 
     public void addLibraryMember() {
 
@@ -344,6 +365,49 @@ public class Ui {
         }
     }
 
+
+    public void searchMember() {
+
+        System.out.println( "-------Add member id-------" );
+
+        System.out.println( "Type memberId:" );
+        String memberId = ( String )Ui.userInput( UserInputType.STRING );
+
+        //Check if memberId exists before adding more data
+        if ( memberId.length() > 0 ) {
+            while ( userService.isMember( memberId ) ) {
+                System.out.println( "MemberId: " + memberId
+                        + " doesn't exist. Try another memberId (0 - Menu)" );
+                memberId = ( String )Ui.userInput( UserInputType.STRING );
+            }
+        }
+
+        //How to exit from application
+        if ( memberId.equals( "0" ) ) {
+            displayUserMenu();
+            return;
+        }
+
+        response = systemController.findMember( memberId );
+
+        if ( response.getStatus() ) {
+            Ui.displayConsole( response.getMessage() + "\n" );
+
+            System.out.println( "Do you want to show the member's checkout records? (yes/no)" );
+            String showCheckoutRecords = ( String )Ui.userInput( UserInputType.STRING );
+
+            if ( showCheckoutRecords.equals( "yes" ) ) {
+                response = systemController.getCheckoutRecordsMemberById( memberId );
+                System.out.println( response );
+            }
+            else {
+                displayUserMenu();
+                return;
+            }
+        }
+    }
+
+
     private Author addAuthor( Book book ) {
 
         //Add book
@@ -369,6 +433,7 @@ public class Ui {
         Author author = new Author( firstName, lastName, phone, address, bio, books );
         return author;
     }
+
 
     private Address createAddress() {
 

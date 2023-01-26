@@ -1,17 +1,21 @@
 package edu.miu.mpp.librarysystem.dao;
 
+import edu.miu.mpp.librarysystem.controller.Response;
 import edu.miu.mpp.librarysystem.dao.model.*;
 
 import java.io.*;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class DataAccessFacade implements DataAccess {
+
+    private static final long serialVersionUID = 5399827794066637059L;
 
     enum StorageType {
         BOOKS, MEMBERS, USERS, CHECKOUT_RECORD;
@@ -348,11 +352,15 @@ public class DataAccessFacade implements DataAccess {
             return "(" + first.toString() + ", " + second.toString() + ")";
         }
 
-        private static final long serialVersionUID = 5399827794066637059L;
     }
 
-    public List<CheckoutRecord> getMemberCheckoutRecords( String memberId ) {
+    public Response getMemberCheckoutRecords( String memberId ) {
 
+        Response response = new Response();
+
+        List<Object> filteredCheckoutRecords = new ArrayList<>();
+
+        @SuppressWarnings( "unchecked" )
         HashMap<String, CheckoutRecord> checkoutRecordsMap = ( HashMap<String,
                 CheckoutRecord> )readFromStorage( StorageType.CHECKOUT_RECORD );
 
@@ -360,14 +368,52 @@ public class DataAccessFacade implements DataAccess {
                 .stream()
                 .collect( Collectors.toList() );
 
-        return checkoutRecords;
+        if ( checkoutRecords.size() > 0 ) {
+
+            for ( CheckoutRecord checkoutRecord : checkoutRecords ) {
+
+                if ( checkoutRecord.getLibraryMemberId().equals( memberId ) ) {
+                    filteredCheckoutRecords.add( checkoutRecord );
+                }
+            }
+
+            response.setListData( filteredCheckoutRecords );
+            response.setStatus( true );
+            // getData( filteredCheckoutRecords );
+        }
+        else {
+            response.setStatus( false );
+        }
+
+        return response;
+    }
+
+
+    public Response findMemberById( String memberId ) {
+
+        Response response = new Response();
+
+        @SuppressWarnings( "unchecked" )
+        HashMap<String, LibraryMember> memberRecordsMap = ( HashMap<String,
+                LibraryMember> )readFromStorage( StorageType.MEMBERS );
+
+        if ( memberRecordsMap.size() > 0 ) {
+            response.setData( memberRecordsMap.get( memberId ) );
+            response.setStatus( true );
+        }
+        else {
+            response.setMessage( "The member with id: " + memberId + " doesn't exist" );
+            response.setStatus( false );
+        }
+
+        return response;
     }
 
 
     public static void main( String[] args ) {
 
         DataAccessFacade daf = new DataAccessFacade();
-        daf.getMemberCheckoutRecords( "0" );
+        //System.out.println( daf.getMemberRecords( "918" ) );
 
     }
 
