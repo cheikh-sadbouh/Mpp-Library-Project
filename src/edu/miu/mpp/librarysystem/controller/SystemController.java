@@ -99,6 +99,21 @@ public class SystemController {
             response.setStatus( false );
         }
         return response;
+    }
 
+
+    public Response searchForLibraryMemberById( String memberId ) {
+
+        Response response = new Response();
+
+        if ( userService.addLibraryMember( memberId, firstName, lastName, phone, address ) ) {
+            response.setData( "A new libray member has been added = memberId " + memberId );
+            response.setStatus( true );
+        }
+        else {
+            response.setMessage( "internal server error , Libray member has not been added " );
+            response.setStatus( false );
+        }
+        return response;
     }
 }
