@@ -1,5 +1,6 @@
 package edu.miu.mpp.librarysystem.service;
 
+import edu.miu.mpp.librarysystem.controller.Response;
 import edu.miu.mpp.librarysystem.dao.DataAccessFacade;
 import edu.miu.mpp.librarysystem.dao.model.Address;
 import edu.miu.mpp.librarysystem.dao.model.Book;
@@ -46,12 +47,14 @@ public class UserService implements Librarian, Administrator {
 
     @Override
     public CheckoutRecord createCheckoutRecord( String Isbn, String memberId ) {
-        BookCopy bookCopy = dao.getBookCopy(Isbn);
-        CheckoutRecordEntry checkoutRecordEntry = new CheckoutRecordEntry( dao.getBookCopy(Isbn));
+
+        BookCopy bookCopy = dao.getBookCopy( Isbn );
+        CheckoutRecordEntry checkoutRecordEntry = new CheckoutRecordEntry( dao.getBookCopy(
+                Isbn ) );
         CheckoutRecord checkoutRecord = new CheckoutRecord( dao.getLibraryMember( memberId ) );
         checkoutRecord.getEntries().add( checkoutRecordEntry );
         dao.addNewCheckoutRecord( checkoutRecord );
-        dao.updateBookCopyAvailability(bookCopy.getBookCopyId().toString());
+        dao.updateBookCopyAvailability( bookCopy.getBookCopyId().toString() );
         return checkoutRecord;
     }
 
@@ -134,18 +137,21 @@ public class UserService implements Librarian, Administrator {
 
 
     @Override
-    public boolean addLibraryMember( String memberId, String firstName, String lastName,
+    public Response addLibraryMember( String memberId, String firstName, String lastName,
             String phone, Address address ) {
 
-        boolean addedMember = true;
+        Response response = new Response();
 
         LibraryMember libraryMember = new LibraryMember( memberId,
                 firstName, lastName, phone,
                 address );
 
         dao.saveNewLibraryMember( libraryMember );
-        addedMember = true;
 
-        return addedMember;
+        response.setStatus( true );
+        response.setData( libraryMember );
+        response.setMessage( "Successfully saved user" );
+
+        return response;
     }
 }

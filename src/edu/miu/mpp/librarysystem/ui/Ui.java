@@ -82,7 +82,7 @@ public class Ui {
                 return scanner.nextInt();
 
             default:
-                return scanner.nextLine();
+                return scanner.next();
         }
     }
 
@@ -169,19 +169,20 @@ public class Ui {
 
     public void checkOut() {
 
-        Ui.displayConsole("----------------------------------------------");
-        Ui.displayConsole("| Current Screen :CheckOut | 0. Navigate Back |");
-        Ui.displayConsole("----------------------------------------------");
+        Ui.displayConsole( "----------------------------------------------" );
+        Ui.displayConsole( "| Current Screen :CheckOut | 0. Navigate Back |" );
+        Ui.displayConsole( "----------------------------------------------" );
 
-        Ui.displayConsole("Enter MemberId");
+        Ui.displayConsole( "Enter MemberId" );
         scanner.nextLine();//to consume \n from displayConsole
-        String memberId =   (String) Ui.userInput(UserInputType.STRING);
+        String memberId = ( String )Ui.userInput( UserInputType.STRING );
         if ( memberId.equalsIgnoreCase( "0" ) ) {
             // call main screen
             displayUserMenu();
-        } else  {
-            Ui.displayConsole("Enter book ISBN");
-            String bookIsbn =  (String) Ui.userInput(UserInputType.STRING);
+        }
+        else {
+            Ui.displayConsole( "Enter book ISBN" );
+            String bookIsbn = ( String )Ui.userInput( UserInputType.STRING );
             Response recordResponse = systemController.Checkout( memberId, bookIsbn );
             if ( recordResponse.getStatus() ) {
                 Ui.displayConsole( recordResponse.getData().toString() );
@@ -279,24 +280,24 @@ public class Ui {
         System.out.println( "-------Add libray member-------" );
 
         System.out.println( "Type memberId:" );
-        String memberId = scanner.nextLine();
+        String memberId = ( String )Ui.userInput( UserInputType.STRING );
 
         //Check if memberId exists before adding more data
         if ( memberId.length() > 0 ) {
-            while ( userService.isMember( memberId ) ) {
+            while ( !userService.isMember( memberId ) ) {
                 System.out.println( "MemberId: " + memberId
                         + " is already taken. Please select another Id" );
-                memberId = scanner.nextLine();
+                memberId = ( String )Ui.userInput( UserInputType.STRING );
             }
         }
 
-        String firstName = scanner.nextLine();
         System.out.println( "Type member first name:" );
+        String firstName = ( String )Ui.userInput( UserInputType.STRING );
 
-        String lastName = scanner.nextLine();
+        String lastName = ( String )Ui.userInput( UserInputType.STRING );
         System.out.println( "Type member last name:" );
 
-        String phone = scanner.nextLine();
+        String phone = ( String )Ui.userInput( UserInputType.STRING );
         System.out.println( "Type member phone:" );
 
         Address address = createAddress();
@@ -306,7 +307,7 @@ public class Ui {
 
         if ( response.getStatus() ) {
             Ui.displayConsole( response.getMessage() + "\n" );
-            user = ( User )response.getData();
+            //            user = ( LibraryMember )response.getData();
             displayUserMenu();
         }
         else {
@@ -344,17 +345,17 @@ public class Ui {
 
     private Address createAddress() {
 
-        String street = scanner.nextLine();
+        String street = ( String )Ui.userInput( UserInputType.STRING );
         System.out.println( "-------Add member address-------" );
         System.out.println( "Type street:" );
 
-        String city = scanner.nextLine();
+        String city = ( String )Ui.userInput( UserInputType.STRING );
         System.out.println( "Type city:" );
 
-        String state = scanner.nextLine();
+        String state = ( String )Ui.userInput( UserInputType.STRING );
         System.out.println( "Type state:" );
 
-        String zip = scanner.nextLine();
+        String zip = ( String )Ui.userInput( UserInputType.STRING );
         System.out.println( "Type zip:" );
 
         //scanner.close();
