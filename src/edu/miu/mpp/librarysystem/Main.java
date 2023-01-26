@@ -9,7 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class Main {
-
+    public  static Ui app;
     public static void main(String[] args) throws IOException {
         // Load data
        if(!Files.exists(Path.of(DataAccessFacade.OUTPUT_DIR))) {
@@ -20,7 +20,7 @@ public class Main {
         /**
          * Start Application
          */
-        Ui app = new Ui();
+         app = new Ui();
         app.start();
 
 

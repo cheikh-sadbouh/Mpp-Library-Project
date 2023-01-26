@@ -2,6 +2,7 @@ package edu.miu.mpp.librarysystem.ui;
 
 import java.util.*;
 
+import edu.miu.mpp.librarysystem.Main;
 import edu.miu.mpp.librarysystem.controller.SystemController;
 import edu.miu.mpp.librarysystem.controller.Response;
 import edu.miu.mpp.librarysystem.dao.model.*;
@@ -94,7 +95,8 @@ public class Ui {
                 String inputString = scanner.next();
 
                 if ( inputString.equals( "0" ) ) {
-                    //ui.displayUserMenu();
+                    /** to be reviewed */
+                    Main.app.displayUserMenu();
                 }
                 return inputString;
         }
