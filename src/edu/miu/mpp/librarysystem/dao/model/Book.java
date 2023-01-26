@@ -1,10 +1,7 @@
 package edu.miu.mpp.librarysystem.dao.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class Book implements Serializable {
 
@@ -16,21 +13,29 @@ public class Book implements Serializable {
 
     public Book(){}
 
-    public Book(String title, String isbn, List<BookCopy> bookCopies, List<Author> authors, MaxBookCheckout maxBookCheckout) {
-        this.title = title;
-        this.isbn = isbn;
-        this.bookCopies = bookCopies;
-        this.authors = authors;
-        this.maxBookCheckout = maxBookCheckout;
-    }
-
     public Book(String isbn, String title, MaxBookCheckout maxBookCheckout, List<Author> authors) {
         this.isbn = isbn;
         this.title = title;
         this.maxBookCheckout = maxBookCheckout;
         this.authors = authors;
-        this.bookCopies = new ArrayList<>();
+        if(maxBookCheckout.equals(MaxBookCheckout.TWENTY_ONE_DAYS))
+             this.bookCopies = Arrays.asList(new BookCopy(UUID.randomUUID(),this));
+        else
+            this.bookCopies = Arrays.asList(new BookCopy(UUID.randomUUID(),this),new BookCopy(UUID.randomUUID(),this));
     }
+
+    public Book(String isbn, String title, MaxBookCheckout maxBookCheckout, List<Author> authors, Integer numberOfCopies){
+        this.isbn = isbn;
+        this.title = title;
+        this.maxBookCheckout = maxBookCheckout;
+        this.authors = authors;
+        this.bookCopies = new ArrayList<>();
+        for (int i = 1; i <  numberOfCopies; i++) {
+            this.bookCopies.add(new BookCopy(UUID.randomUUID(),this));
+        }
+    }
+
+
 
     public String getTitle() {
         return title;
@@ -85,12 +90,12 @@ public class Book implements Serializable {
     }
 
 
-
     @Override
     public String toString() {
         return "Book{" +
                 "title='" + title + '\'' +
                 ", isbn='" + isbn + '\'' +
+                ", bookCopies=" + bookCopies +
                 ", authors=" + authors +
                 ", maxBookCheckout=" + maxBookCheckout +
                 '}';

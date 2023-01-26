@@ -10,6 +10,7 @@ public interface DataAccess {
 	User getUser(String username, String pass);
 	LibraryMember getLibraryMember(String LibraryMemberId);
 	Book getBook(String isbn);
+	boolean updateBookCopyAvailability(String bookCopyId);
 	BookCopy getBookCopy(String isbn);
 	List<Book> getAllBook();
 	public HashMap<String, Book> readBooksMap();

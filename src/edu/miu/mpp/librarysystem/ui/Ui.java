@@ -6,11 +6,13 @@ import edu.miu.mpp.librarysystem.controller.SystemController;
 import edu.miu.mpp.librarysystem.controller.Response;
 import edu.miu.mpp.librarysystem.dao.model.*;
 import edu.miu.mpp.librarysystem.service.Auth;
+import edu.miu.mpp.librarysystem.service.UserService;
 
-enum UserInputType{
+enum UserInputType {
     STRING, INTEGER;
 }
-enum DisplayMenu{
+
+enum DisplayMenu {
     Add_Book,
     Add_New_Library_Member,
     Add_a_Book_Copy,
@@ -20,17 +22,21 @@ enum DisplayMenu{
     Check_Book_Status,
     Find_Over_Due_Book
 }
+
 public class Ui {
 
     private static Scanner scanner;
     private User user;
     private Response response;
+    private UserService userService;
 
     static SystemController systemController;
 
-    public Ui(){
+    public Ui() {
+
         systemController = new SystemController();
-        scanner = new Scanner(System.in);
+        scanner = new Scanner( System.in ).useDelimiter("\\n");
+        userService = new UserService();
     }
 
 
@@ -50,13 +56,14 @@ public class Ui {
         Ui.displayConsole( "Enter Password: " );
         String password = ( String )Ui.userInput( UserInputType.STRING );
 
-        response = systemController.authenticateUser(userID, password);
-        if (response.getStatus()){
-            Ui.displayConsole(response.getMessage()+"\n");
-            user = (User)response.getData();
+        response = systemController.authenticateUser( userID, password );
+        if ( response.getStatus() ) {
+            Ui.displayConsole( response.getMessage() + "\n" );
+            user = ( User )response.getData();
             displayUserMenu();
-        }else{
-            Ui.displayConsole(response.getMessage());
+        }
+        else {
+            Ui.displayConsole( response.getMessage() );
         }
 
     }
@@ -75,7 +82,7 @@ public class Ui {
                 return scanner.nextInt();
 
             default:
-                return scanner.nextLine();
+                return scanner.next();
         }
     }
 
@@ -93,126 +100,152 @@ public class Ui {
         return null;
     }
 
+
     /**
      * User List Menu
      */
-    public void displayUserMenu(){
+    public void displayUserMenu() {
+
         List<DisplayMenu> allList = new ArrayList<>();
-        Collections.addAll(allList, DisplayMenu.Calculate_Late_Fee, DisplayMenu.Check_Book_Status);
+        Collections.addAll( allList, DisplayMenu.Calculate_Late_Fee,
+                DisplayMenu.Check_Book_Status );
 
-        List<DisplayMenu> adminList = Arrays.asList(DisplayMenu.Add_Book, DisplayMenu.Add_New_Library_Member, DisplayMenu.Add_a_Book_Copy);
-        List<DisplayMenu> libList = Arrays.asList(DisplayMenu.Check_Out_Book, DisplayMenu.Search_Member,DisplayMenu.Find_Over_Due_Book);
+        List<DisplayMenu> adminList = Arrays.asList( DisplayMenu.Add_Book,
+                DisplayMenu.Add_New_Library_Member, DisplayMenu.Add_a_Book_Copy );
+        List<DisplayMenu> libList = Arrays.asList( DisplayMenu.Check_Out_Book,
+                DisplayMenu.Search_Member, DisplayMenu.Find_Over_Due_Book );
 
-        if (user.getUserRole() == Auth.BOTH){
-            allList.addAll(adminList);
-            allList.addAll(libList);
-        }else if (user.getUserRole() == Auth.ADMIN){
-            allList.addAll(adminList);
+        if ( user.getUserRole() == Auth.BOTH ) {
+            allList.addAll( adminList );
+            allList.addAll( libList );
+        }
+        else if ( user.getUserRole() == Auth.ADMIN ) {
+            allList.addAll( adminList );
 
-        }else if (user.getUserRole() == Auth.LIBRARIAN) {
-            allList.addAll(libList);
+        }
+        else if ( user.getUserRole() == Auth.LIBRARIAN ) {
+            allList.addAll( libList );
         }
 
-        StringBuilder output = new StringBuilder("Select from the Menu\nEnter the number to select\n");
-        for (int i = 0; i < allList.size(); i++) {
-            output.append(i+1).append(". ").append(allList.get(i)).append("\n");
+        StringBuilder output = new StringBuilder(
+                "Select from the Menu\nEnter the number to select\n" );
+        for ( int i = 0; i < allList.size(); i++ ) {
+            output.append( i + 1 ).append( ". " ).append( allList.get( i ) ).append( "\n" );
         }
 
-        Ui.displayConsole(output.toString());
-        Integer menuSelection = (Integer) Ui.userInput(UserInputType.INTEGER);
+        Ui.displayConsole( output.toString() );
+        Integer menuSelection = ( Integer )Ui.userInput( UserInputType.INTEGER );
 
-        Ui.displayConsole("You selected: "+menuSelection+". "+allList.get(menuSelection-1));
-        menuSelection(allList.get(menuSelection-1));
+        Ui.displayConsole( "You selected: " + menuSelection + ". " + allList.get( menuSelection
+                - 1 ) );
+        menuSelection( allList.get( menuSelection - 1 ) );
     }
 
-    public void menuSelection(DisplayMenu menuSelection){
-        switch (menuSelection){
+
+    public void menuSelection( DisplayMenu menuSelection ) {
+
+        switch ( menuSelection ) {
             case Check_Out_Book:
                 checkOut();
                 break;
             case Add_Book:
-                addNewBook();
+                addBook();
                 break;
-            case  Find_Over_Due_Book :
+            case Find_Over_Due_Book:
                 findOverDueBookCopies();
                 break;
-            case  Add_a_Book_Copy:
-                addBooCopy();
-                break;
-            case Calculate_Late_Fee:
-
+            case Add_a_Book_Copy:
+                addBookCopy();
+            case Add_New_Library_Member:
+                addLibraryMember();
                 break;
             default:
-                Ui.displayConsole("You entered an invalid menu selection\n Try again");
+                Ui.displayConsole( "You entered an invalid menu selection\n Try again" );
                 displayUserMenu();
 
         }
     }
 
+
     public void checkOut() {
 
-        Ui.displayConsole("Current Screen :CheckOut\n");
-        Ui.displayConsole("0. Navigate Back\n" );
+        Ui.displayConsole("----------------------------------------------");
+        Ui.displayConsole("| Current Screen :CheckOut | 0. Navigate Back |");
+        Ui.displayConsole("----------------------------------------------");
 
-        Ui.displayConsole("Enter MemberId\n");
+        Ui.displayConsole("Enter MemberId");
+        scanner.nextLine();//to consume \n from displayConsole
         String memberId =   (String) Ui.userInput(UserInputType.STRING);
         if ( memberId.equalsIgnoreCase( "0" ) ) {
             // call main screen
             displayUserMenu();
         } else  {
-            Ui.displayConsole("Enter book ISBN\n");
+            Ui.displayConsole("Enter book ISBN");
             String bookIsbn =  (String) Ui.userInput(UserInputType.STRING);
             Response recordResponse = systemController.Checkout( memberId, bookIsbn );
-            if ( recordResponse.getStatus()) {
+            if ( recordResponse.getStatus() ) {
                 Ui.displayConsole( recordResponse.getData().toString() );
-            }else{
-                Ui.displayConsole(recordResponse.getMessage());
             }
+            else {
+                Ui.displayConsole( recordResponse.getMessage() );
 
+            }
         }
-
+        checkOut();
 
     }
-    public  void findOverDueBookCopies(){
-        Ui.displayConsole("Current Screen :Find Over Due Book\n");
-        Ui.displayConsole("0. Navigate Back\n" );
 
-        Ui.displayConsole("Enter book ISBN\n");
-        String bookIsbn =  (String) Ui.userInput(UserInputType.STRING);
+
+    public void findOverDueBookCopies() {
+
+        Ui.displayConsole( "Current Screen :Find Over Due Book\n" );
+        Ui.displayConsole( "0. Navigate Back\n" );
+
+        Ui.displayConsole( "Enter book ISBN\n" );
+        String bookIsbn = ( String )Ui.userInput( UserInputType.STRING );
 
         if ( bookIsbn.equalsIgnoreCase( "0" ) ) {
             // call main screen
             displayUserMenu();
-        } else {
-            Response recordResponse = systemController.getBookCopiesWithCheckoutRecord(bookIsbn);
-            if ( recordResponse.getStatus()) {
+        }
+        else {
+            Response recordResponse = systemController.getBookCopiesWithCheckoutRecord( bookIsbn );
+            if ( recordResponse.getStatus() ) {
                 Ui.displayConsole( recordResponse.getData().toString() );
-            }else{
-                Ui.displayConsole(recordResponse.getMessage());
+            }
+            else {
+                Ui.displayConsole( recordResponse.getMessage() );
             }
 
         }
 
     }
-    public  void addBooCopy(){
-        Ui.displayConsole("Current Screen : Add a  Book Copy\n");
-        Ui.displayConsole("0. Navigate Back\n" );
 
-        Ui.displayConsole("Enter book ISBN\n");
-        String bookIsbn =  (String) Ui.userInput(UserInputType.STRING);
+
+    public void addBookCopy() {
+
+        Ui.displayConsole( "Current Screen : Add a  Book Copy\n" );
+        Ui.displayConsole( "0. Navigate Back\n" );
+
+        Ui.displayConsole( "Enter book ISBN\n" );
+        String bookIsbn = ( String )Ui.userInput( UserInputType.STRING );
         if ( bookIsbn.equalsIgnoreCase( "0" ) ) {
             // call main screen
             displayUserMenu();
-        } else {
-            Response recordResponse = systemController.addNewBookCopy(bookIsbn,UUID.randomUUID().toString());
-            if ( recordResponse.getStatus()) {
+        }
+        else {
+            Response recordResponse = systemController.addNewBookCopy( bookIsbn, UUID.randomUUID()
+                    .toString() );
+            if ( recordResponse.getStatus() ) {
                 Ui.displayConsole( recordResponse.getData().toString() );
-            }else{
-                Ui.displayConsole(recordResponse.getMessage());
+            }
+            else {
+                Ui.displayConsole( recordResponse.getMessage() );
             }
 
         }
     }
+
 
     public void addNewBook() {
 
@@ -240,38 +273,100 @@ public class Ui {
         System.out.println( book );
     }
 
-    private void calculateBookLateFee(){
+    public void addBook(){
+        String title, isbn, authorsSelection;
+        MaxBookCheckout maxBookCheckout;
+        Integer numberOfCopies, authorCount;
+        List<Author> authors = new ArrayList<>();
+
+        Ui.displayConsole("Enter details to add a new Book");
+        Ui.displayConsole("");
+
+        Ui.displayConsole("ISBN: ");
+        isbn = (String) Ui.userInput(UserInputType.STRING);
+
+        Ui.displayConsole("Title: ");
+        title = (String) Ui.userInput(UserInputType.STRING);
+
+        Ui.displayConsole("Enter Number of Authors ");
+        authorCount = (Integer) Ui.userInput(UserInputType.INTEGER);
+        for (int i = 1; i <= authorCount; i++) {
+            Ui.displayConsole(i+".");
+            Ui.displayConsole("Enter first name of Author: ");
+            String firstName = (String) Ui.userInput(UserInputType.STRING);
+
+            Ui.displayConsole("Enter last name of Author: ");
+            String lastName = (String) Ui.userInput(UserInputType.STRING);
+
+            Ui.displayConsole("Enter phone of Author: ");
+            String phone = (String) Ui.userInput(UserInputType.STRING);
+
+            authors.add(new Author(firstName, lastName, phone, null, null));
+            Ui.displayConsole("-----------------------------------------------");
+        }
+
+        Ui.displayConsole("Number of Copies: ");
+        numberOfCopies = (Integer) Ui.userInput(UserInputType.INTEGER);
+
+        Ui.displayConsole("Select max checkout length");
+        List<MaxBookCheckout> maxBookCheckoutList = Arrays.asList(MaxBookCheckout.SEVEN_DAYS, MaxBookCheckout.TWENTY_ONE_DAYS);
+        StringBuilder maxOutput = new StringBuilder();
+        for (int i = 0; i < maxBookCheckoutList.size(); i++) {
+            maxOutput.append(i+1).append(". ").append(maxBookCheckoutList.get(i).getDays()).append("\n");
+        }
+        Ui.displayConsole(String.valueOf(maxOutput));
+        Integer maxMenuSelection = (Integer) Ui.userInput(UserInputType.INTEGER);
+        Ui.displayConsole("You selected "+maxBookCheckoutList.get(maxMenuSelection-1).getDays());
+        maxBookCheckout = maxBookCheckoutList.get(maxMenuSelection-1);
+
+        response = systemController.addBook(isbn, title, maxBookCheckout, authors, numberOfCopies);
+        Ui.displayConsole(response.getMessage());
+
+        displayUserMenu();
 
     }
 
-    public LibraryMember addLibraryMember() {
+
+    public void addLibraryMember() {
 
         System.out.println( "-------Add libray member-------" );
 
         System.out.println( "Type memberId:" );
         String memberId = scanner.nextLine();
 
-        System.out.println( "Type member first name:" );
+        //Check if memberId exists before adding more data
+        if ( memberId.length() > 0 ) {
+            while ( userService.isMember( memberId ) ) {
+                System.out.println( "MemberId: " + memberId
+                        + " is already taken. Please select another Id" );
+                memberId = scanner.nextLine();
+            }
+        }
+
         String firstName = scanner.nextLine();
+        System.out.println( "Type member first name:" );
 
-        System.out.println( "Type member last name:" );
         String lastName = scanner.nextLine();
+        System.out.println( "Type member last name:" );
 
-        System.out.println( "Type member phone:" );
         String phone = scanner.nextLine();
-
-        //scanner.close();
+        System.out.println( "Type member phone:" );
 
         Address address = createAddress();
 
-        LibraryMember libraryMember = new LibraryMember( memberId,
-                firstName, lastName, phone,
+        response = systemController.addLibraryMember( memberId, firstName, lastName, phone,
                 address );
 
-        System.out.println( libraryMember );
-
-        return libraryMember;
+        if ( response.getStatus() ) {
+            Ui.displayConsole( response.getMessage() + "\n" );
+            user = ( User )response.getData();
+            displayUserMenu();
+        }
+        else {
+            Ui.displayConsole( response.getMessage() );
+        }
     }
+
 
     private Author addAuthor( Book book ) {
 
@@ -299,21 +394,21 @@ public class Ui {
         return author;
     }
 
+
     private Address createAddress() {
 
-        System.out.println( "-------Add member address-------" );
-
-        System.out.println( "Type street:" );
         String street = scanner.nextLine();
+        System.out.println( "-------Add member address-------" );
+        System.out.println( "Type street:" );
 
-        System.out.println( "Type city:" );
         String city = scanner.nextLine();
+        System.out.println( "Type city:" );
 
-        System.out.println( "Type state:" );
         String state = scanner.nextLine();
+        System.out.println( "Type state:" );
 
-        System.out.println( "Type zip:" );
         String zip = scanner.nextLine();
+        System.out.println( "Type zip:" );
 
         //scanner.close();
 
