@@ -309,10 +309,6 @@ public class Ui {
         else {
             Ui.displayConsole( response.getMessage() );
         }
-
-        LibraryMember libraryMember = new LibraryMember( memberId,
-                firstName, lastName, phone,
-                address );
     }
 
 
