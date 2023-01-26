@@ -417,18 +417,22 @@ public class Ui {
         for ( CheckoutRecord checkoutRecord : checkoutRecords ) {
             System.out.println( "Member Id: " + checkoutRecord.getLibraryMemberId() );
             System.out.println( "Checkout Id: " + checkoutRecord.getCheckoutId() );
-
+            System.out.println( "***************************************************" );
             List<CheckoutRecordEntry> entries = checkoutRecord.getEntries();
 
             for ( CheckoutRecordEntry entry : entries ) {
-                System.out.printf( "%-22s%-22s%-22s\n", "Book Copy Id", "Checkout date",
-                        "Due Date" );
+                System.out.printf( "%-50s%-22s%-22s%-22s\n", "Book Copy Id", "Available",
+                        "Checkout date", "Due Date" );
 
-                System.out.printf( "%-22s%-22s%-22s\n",
-                        entry.getBookCopy(),
+                System.out.printf( "%-50s%-22s%-22s%-22s\n",
+                        entry.getBookCopy().getBookCopyId(),
+                        entry.getBookCopy().isAvailable(),
                         entry.getCheckoutDate(),
-                        entry.getCheckoutDate() );
+                        entry.getDueDate() );
             }
+            System.out.println( "\n" );
+            System.out.println(
+                    "******************************************************************************************************" );
         }
 
     }
