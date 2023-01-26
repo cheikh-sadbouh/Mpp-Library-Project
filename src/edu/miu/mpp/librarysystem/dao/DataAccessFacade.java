@@ -358,7 +358,7 @@ public class DataAccessFacade implements DataAccess {
 
         Response response = new Response();
 
-        List<Object> filteredCheckoutRecords = new ArrayList<>();
+        List<CheckoutRecord> filteredCheckoutRecords = new ArrayList<>();
 
         @SuppressWarnings( "unchecked" )
         HashMap<String, CheckoutRecord> checkoutRecordsMap = ( HashMap<String,
@@ -376,8 +376,8 @@ public class DataAccessFacade implements DataAccess {
                     filteredCheckoutRecords.add( checkoutRecord );
                 }
             }
-
-            response.setListData( filteredCheckoutRecords );
+            
+            response.setData( filteredCheckoutRecords );
             response.setStatus( true );
             // getData( filteredCheckoutRecords );
         }

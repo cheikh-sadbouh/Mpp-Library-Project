@@ -1,6 +1,5 @@
 package edu.miu.mpp.librarysystem.controller;
 
-import java.util.List;
 import java.util.Objects;
 
 public final class Response {
@@ -8,7 +7,6 @@ public final class Response {
     private String message;
     private Boolean status;
     private Object data;
-    private List<Object> listData;
 
     public Response() {
 
@@ -17,14 +15,6 @@ public final class Response {
 
 
     Response( String message, Boolean status, Object data ) {
-
-        this.message = message;
-        this.status = status;
-        this.data = data;
-    }
-
-
-    Response( String message, Boolean status, List<Object> data ) {
 
         this.message = message;
         this.status = status;
@@ -68,18 +58,6 @@ public final class Response {
     }
 
 
-    public List<Object> getListData() {
-
-        return listData;
-    }
-
-
-    public void setListData( List<Object> listData ) {
-
-        this.listData = listData;
-    }
-
-
     @Override
     public boolean equals( Object obj ) {
 
@@ -107,8 +85,7 @@ public final class Response {
         return "Response[" +
                 "message=" + message + ", " +
                 "status=" + status + ", " +
-                "data=" + data + ", " +
-                "listData=" + listData + ']';
+                "data=" + data + ", " + ']';
     }
 
 }

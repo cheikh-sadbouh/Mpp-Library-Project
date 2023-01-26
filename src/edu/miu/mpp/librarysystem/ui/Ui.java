@@ -398,13 +398,38 @@ public class Ui {
 
             if ( showCheckoutRecords.equals( "yes" ) ) {
                 response = systemController.getCheckoutRecordsMemberById( memberId );
-                System.out.println( response );
+
+                List<CheckoutRecord> checkoutRecords = ( List<CheckoutRecord> )response.getData();
+
+                printCheckoutRecordEntries( checkoutRecords );
             }
             else {
                 displayUserMenu();
                 return;
             }
         }
+    }
+
+
+    private void printCheckoutRecordEntries( List<CheckoutRecord> checkoutRecords ) {
+
+        for ( CheckoutRecord checkoutRecord : checkoutRecords ) {
+            System.out.println( "Member Id: " + checkoutRecord.getLibraryMemberId() );
+            System.out.println( "Checkout Id: " + checkoutRecord.getCheckoutId() );
+
+            List<CheckoutRecordEntry> entries = checkoutRecord.getEntries();
+
+            for ( CheckoutRecordEntry entry : entries ) {
+                System.out.printf( "%-22s%-22s%-22s\n", "Book Copy Id", "Checkout date",
+                        "Due Date" );
+
+                System.out.printf( "%-22s%-22s%-22s\n",
+                        entry.getBookCopy(),
+                        entry.getCheckoutDate(),
+                        entry.getCheckoutDate() );
+            }
+        }
+
     }
 
 
