@@ -2,7 +2,7 @@ package edu.miu.mpp.librarysystem.ui;
 
 import java.util.*;
 
-import edu.miu.mpp.librarysystem.controller.LibrarianController;
+import edu.miu.mpp.librarysystem.controller.SystemController;
 import edu.miu.mpp.librarysystem.controller.Response;
 import edu.miu.mpp.librarysystem.dao.model.*;
 import edu.miu.mpp.librarysystem.service.Auth;
@@ -17,7 +17,8 @@ enum DisplayMenu{
     Check_Out_Book,
     Search_Member,
     Calculate_Late_Fee,
-    Check_Book_Status
+    Check_Book_Status,
+    Find_Over_Due_Book
 }
 public class Ui {
 
@@ -25,10 +26,10 @@ public class Ui {
     private User user;
     private Response response;
 
-    static LibrarianController librarianController;
+    static SystemController systemController;
 
     public Ui(){
-        librarianController = new LibrarianController();
+        systemController = new SystemController();
         scanner = new Scanner(System.in);
     }
 
@@ -49,7 +50,7 @@ public class Ui {
         Ui.displayConsole( "Enter Password: " );
         String password = ( String )Ui.userInput( UserInputType.STRING );
 
-        response = librarianController.authenticateUser(userID, password);
+        response = systemController.authenticateUser(userID, password);
         if (response.getStatus()){
             Ui.displayConsole(response.getMessage()+"\n");
             user = (User)response.getData();
@@ -100,7 +101,7 @@ public class Ui {
         Collections.addAll(allList, DisplayMenu.Calculate_Late_Fee, DisplayMenu.Check_Book_Status);
 
         List<DisplayMenu> adminList = Arrays.asList(DisplayMenu.Add_Book, DisplayMenu.Add_New_Library_Member, DisplayMenu.Add_a_Book_Copy);
-        List<DisplayMenu> libList = Arrays.asList(DisplayMenu.Check_Out_Book, DisplayMenu.Search_Member);
+        List<DisplayMenu> libList = Arrays.asList(DisplayMenu.Check_Out_Book, DisplayMenu.Search_Member,DisplayMenu.Find_Over_Due_Book);
 
         if (user.getUserRole() == Auth.BOTH){
             allList.addAll(adminList);
@@ -132,6 +133,12 @@ public class Ui {
             case Add_Book:
                 addNewBook();
                 break;
+            case  Find_Over_Due_Book :
+                findOverDueBookCopies();
+                break;
+            case  Add_a_Book_Copy:
+                addBooCopy();
+                break;
             case Calculate_Late_Fee:
 
                 break;
@@ -144,40 +151,72 @@ public class Ui {
 
     public void checkOut() {
 
-        Scanner scanner = new Scanner( System.in );
-        String userResponse = "";
+        Ui.displayConsole("Current Screen :CheckOut\n");
+        Ui.displayConsole("0. Navigate Back\n" );
 
-        System.out.println( "Current Screen :CheckOut" );
-        System.out.println( "1. start Checkout\n" + "0. Exit" );
-        userResponse = scanner.next();
-
-        if ( userResponse.equalsIgnoreCase( "0" ) ) {
+        Ui.displayConsole("Enter MemberId\n");
+        String memberId =   (String) Ui.userInput(UserInputType.STRING);
+        if ( memberId.equalsIgnoreCase( "0" ) ) {
             // call main screen
-
-        }
-        else if ( userResponse.equalsIgnoreCase( "1" ) ) {
-            System.out.println( "Enter MemberId" );
-            String memberId = scanner.next();
-            System.out.println( "Enter book ISBN " );
-            String bookIsbn = scanner.next();
-            Response recordResponse = librarianController.Checkout( memberId, bookIsbn );
+            displayUserMenu();
+        } else  {
+            Ui.displayConsole("Enter book ISBN\n");
+            String bookIsbn =  (String) Ui.userInput(UserInputType.STRING);
+            Response recordResponse = systemController.Checkout( memberId, bookIsbn );
             if ( recordResponse.getStatus()) {
-                System.out.println( recordResponse.getData() );
+                Ui.displayConsole( recordResponse.getData().toString() );
             }else{
-                System.out.println(recordResponse.getMessage());
+                Ui.displayConsole(recordResponse.getMessage());
             }
 
         }
-        else {
-            checkOut();
+
+
+    }
+    public  void findOverDueBookCopies(){
+        Ui.displayConsole("Current Screen :Find Over Due Book\n");
+        Ui.displayConsole("0. Navigate Back\n" );
+
+        Ui.displayConsole("Enter book ISBN\n");
+        String bookIsbn =  (String) Ui.userInput(UserInputType.STRING);
+
+        if ( bookIsbn.equalsIgnoreCase( "0" ) ) {
+            // call main screen
+            displayUserMenu();
+        } else {
+            Response recordResponse = systemController.getBookCopiesWithCheckoutRecord(bookIsbn);
+            if ( recordResponse.getStatus()) {
+                Ui.displayConsole( recordResponse.getData().toString() );
+            }else{
+                Ui.displayConsole(recordResponse.getMessage());
+            }
+
         }
 
+    }
+    public  void addBooCopy(){
+        Ui.displayConsole("Current Screen : Add a  Book Copy\n");
+        Ui.displayConsole("0. Navigate Back\n" );
+
+        Ui.displayConsole("Enter book ISBN\n");
+        String bookIsbn =  (String) Ui.userInput(UserInputType.STRING);
+        if ( bookIsbn.equalsIgnoreCase( "0" ) ) {
+            // call main screen
+            displayUserMenu();
+        } else {
+            Response recordResponse = systemController.addNewBookCopy(bookIsbn,UUID.randomUUID().toString());
+            if ( recordResponse.getStatus()) {
+                Ui.displayConsole( recordResponse.getData().toString() );
+            }else{
+                Ui.displayConsole(recordResponse.getMessage());
+            }
+
+        }
     }
 
     public void addNewBook() {
 
         System.out.println( "-------Add new book-------" );
-        Scanner scanner = new Scanner( System.in );
         System.out.println( "Type book title:" );
         String title = scanner.next();
         System.out.println( "Type book isbn:" );
@@ -208,7 +247,6 @@ public class Ui {
     public LibraryMember addLibraryMember() {
 
         System.out.println( "-------Add libray member-------" );
-        Scanner scanner = new Scanner( System.in );
 
         System.out.println( "Type memberId:" );
         String memberId = scanner.nextLine();
@@ -241,8 +279,6 @@ public class Ui {
         List<Book> books = new ArrayList<>();
         books.add( book );
 
-        Scanner scanner = new Scanner( System.in );
-
         System.out.println( "Type author first name:" );
         String firstName = scanner.nextLine();
 
@@ -266,7 +302,6 @@ public class Ui {
     private Address createAddress() {
 
         System.out.println( "-------Add member address-------" );
-        Scanner scanner = new Scanner( System.in );
 
         System.out.println( "Type street:" );
         String street = scanner.nextLine();

@@ -6,10 +6,10 @@ import edu.miu.mpp.librarysystem.service.UserService;
 import java.util.Objects;
 import java.util.Optional;
 
-public class LibrarianController {
+public class SystemController {
     private UserService userService;
 
-    public LibrarianController(){
+    public SystemController(){
         userService = new UserService();
     }
 
@@ -58,7 +58,7 @@ public class LibrarianController {
         Response response =  new Response();
 
         if(userService.addNewBookCopy(isbn, bookCopyId)){
-            response.setData("mew Book Copy has been added !");
+            response.setData("mew Book Copy has been added ! with copy Number = "+bookCopyId);
             response.setStatus(true);
         }else {
             response.setMessage("internal server error , bookCopy has not been added ");
