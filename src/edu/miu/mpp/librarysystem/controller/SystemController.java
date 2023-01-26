@@ -34,17 +34,19 @@ public class SystemController {
 
         Response response = new Response();
 
-        if(userService.isMember(memberId)){
-            response.setMessage(memberId+" is  not yet a member \n");
-        } else if(userService.isIsbnExist(Isbn)){
-            response.setMessage(Isbn+" there is no book match this ISBN \n");
-        } else if(userService.isBookAvailable(Isbn)){
-            response.setMessage(" no available copy at the moment for  Isbn "+Isbn+"\n");
-        }else{
-             response.setData(userService.createCheckoutRecord(Isbn,memberId).toString());
-             response.setStatus(true);
+        if ( userService.isMember( memberId ) ) {
+            response.setMessage( memberId + " is  not yet a member \n" );
         }
-
+        else if ( userService.isIsbnExist( Isbn ) ) {
+            response.setMessage( Isbn + " there is no book match this ISBN \n" );
+        }
+        else if ( userService.isBookAvailable( Isbn ) ) {
+            response.setMessage( " no available copy at the moment for  Isbn " + Isbn + "\n" );
+        }
+        else {
+            response.setData( userService.createCheckoutRecord( Isbn, memberId ).toString() );
+            response.setStatus( true );
+        }
 
         return response;
 
@@ -72,7 +74,8 @@ public class SystemController {
         Response response = new Response();
 
         if ( userService.addNewBookCopy( isbn, bookCopyId ) ) {
-            response.setData( "mew Book Copy has been added ! with copy Number = " + bookCopyId );
+            response.setMessage( "mew Book Copy has been added ! with copy Number = "
+                    + bookCopyId );
             response.setStatus( true );
         }
         else {
@@ -86,18 +89,25 @@ public class SystemController {
     public Response addLibraryMember( String memberId, String firstName, String lastName,
             String phone, Address address ) {
 
+        Response response =
+                userService.addLibraryMember( memberId, firstName, lastName, phone, address );
+        return response;
+    }
+
+
+    public Response searchForLibraryMemberById( String memberId ) {
+
         Response response = new Response();
 
-        if ( userService.addLibraryMember( memberId, firstName, lastName, phone, address ) ) {
-            response.setData( "A new libray member has been added = memberId " + memberId );
-            response.setStatus( true );
-        }
-        else {
-            response.setMessage( "internal server error , Libray member has not been added " );
-            response.setStatus( false );
-        }
+        //        if ( userService.addLibraryMember( memberId, firstName, lastName, phone, address ) ) {
+        //            response.setData( "A new libray member has been added = memberId " + memberId );
+        //            response.setStatus( true );
+        //        }
+        //        else {
+        //            response.setMessage( "internal server error , Libray member has not been added " );
+        //            response.setStatus( false );
+        //        }
         return response;
-
     }
 
     public Response addBook(String isbn, String title, MaxBookCheckout maxBookCheckout,
