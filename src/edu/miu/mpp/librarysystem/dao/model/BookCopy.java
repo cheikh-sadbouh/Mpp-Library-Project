@@ -51,12 +51,10 @@ public class BookCopy implements Serializable {
         return isAvailable == bookCopy.isAvailable && Objects.equals(bookCopyId, bookCopy.bookCopyId) && Objects.equals(book, bookCopy.book);
     }
 
-
     @Override
     public String toString() {
         return "BookCopy{" +
-                "bookCopyId=" + bookCopyId +
-                ", book=" + book +
+                "bookCopyId=" + bookCopyId.toString() +
                 ", isAvailable=" + isAvailable +
                 '}';
     }

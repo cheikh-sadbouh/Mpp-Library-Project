@@ -5,6 +5,7 @@ import edu.miu.mpp.librarysystem.service.Auth;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class TestData {
@@ -15,15 +16,16 @@ public class TestData {
         td.libraryMemberData();
         td.userData();
         DataAccess da = new DataAccessFacade();
+        DataAccessFacade.loadCheckoutRecordMap();
     }
 
     public void bookData() {
-        allBooks.get(0).addCopy();
-        allBooks.get(0).addCopy();
-        allBooks.get(1).addCopy();
-        allBooks.get(3).addCopy();
-        allBooks.get(2).addCopy();
-        allBooks.get(2).addCopy();
+//        allBooks.get(0).addCopy();
+//        allBooks.get(0).addCopy();
+//        allBooks.get(1).addCopy();
+//        allBooks.get(3).addCopy();
+//        allBooks.get(2).addCopy();
+//        allBooks.get(2).addCopy();
         DataAccessFacade.loadBookMap(allBooks);
     }
 
