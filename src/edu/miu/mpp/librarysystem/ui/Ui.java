@@ -186,30 +186,27 @@ public class Ui {
 
     public void checkOut() {
 
-        displayScreenHeader(DisplayMenu.Check_Out_Book.toString());
+            displayScreenHeader(DisplayMenu.Check_Out_Book.toString());
 
-        Ui.displayConsole("Enter MemberId");
+            Ui.displayConsole("Enter MemberId");
 
-        String memberId = ( String )Ui.userInput( UserInputType.STRING );
-        if ( memberId.equalsIgnoreCase( "0" ) ) {
+           String memberId = ( String )Ui.userInput( UserInputType.STRING );
 
-            displayUserMenu();
-        }
-        else {
             Ui.displayConsole( "Enter book ISBN" );
             String bookIsbn = ( String )Ui.userInput( UserInputType.STRING );
             Response recordResponse = systemController.Checkout( memberId, bookIsbn );
             if ( recordResponse.getStatus() ) {
                 Ui.displayConsole( recordResponse.getData().toString() );
+                checkOut();
             }
             else {
                 Ui.displayConsole( recordResponse.getMessage() );
 
             }
         }
-        checkOut();
 
-    }
+
+
 
 
     public void findOverDueBookCopies() {
@@ -219,11 +216,7 @@ public class Ui {
         Ui.displayConsole( "Enter book ISBN" );
         String bookIsbn = ( String )Ui.userInput( UserInputType.STRING );
 
-        if ( bookIsbn.equalsIgnoreCase( "0" ) ) {
 
-            displayUserMenu();
-        }
-        else {
             Response recordResponse = systemController.getBookCopiesWithCheckoutRecord( bookIsbn );
             if ( recordResponse.getStatus() ) {
 
@@ -249,20 +242,17 @@ public class Ui {
 
         }
 
-    }
+
 
 
     public void addBookCopy() {
 
 
-        displayScreenHeader(DisplayMenu.Add_a_Book_Copy.toString());
+            displayScreenHeader(DisplayMenu.Add_a_Book_Copy.toString());
 
-        Ui.displayConsole( "Enter book ISBN" );
-        String bookIsbn = ( String )Ui.userInput( UserInputType.STRING );
-        if ( bookIsbn.equalsIgnoreCase( "0" ) ) {
-            displayUserMenu();
-        }
-        else {
+            Ui.displayConsole( "Enter book ISBN" );
+            String bookIsbn = ( String )Ui.userInput( UserInputType.STRING );
+
             String bookCopyId = UUID.randomUUID().toString();
             Ui.displayConsole( "a new bookCopy Id has been generated " );
             Ui.displayConsole( "bookCopyId = "+bookCopyId );
@@ -278,7 +268,7 @@ public class Ui {
                 Ui.displayConsole( recordResponse.getMessage() );
             }
 
-        }
+
     }
 
 
