@@ -132,14 +132,15 @@ public class Ui {
             case Add_Book:
                 addNewBook();
                 break;
+            case Calculate_Late_Fee:
+
+                break;
             default:
                 Ui.displayConsole("You entered an invalid menu selection\n Try again");
                 displayUserMenu();
 
         }
     }
-
-
 
     public void checkOut() {
 
@@ -173,7 +174,6 @@ public class Ui {
 
     }
 
-
     public void addNewBook() {
 
         System.out.println( "-------Add new book-------" );
@@ -201,6 +201,9 @@ public class Ui {
         System.out.println( book );
     }
 
+    private void calculateBookLateFee(){
+
+    }
 
     public LibraryMember addLibraryMember() {
 
@@ -232,7 +235,6 @@ public class Ui {
         return libraryMember;
     }
 
-
     private Author addAuthor( Book book ) {
 
         //Add book
@@ -260,7 +262,6 @@ public class Ui {
         Author author = new Author( firstName, lastName, phone, address, bio, books );
         return author;
     }
-
 
     private Address createAddress() {
 
