@@ -6,19 +6,28 @@ import edu.miu.mpp.librarysystem.dao.model.CheckoutRecord;
 import java.util.HashMap;
 import java.util.List;
 
-
 public interface Librarian {
-    boolean isMember(String MemberId);
 
-    boolean isIsbnExist(String Isbn);
+    boolean isMember( String MemberId );
 
-    boolean isBookAvailable(String Isbn);
 
-    CheckoutRecord createCheckoutRecord(String Isbn, String MemberId);
+    boolean isIsbnExist( String Isbn );
 
-    String getBookCopiesWithCheckoutRecord(String Isbn);
 
-    HashMap<String, String> getBookCopyCheckoutRecord(BookCopy bookCopy);
+    boolean isBookAvailable( String Isbn );
 
-    boolean addNewBookCopy(String isbn, String bookCopyId);
+
+    CheckoutRecord createCheckoutRecord( String Isbn, String MemberId );
+
+
+    List<CheckoutRecord> getMemberCheckoutRecords( String MemberId );
+
+
+    String getBookCopiesWithCheckoutRecord( String Isbn );
+
+
+    HashMap<String, String> getBookCopyCheckoutRecord( BookCopy bookCopy );
+
+
+    boolean addNewBookCopy( String isbn, String bookCopyId );
 }

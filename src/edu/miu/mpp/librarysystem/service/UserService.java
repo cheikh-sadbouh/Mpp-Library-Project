@@ -154,4 +154,12 @@ public class UserService implements Librarian, Administrator {
 
         return response;
     }
+
+
+    @Override
+    public List<CheckoutRecord> getMemberCheckoutRecords( String MemberId ) {
+
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

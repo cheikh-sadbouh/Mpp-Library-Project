@@ -77,12 +77,21 @@ public class Ui {
 
     public static Object userInput( UserInputType inputType ) {
 
+        //Redirect user to the main menu if input is zero
+
         switch ( inputType ) {
             case INTEGER:
-                return scanner.nextInt();
+
+                int inputInt = scanner.nextInt();
+                return inputInt;
 
             default:
-                return scanner.next();
+                String inputString = scanner.next();
+
+                if ( inputString.equals( "0" ) ) {
+                    //ui.displayUserMenu();
+                }
+                return inputString;
         }
     }
 
@@ -286,9 +295,15 @@ public class Ui {
         if ( memberId.length() > 0 ) {
             while ( !userService.isMember( memberId ) ) {
                 System.out.println( "MemberId: " + memberId
-                        + " is already taken. Please select another Id" );
+                        + " is already taken. Please select another Id. (0 - Menu)" );
                 memberId = ( String )Ui.userInput( UserInputType.STRING );
             }
+        }
+
+        //How to exit from application
+        if ( memberId.equals( "0" ) ) {
+            displayUserMenu();
+            return;
         }
 
         System.out.println( "Type member first name:" );
