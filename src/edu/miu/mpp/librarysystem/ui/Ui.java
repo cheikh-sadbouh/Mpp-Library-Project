@@ -150,7 +150,7 @@ public class Ui {
                 findOverDueBookCopies();
                 break;
             case  Add_a_Book_Copy:
-                addBooCopy();
+                addBookCopy();
                 break;
             default:
                 Ui.displayConsole( "You entered an invalid menu selection\n Try again" );
@@ -205,7 +205,7 @@ public class Ui {
         }
 
     }
-    public  void addBooCopy(){
+    public  void addBookCopy(){
         Ui.displayConsole("Current Screen : Add a  Book Copy\n");
         Ui.displayConsole("0. Navigate Back\n" );
 
