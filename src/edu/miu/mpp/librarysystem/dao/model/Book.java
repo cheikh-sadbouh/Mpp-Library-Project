@@ -24,6 +24,17 @@ public class Book implements Serializable {
             this.bookCopies = Arrays.asList(new BookCopy(UUID.randomUUID(),this),new BookCopy(UUID.randomUUID(),this));
     }
 
+    public Book(String isbn, String title, MaxBookCheckout maxBookCheckout, List<Author> authors, Integer numberOfCopies){
+        this.isbn = isbn;
+        this.title = title;
+        this.maxBookCheckout = maxBookCheckout;
+        this.authors = authors;
+        this.bookCopies = new ArrayList<>();
+        for (int i = 1; i <  numberOfCopies; i++) {
+            this.bookCopies.add(new BookCopy(UUID.randomUUID(),this));
+        }
+    }
+
 
 
     public String getTitle() {

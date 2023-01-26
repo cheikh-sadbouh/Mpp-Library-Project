@@ -35,16 +35,13 @@ public class Ui {
     public Ui() {
 
         systemController = new SystemController();
-        scanner = new Scanner( System.in );
+        scanner = new Scanner( System.in ).useDelimiter("\\n");
         userService = new UserService();
     }
 
-
     public void start() {
-
         userLogin();
     }
-
 
     public void userLogin() {
 
@@ -65,15 +62,11 @@ public class Ui {
         else {
             Ui.displayConsole( response.getMessage() );
         }
-
     }
-
 
     public static void displayConsole( String message ) {
-
         System.out.println( message );
     }
-
 
     public static Object userInput( UserInputType inputType ) {
 
@@ -95,7 +88,6 @@ public class Ui {
         }
     }
 
-
     public void librarianLoginUi() {
 
         System.out.println(
@@ -103,12 +95,9 @@ public class Ui {
                         + "0. Exit" );
     }
 
-
     public LibraryMember getLibraryMemberById( String memberId ) {
-
         return null;
     }
-
 
     /**
      * User List Menu
@@ -158,7 +147,7 @@ public class Ui {
                 checkOut();
                 break;
             case Add_Book:
-                addNewBook();
+                addBook();
                 break;
             case Find_Over_Due_Book:
                 findOverDueBookCopies();
@@ -178,15 +167,16 @@ public class Ui {
 
     public void checkOut() {
 
-        Ui.displayConsole( "----------------------------------------------" );
-        Ui.displayConsole( "| Current Screen :CheckOut | 0. Navigate Back |" );
-        Ui.displayConsole( "----------------------------------------------" );
+        Ui.displayConsole("+---------------------------------------------+");
+        Ui.displayConsole("| Current Screen :CheckOut | 0. Navigate Back |");
+        Ui.displayConsole("+---------------------------------------------+");
 
-        Ui.displayConsole( "Enter MemberId" );
-        scanner.nextLine();//to consume \n from displayConsole
-        String memberId = ( String )Ui.userInput( UserInputType.STRING );
+        Ui.displayConsole("Enter MemberId");
+        scanner.skip("(\n)?");//consume \n from previous line
+
+        String memberId =   (String) Ui.userInput(UserInputType.STRING);
         if ( memberId.equalsIgnoreCase( "0" ) ) {
-            // call main screen
+
             displayUserMenu();
         }
         else {
@@ -204,7 +194,6 @@ public class Ui {
         checkOut();
 
     }
-
 
     public void findOverDueBookCopies() {
 
@@ -256,33 +245,58 @@ public class Ui {
         }
     }
 
+    public void addBook(){
+        String title, isbn;
+        MaxBookCheckout maxBookCheckout;
+        Integer numberOfCopies, authorCount;
+        List<Author> authors = new ArrayList<>();
 
-    public void addNewBook() {
+        Ui.displayConsole("Enter details to add a new Book");
+        Ui.displayConsole("");
 
-        System.out.println( "-------Add new book-------" );
-        System.out.println( "Type book title:" );
-        String title = scanner.next();
-        System.out.println( "Type book isbn:" );
-        String isbn = scanner.next();
-        System.out.println( "Is the book available: (yes/no)" );
-        String availability = scanner.next();
+        Ui.displayConsole("ISBN: ");
+        isbn = (String) Ui.userInput(UserInputType.STRING);
 
-        Book book = new Book();
-        book.setTitle( title );
-        book.setIsbn( isbn );
+        Ui.displayConsole("Title: ");
+        title = (String) Ui.userInput(UserInputType.STRING);
 
-        //Add authors
-        System.out.println( "Do you want to add authors to this book: (yes/no)" );
-        String addAuthor = scanner.next();
+        Ui.displayConsole("Enter Number of Authors ");
+        authorCount = (Integer) Ui.userInput(UserInputType.INTEGER);
+        for (int i = 1; i <= authorCount; i++) {
+            Ui.displayConsole(i+".");
+            Ui.displayConsole("Enter first name of Author: ");
+            String firstName = (String) Ui.userInput(UserInputType.STRING);
 
-        if ( addAuthor == "yes" ) {
+            Ui.displayConsole("Enter last name of Author: ");
+            String lastName = (String) Ui.userInput(UserInputType.STRING);
 
-            Author author = new Author();
+            Ui.displayConsole("Enter phone of Author: ");
+            String phone = (String) Ui.userInput(UserInputType.STRING);
+
+            authors.add(new Author(firstName, lastName, phone, null, null));
+            Ui.displayConsole("-----------------------------------------------");
         }
 
-        System.out.println( book );
-    }
+        Ui.displayConsole("Number of Copies: ");
+        numberOfCopies = (Integer) Ui.userInput(UserInputType.INTEGER);
 
+        Ui.displayConsole("Select max checkout length");
+        List<MaxBookCheckout> maxBookCheckoutList = Arrays.asList(MaxBookCheckout.SEVEN_DAYS, MaxBookCheckout.TWENTY_ONE_DAYS);
+        StringBuilder maxOutput = new StringBuilder();
+        for (int i = 0; i < maxBookCheckoutList.size(); i++) {
+            maxOutput.append(i+1).append(". ").append(maxBookCheckoutList.get(i).getDays()).append("\n");
+        }
+        Ui.displayConsole(String.valueOf(maxOutput));
+        Integer maxMenuSelection = (Integer) Ui.userInput(UserInputType.INTEGER);
+        Ui.displayConsole("You selected "+maxBookCheckoutList.get(maxMenuSelection-1).getDays());
+        maxBookCheckout = maxBookCheckoutList.get(maxMenuSelection-1);
+
+        response = systemController.addBook(isbn, title, maxBookCheckout, authors, numberOfCopies);
+        Ui.displayConsole(response.getMessage());
+
+        displayUserMenu();
+
+    }
 
     public void addLibraryMember() {
 
@@ -330,7 +344,6 @@ public class Ui {
         }
     }
 
-
     private Author addAuthor( Book book ) {
 
         //Add book
@@ -357,7 +370,6 @@ public class Ui {
         return author;
     }
 
-
     private Address createAddress() {
 
         String street = ( String )Ui.userInput( UserInputType.STRING );
@@ -378,4 +390,5 @@ public class Ui {
         Address address = new Address( street, city, state, zip );
         return address;
     }
+
 }

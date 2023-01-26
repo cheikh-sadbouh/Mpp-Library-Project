@@ -8,11 +8,11 @@ import java.util.UUID;
 
 public class CheckoutRecord implements Serializable {
     private  String checkoutId;
-    private LibraryMember libraryMember;
+    private String libraryMemberId;
     private List<CheckoutRecordEntry> entries = new ArrayList<>();
 
-    public CheckoutRecord(LibraryMember libraryMember) {
-        this.libraryMember = libraryMember;
+    public CheckoutRecord(String libraryMemberdD) {
+        this.libraryMemberId = libraryMemberdD;
         this.checkoutId= UUID.randomUUID().toString();
     }
 
@@ -21,7 +21,7 @@ public class CheckoutRecord implements Serializable {
         if (this == o) return true;
         if (!(o instanceof CheckoutRecord)) return false;
         CheckoutRecord that = (CheckoutRecord) o;
-        return Objects.equals(checkoutId, that.checkoutId) && Objects.equals(libraryMember, that.libraryMember) && Objects.equals(entries, that.entries);
+        return Objects.equals(checkoutId, that.checkoutId) && Objects.equals(libraryMemberId, that.libraryMemberId) && Objects.equals(entries, that.entries);
     }
 
 
@@ -30,7 +30,7 @@ public class CheckoutRecord implements Serializable {
     public String toString() {
         return "CheckoutRecord{" +
                 "checkoutId='" + checkoutId + '\'' +
-                ", libraryMember=" + libraryMember +
+                ", libraryMember=" + libraryMemberId +
                 ", entries=" + entries +
                 '}';
     }
@@ -39,9 +39,6 @@ public class CheckoutRecord implements Serializable {
         return checkoutId;
     }
 
-    public LibraryMember getLibraryMember() {
-        return libraryMember;
-    }
 
     public List<CheckoutRecordEntry> getEntries() {
         return entries;
@@ -51,8 +48,12 @@ public class CheckoutRecord implements Serializable {
         this.checkoutId = checkoutId;
     }
 
-    public void setLibraryMember(LibraryMember libraryMember) {
-        this.libraryMember = libraryMember;
+    public String getLibraryMemberId() {
+        return libraryMemberId;
+    }
+
+    public void setLibraryMemberId(String libraryMemberId) {
+        this.libraryMemberId = libraryMemberId;
     }
 
     public void setEntries(List<CheckoutRecordEntry> entries) {

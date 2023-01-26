@@ -12,6 +12,7 @@ public interface Librarian {
 
 
     boolean isIsbnExist( String Isbn );
+    String createCheckoutRecord(String Isbn, String MemberId);
 
 
     boolean isBookAvailable( String Isbn );

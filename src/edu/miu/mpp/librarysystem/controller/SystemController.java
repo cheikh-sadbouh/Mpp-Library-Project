@@ -1,9 +1,12 @@
 package edu.miu.mpp.librarysystem.controller;
 
 import edu.miu.mpp.librarysystem.dao.model.Address;
+import edu.miu.mpp.librarysystem.dao.model.Author;
+import edu.miu.mpp.librarysystem.dao.model.MaxBookCheckout;
 import edu.miu.mpp.librarysystem.dao.model.User;
 import edu.miu.mpp.librarysystem.service.UserService;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -12,7 +15,6 @@ public class SystemController {
     private UserService userService;
 
     public SystemController() {
-
         userService = new UserService();
     }
 
@@ -32,18 +34,16 @@ public class SystemController {
 
         Response response = new Response();
 
-        if ( userService.isMember( memberId ) ) {
-            response.setMessage( memberId + " is  not yet a member \n" );
-        }
-        else if ( userService.isIsbnExist( Isbn ) ) {
-            response.setMessage( Isbn + " there is no book match this ISBN \n" );
-        }
-        else if ( userService.isBookAvailable( Isbn ) ) {
-            response.setMessage( " no available copy at the moment for  Isbn " + Isbn + "\n" );
-        }
-        else {
-            response.setData( userService.createCheckoutRecord( Isbn, memberId ).toString() );
-            response.setStatus( true );
+        if(userService.isMember(memberId)){
+            response.setMessage(memberId+" is  not yet a member \n");
+        } else if(userService.isIsbnExist(Isbn)){
+            response.setMessage(Isbn+" there is no book match this ISBN \n");
+        } else if(userService.isBookAvailable(Isbn)){
+            response.setMessage(" no available copy at the moment for  Isbn "+Isbn+"\n");
+        }else{
+
+             response.setData("new Record :\n"+userService.createCheckoutRecord(Isbn,memberId));
+             response.setStatus(true);
         }
 
         return response;
@@ -106,5 +106,14 @@ public class SystemController {
         //            response.setStatus( false );
         //        }
         return response;
+    }
+
+    public Response addBook(String isbn, String title, MaxBookCheckout maxBookCheckout,
+                            List<Author> authors, Integer numberOfCopies){
+        if (userService.addBook(isbn, title, maxBookCheckout, authors, numberOfCopies)){
+            return new Response("Successfully added new Book", true, null);
+        }else{
+            return new Response("Error in adding new Book", false, null);
+        }
     }
 }

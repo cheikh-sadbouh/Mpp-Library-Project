@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class DataAccessFacade implements DataAccess {
@@ -125,13 +126,15 @@ public class DataAccessFacade implements DataAccess {
 
         HashMap<String, String> foundBookCopyCheckoutRecord = new HashMap<>();
         HashMap<String, CheckoutRecord> checkoutRecordMap = readCheckoutRecordMap();
-        checkoutRecordMap.forEach( ( key, record ) -> record.getEntries().forEach( entry -> {
-            if ( entry.getBookCopy().getBookCopyId().equals( bookCopy.getBookCopyId() ) ) {
+        checkoutRecordMap.forEach((key, record) -> record.getEntries().forEach(entry -> {
+            if (entry.getBookCopy().getBookCopyId().equals(bookCopy.getBookCopyId())) {
+                LibraryMember member = getLibraryMember( record.getLibraryMemberId());
                 foundBookCopyCheckoutRecord.put(
-                        record.getLibraryMember().getFirstName()
-                                .concat( " " )
-                                .concat( record.getLibraryMember().getLastName() ), entry
-                                        .getDueDate().toString() );
+                        member.getFirstName()
+                        .concat(" ")
+                        .concat(member.getLastName())
+                        , entry.getDueDate().toString()
+                );
             }
         } ) );
 
@@ -202,6 +205,17 @@ public class DataAccessFacade implements DataAccess {
         return false;
     }
 
+    @Override
+    public boolean updateMember(LibraryMember libraryMember) {
+        HashMap<String, LibraryMember> memberHashMap = readLibraryMemberMap();
+        String memberId = libraryMember.getMemberId();
+        if(Objects.isNull(memberHashMap.replace(memberId, libraryMember) )) return false;
+        saveToStorage(StorageType.MEMBERS, memberHashMap);
+        return  true;
+    }
+
+    @Override
+    public BookCopy getBookCopy(String isbn) {
 
     @Override
     public BookCopy getBookCopy( String isbn ) {

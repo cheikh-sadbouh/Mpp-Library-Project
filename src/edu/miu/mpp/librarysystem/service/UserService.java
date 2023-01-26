@@ -9,8 +9,10 @@ import edu.miu.mpp.librarysystem.dao.model.CheckoutRecord;
 import edu.miu.mpp.librarysystem.dao.model.CheckoutRecordEntry;
 import edu.miu.mpp.librarysystem.dao.model.LibraryMember;
 import edu.miu.mpp.librarysystem.dao.model.User;
+import edu.miu.mpp.librarysystem.utility.StringPropertyExtractor;
 
 import java.util.*;
+
 
 public class UserService implements Librarian, Administrator {
 
@@ -46,16 +48,22 @@ public class UserService implements Librarian, Administrator {
 
 
     @Override
-    public CheckoutRecord createCheckoutRecord( String Isbn, String memberId ) {
-
-        BookCopy bookCopy = dao.getBookCopy( Isbn );
-        CheckoutRecordEntry checkoutRecordEntry = new CheckoutRecordEntry( dao.getBookCopy(
-                Isbn ) );
-        CheckoutRecord checkoutRecord = new CheckoutRecord( dao.getLibraryMember( memberId ) );
+    public String createCheckoutRecord( String Isbn, String memberId ) {
+        BookCopy bookCopy = dao.getBookCopy(Isbn);
+        CheckoutRecordEntry checkoutRecordEntry = new CheckoutRecordEntry( dao.getBookCopy(Isbn));
+        LibraryMember member =  dao.getLibraryMember( memberId );
+        CheckoutRecord checkoutRecord = new CheckoutRecord( memberId);
         checkoutRecord.getEntries().add( checkoutRecordEntry );
         dao.addNewCheckoutRecord( checkoutRecord );
-        dao.updateBookCopyAvailability( bookCopy.getBookCopyId().toString() );
-        return checkoutRecord;
+        dao.updateBookCopyAvailability(bookCopy.getBookCopyId().toString());
+
+            member.getRecord().addAll(Collections.singletonList(checkoutRecord));
+
+
+        dao.updateMember(member);
+        return StringPropertyExtractor.findProperties(
+                Arrays.asList("checkoutId","memberId","bookCopyId","checkoutDate","dueDate"),
+                checkoutRecord.toString());
     }
 
 
@@ -161,5 +169,9 @@ public class UserService implements Librarian, Administrator {
 
         // TODO Auto-generated method stub
         return null;
+    @Override
+    public boolean addBook(String isbn, String title, MaxBookCheckout maxBookCheckout, List<Author> authors, Integer numberOfCopies) {
+        dao.saveNewBook(new Book(isbn,title,maxBookCheckout, authors, numberOfCopies));
+        return true;
     }
 }
