@@ -130,6 +130,7 @@ public class Ui {
         menuSelection( allList.get( menuSelection - 1 ) );
     }
 
+
     public void menuSelection( DisplayMenu menuSelection ) {
 
         switch ( menuSelection ) {
@@ -154,17 +155,19 @@ public class Ui {
         }
     }
 
+
     public void checkOut() {
 
-        Ui.displayConsole( "----------------------------------------------" );
-        Ui.displayConsole( "| Current Screen :CheckOut | 0. Navigate Back |" );
-        Ui.displayConsole( "----------------------------------------------" );
+        Ui.displayConsole("+---------------------------------------------+");
+        Ui.displayConsole("| Current Screen :CheckOut | 0. Navigate Back |");
+        Ui.displayConsole("+---------------------------------------------+");
 
-        Ui.displayConsole( "Enter MemberId" );
-        scanner.nextLine();//to consume \n from displayConsole
-        String memberId = ( String )Ui.userInput( UserInputType.STRING );
+        Ui.displayConsole("Enter MemberId");
+        scanner.skip("(\n)?");//consume \n from previous line
+
+        String memberId =   (String) Ui.userInput(UserInputType.STRING);
         if ( memberId.equalsIgnoreCase( "0" ) ) {
-            // call main screen
+
             displayUserMenu();
         }
         else {

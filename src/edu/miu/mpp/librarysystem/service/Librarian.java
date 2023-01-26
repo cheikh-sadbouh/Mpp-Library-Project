@@ -14,7 +14,7 @@ public interface Librarian {
 
     boolean isBookAvailable(String Isbn);
 
-    CheckoutRecord createCheckoutRecord(String Isbn, String MemberId);
+    String createCheckoutRecord(String Isbn, String MemberId);
 
     String getBookCopiesWithCheckoutRecord(String Isbn);
 

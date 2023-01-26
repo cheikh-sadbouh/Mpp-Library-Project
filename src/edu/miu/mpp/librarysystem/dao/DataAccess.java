@@ -11,6 +11,7 @@ public interface DataAccess {
 	LibraryMember getLibraryMember(String LibraryMemberId);
 	Book getBook(String isbn);
 	boolean updateBookCopyAvailability(String bookCopyId);
+	boolean updateMember(LibraryMember libraryMember);
 	BookCopy getBookCopy(String isbn);
 	List<Book> getAllBook();
 	public HashMap<String, Book> readBooksMap();

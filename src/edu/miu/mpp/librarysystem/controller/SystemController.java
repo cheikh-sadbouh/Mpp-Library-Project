@@ -34,18 +34,16 @@ public class SystemController {
 
         Response response = new Response();
 
-        if ( userService.isMember( memberId ) ) {
-            response.setMessage( memberId + " is  not yet a member \n" );
-        }
-        else if ( userService.isIsbnExist( Isbn ) ) {
-            response.setMessage( Isbn + " there is no book match this ISBN \n" );
-        }
-        else if ( userService.isBookAvailable( Isbn ) ) {
-            response.setMessage( " no available copy at the moment for  Isbn " + Isbn + "\n" );
-        }
-        else {
-            response.setData( userService.createCheckoutRecord( Isbn, memberId ).toString() );
-            response.setStatus( true );
+        if(userService.isMember(memberId)){
+            response.setMessage(memberId+" is  not yet a member \n");
+        } else if(userService.isIsbnExist(Isbn)){
+            response.setMessage(Isbn+" there is no book match this ISBN \n");
+        } else if(userService.isBookAvailable(Isbn)){
+            response.setMessage(" no available copy at the moment for  Isbn "+Isbn+"\n");
+        }else{
+
+             response.setData("new Record :\n"+userService.createCheckoutRecord(Isbn,memberId));
+             response.setStatus(true);
         }
 
         return response;

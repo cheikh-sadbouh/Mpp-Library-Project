@@ -1,19 +1,21 @@
 package edu.miu.mpp.librarysystem.dao.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class LibraryMember extends Person implements Serializable {
 
     private String memberId;
-    private CheckoutRecord record;
+    private List<CheckoutRecord> record;
 
     public LibraryMember( String memberId, String firstName, String lastName, String phone,
             Address address ) {
 
         super( firstName, lastName, phone, address );
         this.memberId = memberId;
+        this.record = new ArrayList<>();
     }
 
     @Override
@@ -35,11 +37,11 @@ public class LibraryMember extends Person implements Serializable {
                 '}';
     }
 
-    public CheckoutRecord getRecord() {
+    public List<CheckoutRecord> getRecord() {
         return record;
     }
 
-    public void setRecord(CheckoutRecord record) {
+    public void setRecord(List<CheckoutRecord> record) {
         this.record = record;
     }
 
