@@ -32,7 +32,10 @@ public class DataAccessFacade implements DataAccess {
         bookList.forEach(book -> books.put(book.getIsbn(), book));
         saveToStorage(StorageType.BOOKS, books);
     }
-
+    static void loadCheckoutRecordMap() {
+        HashMap<String, CheckoutRecord> checkoutRecordMap = new HashMap<>();
+        saveToStorage(StorageType.CHECKOUT_RECORD, checkoutRecordMap);
+    }
     static void loadUserMap(List<User> userList) {
 
         HashMap<String, User> users = new HashMap<String, User>();
@@ -163,6 +166,22 @@ public class DataAccessFacade implements DataAccess {
             return books.get(isbn);
         }
         return null;
+    }
+
+    @Override
+    public boolean updateBookCopyAvailability(String bookCopyId) {
+        HashMap<String, Book> books = (HashMap<String, Book>) readFromStorage(StorageType.BOOKS);
+        for (Book b : books.values()) {
+                for (BookCopy bc : b.getBookCopies()) {
+                    if (bc.getBookCopyId().toString().equals(bookCopyId)) {
+                         bc.changeAvailability();
+                        saveToStorage( StorageType.BOOKS, books );
+                        return true;
+                    }
+                }
+
+        }
+        return  false;
     }
 
     @Override

@@ -46,12 +46,12 @@ public class UserService implements Librarian, Administrator {
 
     @Override
     public CheckoutRecord createCheckoutRecord( String Isbn, String memberId ) {
-
-        CheckoutRecordEntry checkoutRecordEntry = new CheckoutRecordEntry( dao.getBookCopy(
-                Isbn ) );
+        BookCopy bookCopy = dao.getBookCopy(Isbn);
+        CheckoutRecordEntry checkoutRecordEntry = new CheckoutRecordEntry( dao.getBookCopy(Isbn));
         CheckoutRecord checkoutRecord = new CheckoutRecord( dao.getLibraryMember( memberId ) );
         checkoutRecord.getEntries().add( checkoutRecordEntry );
         dao.addNewCheckoutRecord( checkoutRecord );
+        dao.updateBookCopyAvailability(bookCopy.getBookCopyId().toString());
         return checkoutRecord;
     }
 

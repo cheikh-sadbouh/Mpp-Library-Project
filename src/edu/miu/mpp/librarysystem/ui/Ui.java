@@ -169,26 +169,29 @@ public class Ui {
 
     public void checkOut() {
 
-        Ui.displayConsole( "Current Screen :CheckOut\n" );
-        Ui.displayConsole( "0. Navigate Back\n" );
+        Ui.displayConsole("----------------------------------------------");
+        Ui.displayConsole("| Current Screen :CheckOut | 0. Navigate Back |");
+        Ui.displayConsole("----------------------------------------------");
 
-        Ui.displayConsole( "Enter MemberId\n" );
-        String memberId = ( String )Ui.userInput( UserInputType.STRING );
+        Ui.displayConsole("Enter MemberId");
+        scanner.nextLine();//to consume \n from displayConsole
+        String memberId =   (String) Ui.userInput(UserInputType.STRING);
         if ( memberId.equalsIgnoreCase( "0" ) ) {
             // call main screen
             displayUserMenu();
-        }
-        else {
-            Ui.displayConsole( "Enter book ISBN\n" );
-            String bookIsbn = ( String )Ui.userInput( UserInputType.STRING );
+        } else  {
+            Ui.displayConsole("Enter book ISBN");
+            String bookIsbn =  (String) Ui.userInput(UserInputType.STRING);
             Response recordResponse = systemController.Checkout( memberId, bookIsbn );
             if ( recordResponse.getStatus() ) {
                 Ui.displayConsole( recordResponse.getData().toString() );
             }
             else {
                 Ui.displayConsole( recordResponse.getMessage() );
+
             }
         }
+        checkOut();
 
     }
 

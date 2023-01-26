@@ -32,21 +32,17 @@ public class SystemController {
 
         Response response = new Response();
 
-        if ( !userService.isMember( memberId ) ) {
-            response.setMessage( memberId + " you are not yet a member \n" );
+        if(userService.isMember(memberId)){
+            response.setMessage(memberId+" is  not yet a member \n");
+        } else if(userService.isIsbnExist(Isbn)){
+            response.setMessage(Isbn+" there is no book match this ISBN \n");
+        } else if(userService.isBookAvailable(Isbn)){
+            response.setMessage(" no available copy at the moment for  Isbn "+Isbn+"\n");
+        }else{
+             response.setData(userService.createCheckoutRecord(Isbn,memberId).toString());
+             response.setStatus(true);
         }
-        else if ( !userService.isIsbnExist( Isbn ) ) {
-            response.setMessage( response.getMessage() + Isbn
-                    + " there is no book match this ISBN \n" );
-        }
-        else if ( !userService.isBookAvailable( Isbn ) ) {
-            response.setMessage( response.getMessage() + Isbn
-                    + " no available copy at the moment \n" );
-        }
-        else {
-            response.setData( userService.createCheckoutRecord( Isbn, memberId ).toString() );
-            response.setStatus( true );
-        }
+
 
         return response;
 

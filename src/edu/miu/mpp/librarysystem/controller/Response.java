@@ -6,7 +6,9 @@ public final class Response {
     private  String message;
     private  Boolean status;
     private  Object data;
-    Response(){}
+    Response(){
+        this.status=false;
+    }
     Response(String message, Boolean status, Object data) {
         this.message = message;
         this.status = status;
