@@ -64,6 +64,7 @@ public class Ui {
         }
         else {
             Ui.displayConsole( response.getMessage() );
+            userLogin();
         }
     }
 
