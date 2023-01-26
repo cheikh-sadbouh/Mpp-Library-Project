@@ -7,10 +7,11 @@ import edu.miu.mpp.librarysystem.controller.Response;
 import edu.miu.mpp.librarysystem.dao.model.*;
 import edu.miu.mpp.librarysystem.service.Auth;
 
-enum UserInputType{
+enum UserInputType {
     STRING, INTEGER;
 }
-enum DisplayMenu{
+
+enum DisplayMenu {
     Add_Book,
     Add_New_Library_Member,
     Add_a_Book_Copy,
@@ -19,6 +20,7 @@ enum DisplayMenu{
     Calculate_Late_Fee,
     Check_Book_Status
 }
+
 public class Ui {
 
     private static Scanner scanner;
@@ -27,9 +29,10 @@ public class Ui {
 
     static SystemController systemController;
 
-    public Ui(){
+    public Ui() {
+
         systemController = new SystemController();
-        scanner = new Scanner(System.in);
+        scanner = new Scanner( System.in );
     }
 
 
@@ -49,13 +52,14 @@ public class Ui {
         Ui.displayConsole( "Enter Password: " );
         String password = ( String )Ui.userInput( UserInputType.STRING );
 
-        response = systemController.authenticateUser(userID, password);
-        if (response.getStatus()){
-            Ui.displayConsole(response.getMessage()+"\n");
-            user = (User)response.getData();
+        response = systemController.authenticateUser( userID, password );
+        if ( response.getStatus() ) {
+            Ui.displayConsole( response.getMessage() + "\n" );
+            user = ( User )response.getData();
             displayUserMenu();
-        }else{
-            Ui.displayConsole(response.getMessage());
+        }
+        else {
+            Ui.displayConsole( response.getMessage() );
         }
 
     }
@@ -92,40 +96,51 @@ public class Ui {
         return null;
     }
 
+
     /**
      * User List Menu
      */
-    public void displayUserMenu(){
+    public void displayUserMenu() {
+
         List<DisplayMenu> allList = new ArrayList<>();
-        Collections.addAll(allList, DisplayMenu.Calculate_Late_Fee, DisplayMenu.Check_Book_Status);
+        Collections.addAll( allList, DisplayMenu.Calculate_Late_Fee,
+                DisplayMenu.Check_Book_Status );
 
-        List<DisplayMenu> adminList = Arrays.asList(DisplayMenu.Add_Book, DisplayMenu.Add_New_Library_Member, DisplayMenu.Add_a_Book_Copy);
-        List<DisplayMenu> libList = Arrays.asList(DisplayMenu.Check_Out_Book, DisplayMenu.Search_Member);
+        List<DisplayMenu> adminList = Arrays.asList( DisplayMenu.Add_Book,
+                DisplayMenu.Add_New_Library_Member, DisplayMenu.Add_a_Book_Copy );
+        List<DisplayMenu> libList = Arrays.asList( DisplayMenu.Check_Out_Book,
+                DisplayMenu.Search_Member );
 
-        if (user.getUserRole() == Auth.BOTH){
-            allList.addAll(adminList);
-            allList.addAll(libList);
-        }else if (user.getUserRole() == Auth.ADMIN){
-            allList.addAll(adminList);
+        if ( user.getUserRole() == Auth.BOTH ) {
+            allList.addAll( adminList );
+            allList.addAll( libList );
+        }
+        else if ( user.getUserRole() == Auth.ADMIN ) {
+            allList.addAll( adminList );
 
-        }else if (user.getUserRole() == Auth.LIBRARIAN) {
-            allList.addAll(libList);
+        }
+        else if ( user.getUserRole() == Auth.LIBRARIAN ) {
+            allList.addAll( libList );
         }
 
-        StringBuilder output = new StringBuilder("Select from the Menu\nEnter the number to select\n");
-        for (int i = 0; i < allList.size(); i++) {
-            output.append(i+1).append(". ").append(allList.get(i)).append("\n");
+        StringBuilder output = new StringBuilder(
+                "Select from the Menu\nEnter the number to select\n" );
+        for ( int i = 0; i < allList.size(); i++ ) {
+            output.append( i + 1 ).append( ". " ).append( allList.get( i ) ).append( "\n" );
         }
 
-        Ui.displayConsole(output.toString());
-        Integer menuSelection = (Integer) Ui.userInput(UserInputType.INTEGER);
+        Ui.displayConsole( output.toString() );
+        Integer menuSelection = ( Integer )Ui.userInput( UserInputType.INTEGER );
 
-        Ui.displayConsole("You selected: "+menuSelection+". "+allList.get(menuSelection-1));
-        menuSelection(allList.get(menuSelection-1));
+        Ui.displayConsole( "You selected: " + menuSelection + ". " + allList.get( menuSelection
+                - 1 ) );
+        menuSelection( allList.get( menuSelection - 1 ) );
     }
 
-    public void menuSelection(DisplayMenu menuSelection){
-        switch (menuSelection){
+
+    public void menuSelection( DisplayMenu menuSelection ) {
+
+        switch ( menuSelection ) {
             case Check_Out_Book:
                 checkOut();
                 break;
@@ -133,36 +148,36 @@ public class Ui {
                 addNewBook();
                 break;
             default:
-                Ui.displayConsole("You entered an invalid menu selection\n Try again");
+                Ui.displayConsole( "You entered an invalid menu selection\n Try again" );
                 displayUserMenu();
 
         }
     }
 
 
-
     public void checkOut() {
 
-        Ui.displayConsole("Current Screen :CheckOut\n");
-        Ui.displayConsole("1. start Checkout   |   " + "0. Exit" );
+        Ui.displayConsole( "Current Screen :CheckOut\n" );
+        Ui.displayConsole( "1. start Checkout   |   " + "0. Exit" );
 
-        String userResponse =  (String) Ui.userInput(UserInputType.STRING);
+        String userResponse = ( String )Ui.userInput( UserInputType.STRING );
 
         if ( userResponse.equalsIgnoreCase( "0" ) ) {
             // call main screen
             displayUserMenu();
-        } else if ( userResponse.equalsIgnoreCase( "1" ) ) {
-            Ui.displayConsole("Enter MemberId\n");
-            String memberId =   (String) Ui.userInput(UserInputType.STRING);
-            Ui.displayConsole("Enter book ISBN\n");
-            String bookIsbn =  (String) Ui.userInput(UserInputType.STRING);
+        }
+        else if ( userResponse.equalsIgnoreCase( "1" ) ) {
+            Ui.displayConsole( "Enter MemberId\n" );
+            String memberId = ( String )Ui.userInput( UserInputType.STRING );
+            Ui.displayConsole( "Enter book ISBN\n" );
+            String bookIsbn = ( String )Ui.userInput( UserInputType.STRING );
             Response recordResponse = systemController.Checkout( memberId, bookIsbn );
-            if ( recordResponse.getStatus()) {
+            if ( recordResponse.getStatus() ) {
                 Ui.displayConsole( recordResponse.getData().toString() );
-            }else{
-                Ui.displayConsole(recordResponse.getMessage());
             }
-
+            else {
+                Ui.displayConsole( recordResponse.getMessage() );
+            }
         }
         else {
             checkOut();
@@ -213,8 +228,6 @@ public class Ui {
 
         System.out.println( "Type member phone:" );
         String phone = scanner.nextLine();
-
-        //scanner.close();
 
         Address address = createAddress();
 
