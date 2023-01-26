@@ -2,7 +2,13 @@ package edu.miu.mpp.librarysystem.service;
 
 import edu.miu.mpp.librarysystem.controller.Response;
 import edu.miu.mpp.librarysystem.dao.DataAccessFacade;
-import edu.miu.mpp.librarysystem.dao.model.*;
+import edu.miu.mpp.librarysystem.dao.model.Address;
+import edu.miu.mpp.librarysystem.dao.model.Book;
+import edu.miu.mpp.librarysystem.dao.model.BookCopy;
+import edu.miu.mpp.librarysystem.dao.model.CheckoutRecord;
+import edu.miu.mpp.librarysystem.dao.model.CheckoutRecordEntry;
+import edu.miu.mpp.librarysystem.dao.model.LibraryMember;
+import edu.miu.mpp.librarysystem.dao.model.User;
 
 import java.util.*;
 
@@ -96,7 +102,7 @@ public class UserService implements Librarian, Administrator {
                         .values().toArray() ).orElseGet( null );
                 responseBuilder.append( bookCopy.getBookCopyId() + " | " + ( Objects.isNull(
                         recordValues[0] ) ? "non" : recordValues[0] ) + " | " + ( Objects.isNull(
-                        recordValues[1] ) ? "non" : recordValues[1] ) );
+                                recordValues[1] ) ? "non" : recordValues[1] ) );
 
             } );
         }
@@ -132,7 +138,7 @@ public class UserService implements Librarian, Administrator {
 
     @Override
     public Response addLibraryMember( String memberId, String firstName, String lastName,
-                                      String phone, Address address ) {
+            String phone, Address address ) {
 
         Response response = new Response();
 
@@ -147,11 +153,5 @@ public class UserService implements Librarian, Administrator {
         response.setMessage( "Successfully saved user" );
 
         return response;
-    }
-
-    @Override
-    public boolean addBook(String isbn, String title, MaxBookCheckout maxBookCheckout, List<Author> authors, Integer numberOfCopies) {
-        dao.saveNewBook(new Book(isbn, title, maxBookCheckout, authors, numberOfCopies));
-        return true;
     }
 }
