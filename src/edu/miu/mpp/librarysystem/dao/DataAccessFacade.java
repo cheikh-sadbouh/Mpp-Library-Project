@@ -126,15 +126,13 @@ public class DataAccessFacade implements DataAccess {
 
         HashMap<String, String> foundBookCopyCheckoutRecord = new HashMap<>();
         HashMap<String, CheckoutRecord> checkoutRecordMap = readCheckoutRecordMap();
-        checkoutRecordMap.forEach((key, record) -> record.getEntries().forEach(entry -> {
-            if (entry.getBookCopy().getBookCopyId().equals(bookCopy.getBookCopyId())) {
-                LibraryMember member = getLibraryMember( record.getLibraryMemberId());
+        checkoutRecordMap.forEach( ( key, record ) -> record.getEntries().forEach( entry -> {
+            if ( entry.getBookCopy().getBookCopyId().equals( bookCopy.getBookCopyId() ) ) {
+                LibraryMember member = getLibraryMember( record.getLibraryMemberId() );
                 foundBookCopyCheckoutRecord.put(
                         member.getFirstName()
-                        .concat(" ")
-                        .concat(member.getLastName())
-                        , entry.getDueDate().toString()
-                );
+                                .concat( " " )
+                                .concat( member.getLastName() ), entry.getDueDate().toString() );
             }
         } ) );
 
@@ -205,17 +203,18 @@ public class DataAccessFacade implements DataAccess {
         return false;
     }
 
-    @Override
-    public boolean updateMember(LibraryMember libraryMember) {
-        HashMap<String, LibraryMember> memberHashMap = readLibraryMemberMap();
-        String memberId = libraryMember.getMemberId();
-        if(Objects.isNull(memberHashMap.replace(memberId, libraryMember) )) return false;
-        saveToStorage(StorageType.MEMBERS, memberHashMap);
-        return  true;
-    }
 
     @Override
-    public BookCopy getBookCopy(String isbn) {
+    public boolean updateMember( LibraryMember libraryMember ) {
+
+        HashMap<String, LibraryMember> memberHashMap = readLibraryMemberMap();
+        String memberId = libraryMember.getMemberId();
+        if ( Objects.isNull( memberHashMap.replace( memberId, libraryMember ) ) )
+            return false;
+        saveToStorage( StorageType.MEMBERS, memberHashMap );
+        return true;
+    }
+
 
     @Override
     public BookCopy getBookCopy( String isbn ) {
@@ -352,8 +351,7 @@ public class DataAccessFacade implements DataAccess {
         private static final long serialVersionUID = 5399827794066637059L;
     }
 
-    @Override
-    public List<CheckoutRecord> getCheckoutRecords( String memberId ) {
+    public List<CheckoutRecord> getMemberCheckoutRecords( String memberId ) {
 
         HashMap<String, CheckoutRecord> checkoutRecordsMap = ( HashMap<String,
                 CheckoutRecord> )readFromStorage( StorageType.CHECKOUT_RECORD );
@@ -369,7 +367,7 @@ public class DataAccessFacade implements DataAccess {
     public static void main( String[] args ) {
 
         DataAccessFacade daf = new DataAccessFacade();
-        daf.getCheckoutRecords( "0" );
+        daf.getMemberCheckoutRecords( "0" );
 
     }
 

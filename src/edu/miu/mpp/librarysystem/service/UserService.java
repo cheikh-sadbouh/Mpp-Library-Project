@@ -3,16 +3,17 @@ package edu.miu.mpp.librarysystem.service;
 import edu.miu.mpp.librarysystem.controller.Response;
 import edu.miu.mpp.librarysystem.dao.DataAccessFacade;
 import edu.miu.mpp.librarysystem.dao.model.Address;
+import edu.miu.mpp.librarysystem.dao.model.Author;
 import edu.miu.mpp.librarysystem.dao.model.Book;
 import edu.miu.mpp.librarysystem.dao.model.BookCopy;
 import edu.miu.mpp.librarysystem.dao.model.CheckoutRecord;
 import edu.miu.mpp.librarysystem.dao.model.CheckoutRecordEntry;
 import edu.miu.mpp.librarysystem.dao.model.LibraryMember;
+import edu.miu.mpp.librarysystem.dao.model.MaxBookCheckout;
 import edu.miu.mpp.librarysystem.dao.model.User;
 import edu.miu.mpp.librarysystem.utility.StringPropertyExtractor;
 
 import java.util.*;
-
 
 public class UserService implements Librarian, Administrator {
 
@@ -49,21 +50,22 @@ public class UserService implements Librarian, Administrator {
 
     @Override
     public String createCheckoutRecord( String Isbn, String memberId ) {
-        BookCopy bookCopy = dao.getBookCopy(Isbn);
-        CheckoutRecordEntry checkoutRecordEntry = new CheckoutRecordEntry( dao.getBookCopy(Isbn));
-        LibraryMember member =  dao.getLibraryMember( memberId );
-        CheckoutRecord checkoutRecord = new CheckoutRecord( memberId);
+
+        BookCopy bookCopy = dao.getBookCopy( Isbn );
+        CheckoutRecordEntry checkoutRecordEntry = new CheckoutRecordEntry( dao.getBookCopy(
+                Isbn ) );
+        LibraryMember member = dao.getLibraryMember( memberId );
+        CheckoutRecord checkoutRecord = new CheckoutRecord( memberId );
         checkoutRecord.getEntries().add( checkoutRecordEntry );
         dao.addNewCheckoutRecord( checkoutRecord );
-        dao.updateBookCopyAvailability(bookCopy.getBookCopyId().toString());
+        dao.updateBookCopyAvailability( bookCopy.getBookCopyId().toString() );
 
-            member.getRecord().addAll(Collections.singletonList(checkoutRecord));
+        member.getRecord().addAll( Collections.singletonList( checkoutRecord ) );
 
-
-        dao.updateMember(member);
+        dao.updateMember( member );
         return StringPropertyExtractor.findProperties(
-                Arrays.asList("checkoutId","memberId","bookCopyId","checkoutDate","dueDate"),
-                checkoutRecord.toString());
+                Arrays.asList( "checkoutId", "memberId", "bookCopyId", "checkoutDate", "dueDate" ),
+                checkoutRecord.toString() );
     }
 
 
@@ -169,9 +171,14 @@ public class UserService implements Librarian, Administrator {
 
         // TODO Auto-generated method stub
         return null;
+    }
+
+
     @Override
-    public boolean addBook(String isbn, String title, MaxBookCheckout maxBookCheckout, List<Author> authors, Integer numberOfCopies) {
-        dao.saveNewBook(new Book(isbn,title,maxBookCheckout, authors, numberOfCopies));
+    public boolean addBook( String isbn, String title, MaxBookCheckout maxBookCheckout, List<
+            Author> authors, Integer numberOfCopies ) {
+
+        dao.saveNewBook( new Book( isbn, title, maxBookCheckout, authors, numberOfCopies ) );
         return true;
     }
 }
