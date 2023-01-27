@@ -76,10 +76,14 @@ public class Ui {
     }
 
 
-    public  static  void displayScreenHeader(String currentScreen){
-        Ui.displayConsole("+-------------------------------------------------------------------------------------------------------------+");
-        Ui.displayConsole("|  Current Screen : "+currentScreen+"                                                                         |");
-        Ui.displayConsole("+-------------------------------------------------------------------------------------------------------------+");
+    public static void displayScreenHeader( String currentScreen ) {
+
+        Ui.displayConsole(
+                "+-------------------------------------------------------------------------------------------------------------+" );
+        Ui.displayConsole( "|  Current Screen : " + currentScreen
+                + "                                                                         |" );
+        Ui.displayConsole(
+                "+-------------------------------------------------------------------------------------------------------------+" );
     }
 
 
@@ -191,19 +195,19 @@ public class Ui {
 
         String memberId = ( String )Ui.userInput( UserInputType.STRING );
 
-            Ui.displayConsole( "Enter book ISBN" );
-            String bookIsbn = ( String )Ui.userInput( UserInputType.STRING );
-            Response recordResponse = systemController.Checkout( memberId, bookIsbn );
-            if ( recordResponse.getStatus() ) {
-                Ui.displayConsole( recordResponse.getData().toString() );
+        Ui.displayConsole( "Enter book ISBN" );
+        String bookIsbn = ( String )Ui.userInput( UserInputType.STRING );
+        Response recordResponse = systemController.Checkout( memberId, bookIsbn );
+        if ( recordResponse.getStatus() ) {
+            Ui.displayConsole( recordResponse.getData().toString() );
 
-            }
-            else {
-                Ui.displayConsole( recordResponse.getMessage() );
-
-            }
-        checkOut();
         }
+        else {
+            Ui.displayConsole( recordResponse.getMessage() );
+
+        }
+        checkOut();
+    }
 
 
     public void findOverDueBookCopies() {
@@ -230,14 +234,14 @@ public class Ui {
             }
             sb.insert( 0, "---------------------Book CheckOut Record ---------------" + "\n" );
 
-                Ui.displayConsole(sb.toString());
+            Ui.displayConsole( sb.toString() );
 
-            }
-            else {
-                Ui.displayConsole( recordResponse.getMessage() );
-            }
-        findOverDueBookCopies();
         }
+        else {
+            Ui.displayConsole( recordResponse.getMessage() );
+        }
+        findOverDueBookCopies();
+    }
 
 
     public void addBookCopy() {
@@ -257,11 +261,10 @@ public class Ui {
             Ui.displayConsole( recordResponse.getData().toString() );
             Ui.displayConsole( "---------------------------------------------------------" );
 
-
-            }
-            else {
-                Ui.displayConsole( recordResponse.getMessage() );
-            }
+        }
+        else {
+            Ui.displayConsole( recordResponse.getMessage() );
+        }
         addBookCopy();
 
     }
@@ -423,8 +426,13 @@ public class Ui {
         if ( showCheckoutRecords.equals( "yes" ) ) {
             response = systemController.getCheckoutRecordsMemberById( memberId );
 
-            List<CheckoutRecord> checkoutRecords = ( List<CheckoutRecord> )response.getData();
+            if ( response.getData() == null ) {
+                Ui.displayConsole( "The member has no checkout records" );
+                displayUserMenu();
+                return;
+            }
 
+            List<CheckoutRecord> checkoutRecords = ( List<CheckoutRecord> )response.getData();
             printCheckoutRecordEntries( checkoutRecords );
         }
         else {
