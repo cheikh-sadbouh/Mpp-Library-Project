@@ -14,6 +14,8 @@ import edu.miu.mpp.librarysystem.dao.model.MaxBookCheckout;
 import edu.miu.mpp.librarysystem.dao.model.User;
 import edu.miu.mpp.librarysystem.utility.StringPropertyExtractor;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.*;
 
 public class UserService implements Librarian, Administrator {
@@ -67,6 +69,34 @@ public class UserService implements Librarian, Administrator {
         return StringPropertyExtractor.findProperties(
                 Arrays.asList( "checkoutId", "memberId", "bookCopyId", "checkoutDate", "dueDate" ),
                 checkoutRecord.toString() );
+    }
+
+    public Optional<CheckoutRecordEntry> getCheckoutRecordEntry(String Isbn, String memberId){
+        BookCopy bookCopy = dao.getBookCopy( Isbn );
+
+        List<CheckoutRecord> checkoutRecordList = (List<CheckoutRecord>) dao.getMemberCheckoutRecords(memberId).getData();
+
+
+        for(CheckoutRecord checkoutRecord: checkoutRecordList){
+            for(CheckoutRecordEntry entry: checkoutRecord.getEntries()){
+                if (entry.getBookCopy().getBookCopyId().equals(bookCopy.getBookCopyId())){
+                    return Optional.of(entry);
+                }
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    public Double calculateOverDueBook(String Isbn, String memberId){
+        Optional<CheckoutRecordEntry> checkoutRecordEntry = getCheckoutRecordEntry(Isbn, memberId);
+
+        if (checkoutRecordEntry.isPresent()){
+            Period period = Period.between(checkoutRecordEntry.get().getCheckoutDate(), LocalDate.now());
+            return 0.25 * period.getDays();
+        }else{
+            return 0.0;
+        }
     }
 
 

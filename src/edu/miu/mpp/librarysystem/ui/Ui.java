@@ -102,15 +102,6 @@ public class Ui {
         }
     }
 
-
-    public void librarianLoginUi() {
-
-        System.out.println(
-                "1. Checkout book\n" + "2. Search for library member\n"
-                        + "0. Exit" );
-    }
-
-
     public LibraryMember getLibraryMemberById( String memberId ) {
 
         return null;
@@ -178,6 +169,9 @@ public class Ui {
             case Search_Member:
                 searchMember();
                 break;
+            case Calculate_Late_Fee:
+                calculateBookLateFee();
+                break;
             default:
                 Ui.displayConsole( "You entered an invalid menu selection\n Try again" );
                 displayUserMenu();
@@ -206,10 +200,6 @@ public class Ui {
 
             }
         }
-
-
-
-
 
     public void findOverDueBookCopies() {
         displayScreenHeader(DisplayMenu.Find_Over_Due_Book.toString());
@@ -249,7 +239,6 @@ public class Ui {
 
     public void addBookCopy() {
 
-
             displayScreenHeader(DisplayMenu.Add_a_Book_Copy.toString());
 
             Ui.displayConsole( "Enter book ISBN" );
@@ -272,7 +261,6 @@ public class Ui {
 
 
     }
-
 
     public void addBook() {
 
@@ -332,6 +320,22 @@ public class Ui {
 
     }
 
+    public void calculateBookLateFee(){
+        Ui.displayConsole("Enter ISBN for book: ");
+        String isbn = (String) Ui.userInput(UserInputType.STRING);
+
+        Ui.displayConsole("Enter Member Id: ");
+        String memberId = (String) Ui.userInput(UserInputType.STRING);
+
+        response = systemController.getCheckoutOverDueFee(memberId, isbn);
+
+        if (response.getStatus()){
+            Ui.displayConsole("Fee is $ "+String.format("%.2f", response.getData()));
+        }else{
+            Ui.displayConsole(response.getMessage());
+        }
+
+    }
 
     public void addLibraryMember() {
 
@@ -378,7 +382,6 @@ public class Ui {
             Ui.displayConsole( response.getMessage() );
         }
     }
-
 
     public void searchMember() {
 
@@ -469,8 +472,6 @@ public class Ui {
         System.out.println( "Type author phone:" );
         String phone = scanner.nextLine();
 
-        //scanner.close();
-
         Address address = null;
 
         Author author = new Author( firstName, lastName, phone, address, bio, books );
@@ -498,5 +499,6 @@ public class Ui {
         Address address = new Address( street, city, state, zip );
         return address;
     }
+
 
 }
