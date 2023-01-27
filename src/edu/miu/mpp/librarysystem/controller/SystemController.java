@@ -85,7 +85,13 @@ public class SystemController {
     }
 
     public Response getCheckoutOverDueFee(String memberId, String Isbn){
-        Response response = new Response();
+
+        //check permission
+        Response  response = isAuthorized(Arrays.asList(Auth.ADMIN,Auth.LIBRARIAN,Auth.BOTH));
+
+        if(!response.getStatus())
+            return  response;
+        else response = new Response();
 
         if ( userService.isMember( memberId ) ) {
             response.setMessage( memberId + " is  not yet a member \n" );
@@ -146,9 +152,13 @@ public class SystemController {
 
     public Response addLibraryMember( String memberId, String firstName, String lastName,
             String phone, Address address ) {
+        //check permission
+        Response  response = isAuthorized(Arrays.asList(Auth.ADMIN,Auth.BOTH));
 
-        Response response =
-                userService.addLibraryMember( memberId, firstName, lastName, phone, address );
+        if(!response.getStatus())
+            return  response;
+
+         response = userService.addLibraryMember( memberId, firstName, lastName, phone, address );
         return response;
     }
 
@@ -169,6 +179,12 @@ public class SystemController {
 
     public Response addBook( String isbn, String title, MaxBookCheckout maxBookCheckout,
             List<Author> authors, Integer numberOfCopies ) {
+
+        //check permission
+        Response  response = isAuthorized(Arrays.asList(Auth.ADMIN,Auth.BOTH));
+
+        if(!response.getStatus())
+            return  response;
 
         if ( userService.addBook( isbn, title, maxBookCheckout, authors, numberOfCopies ) ) {
             return new Response( "Successfully added new Book", true, null );
