@@ -7,8 +7,7 @@ import java.util.regex.Pattern;
 
 public class StringPropertyExtractor {
   public  static  String findProperties(List<String> properties,String source) {
-            AtomicReference<String> response= new AtomicReference<>("");
-
+            AtomicReference<String> response = new AtomicReference<>("");
             properties.forEach(property -> {
                 Matcher m = Pattern.compile(property+"=.*?(?=,|})").matcher(source);
                 while (m.find())
