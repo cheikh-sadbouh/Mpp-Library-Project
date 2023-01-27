@@ -349,6 +349,8 @@ public class Ui {
 
     public void calculateBookLateFee() {
 
+        displayScreenHeader(DisplayMenu.Calculate_Late_Fee.toString());
+
         Ui.displayConsole( "Enter ISBN for book: " );
         String isbn = ( String )Ui.userInput( UserInputType.STRING );
 
@@ -369,6 +371,7 @@ public class Ui {
 
 
     public void addLibraryMember() {
+        displayScreenHeader(DisplayMenu.Add_New_Library_Member.toString());
 
         Ui.displayConsole( "-------Add libray member-------" );
 
@@ -410,6 +413,7 @@ public class Ui {
 
 
     public void searchMember() {
+        displayScreenHeader(DisplayMenu.Search_Member.toString());
 
         Ui.displayConsole( "-------Add member id-------" );
 
@@ -447,9 +451,9 @@ public class Ui {
     private void printCheckoutRecordEntries( List<CheckoutRecord> checkoutRecords ) {
 
         for ( CheckoutRecord checkoutRecord : checkoutRecords ) {
-            System.out.println( "Member Id: " + checkoutRecord.getLibraryMemberId() );
-            System.out.println( "Checkout Id: " + checkoutRecord.getCheckoutId() );
-            System.out.println( "***************************************************" );
+            Ui.displayConsole( "Member Id: " + checkoutRecord.getLibraryMemberId() );
+            Ui.displayConsole( "Checkout Id: " + checkoutRecord.getCheckoutId() );
+            Ui.displayConsole( "***************************************************" );
             List<CheckoutRecordEntry> entries = checkoutRecord.getEntries();
 
             for ( CheckoutRecordEntry entry : entries ) {
@@ -462,8 +466,8 @@ public class Ui {
                         entry.getCheckoutDate(),
                         entry.getDueDate() );
             }
-            System.out.println( "\n" );
-            System.out.println(
+            Ui.displayConsole( "\n" );
+            Ui.displayConsole(
                     "******************************************************************************************************" );
         }
 
