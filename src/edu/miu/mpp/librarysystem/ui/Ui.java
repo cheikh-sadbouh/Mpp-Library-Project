@@ -349,7 +349,7 @@ public class Ui {
 
     public void calculateBookLateFee() {
 
-        displayScreenHeader(DisplayMenu.Calculate_Late_Fee.toString());
+        displayScreenHeader( DisplayMenu.Calculate_Late_Fee.toString() );
 
         Ui.displayConsole( "Enter ISBN for book: " );
         String isbn = ( String )Ui.userInput( UserInputType.STRING );
@@ -371,7 +371,8 @@ public class Ui {
 
 
     public void addLibraryMember() {
-        displayScreenHeader(DisplayMenu.Add_New_Library_Member.toString());
+
+        displayScreenHeader( DisplayMenu.Add_New_Library_Member.toString() );
 
         Ui.displayConsole( "-------Add libray member-------" );
 
@@ -413,7 +414,8 @@ public class Ui {
 
 
     public void searchMember() {
-        displayScreenHeader(DisplayMenu.Search_Member.toString());
+
+        displayScreenHeader( DisplayMenu.Search_Member.toString() );
 
         Ui.displayConsole( "-------Add member id-------" );
 
@@ -436,7 +438,7 @@ public class Ui {
 
             if ( response.getData() == null ) {
                 Ui.displayConsole( "The member has no checkout records" );
-                displayUserMenu();
+                displayLogout();
                 return;
             }
 
@@ -453,7 +455,8 @@ public class Ui {
         for ( CheckoutRecord checkoutRecord : checkoutRecords ) {
             Ui.displayConsole( "Member Id: " + checkoutRecord.getLibraryMemberId() );
             Ui.displayConsole( "Checkout Id: " + checkoutRecord.getCheckoutId() );
-            Ui.displayConsole( "***************************************************" );
+            Ui.displayConsole(
+                    "******************************************************************************************************" );
             List<CheckoutRecordEntry> entries = checkoutRecord.getEntries();
 
             for ( CheckoutRecordEntry entry : entries ) {
