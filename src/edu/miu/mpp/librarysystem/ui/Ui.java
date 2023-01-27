@@ -44,6 +44,7 @@ public class Ui {
     public void start() {
 
         userLogin();
+
     }
 
 
@@ -61,6 +62,7 @@ public class Ui {
         if ( response.getStatus() ) {
             Ui.displayConsole( response.getMessage() + "\n" );
             user = ( User )response.getData();
+            Ui.displayConsole("Welcome "+user.getUsername());
             displayUserMenu();
         }
         else {
@@ -86,25 +88,28 @@ public class Ui {
                 "+-------------------------------------------------------------------------------------------------------------+" );
     }
 
+    public void displayLogout(){
+        Ui.displayConsole(
+                "+-------------------------------------------------------------------------------------------------------------+" );
+        Ui.displayConsole( "Select Option to Continue\n1. Logout and Exit Program \n2. Continue to Menu" );
+        Ui.displayConsole(
+                "+-------------------------------------------------------------------------------------------------------------+" );
+
+        if ((Integer) Ui.userInput(UserInputType.INTEGER) == 1){
+            Ui.displayConsole("Logging Out from System.");
+            System.exit(1);
+        }
+        displayUserMenu();
+    }
+
 
     public static Object userInput( UserInputType inputType ) {
-
-        //Redirect user to the main menu if input is zero
-
         switch ( inputType ) {
             case INTEGER:
-
-                int inputInt = scanner.nextInt();
-                return inputInt;
+                return scanner.nextInt();
 
             default:
-                String inputString = scanner.next();
-
-                if ( inputString.equals( "0" ) ) {
-                    /** to be reviewed */
-                    Main.app.displayUserMenu();
-                }
-                return inputString;
+                return scanner.next();
         }
     }
 
@@ -180,8 +185,7 @@ public class Ui {
                 break;
             default:
                 Ui.displayConsole( "You entered an invalid menu selection\n Try again" );
-                displayUserMenu();
-
+                displayLogout();
         }
     }
 
@@ -205,6 +209,8 @@ public class Ui {
             Ui.displayConsole( recordResponse.getMessage() );
 
         }
+
+        displayLogout();
     }
 
 
@@ -233,12 +239,12 @@ public class Ui {
             sb.insert( 0, "---------------------Book CheckOut Record ---------------" + "\n" );
 
             Ui.displayConsole( sb.toString() );
-            findOverDueBookCopies();
         }
         else {
             Ui.displayConsole( recordResponse.getMessage() );
         }
 
+        displayLogout();
     }
 
 
@@ -259,15 +265,17 @@ public class Ui {
             Ui.displayConsole( recordResponse.getData().toString() );
             Ui.displayConsole( "---------------------------------------------------------" );
 
-            addBookCopy();
         }
         else {
             Ui.displayConsole( recordResponse.getMessage() );
         }
 
+        displayLogout();
     }
 
     public void addBook() {
+
+        displayScreenHeader(DisplayMenu.Add_a_Book_Copy.toString());
 
         String title, isbn;
         MaxBookCheckout maxBookCheckout;
@@ -321,7 +329,7 @@ public class Ui {
                 numberOfCopies );
         Ui.displayConsole( response.getMessage() );
 
-        displayUserMenu();
+        displayLogout();
 
     }
 
@@ -340,6 +348,7 @@ public class Ui {
             Ui.displayConsole(response.getMessage());
         }
 
+        displayLogout();
     }
 
     public void addLibraryMember() {
@@ -358,12 +367,6 @@ public class Ui {
             }
         }
 
-        //How to exit from application
-        if ( memberId.equals( "0" ) ) {
-            displayUserMenu();
-            return;
-        }
-
         System.out.println( "Type member first name:" );
         String firstName = ( String )Ui.userInput( UserInputType.STRING );
 
@@ -380,12 +383,12 @@ public class Ui {
 
         if ( response.getStatus() ) {
             Ui.displayConsole( response.getMessage() + "\n" );
-            //            user = ( LibraryMember )response.getData();
-            displayUserMenu();
         }
         else {
             Ui.displayConsole( response.getMessage() );
         }
+
+        displayLogout();
     }
 
     public void searchMember() {
@@ -404,14 +407,6 @@ public class Ui {
             }
         }
 
-        //How to exit from application
-        if ( memberId.equals( "0" ) ) {
-            displayUserMenu();
-            return;
-        }
-
-        //response = systemController.findMemberById( memberId );
-
         System.out.println( "Do you want to show the member's checkout records? (yes/no)" );
         String showCheckoutRecords = ( String )Ui.userInput( UserInputType.STRING );
 
@@ -422,10 +417,8 @@ public class Ui {
 
             printCheckoutRecordEntries( checkoutRecords );
         }
-        else {
-            displayUserMenu();
-            return;
-        }
+
+        displayLogout();
     }
 
 
