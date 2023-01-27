@@ -83,7 +83,9 @@ public class UserService implements Librarian, Administrator {
 
         List<CheckoutRecord> checkoutRecordList = (List<CheckoutRecord>) dao.getMemberCheckoutRecords(memberId).getData();
 
-
+        if (checkoutRecordList == null){
+            return Optional.empty();
+        }
         for(CheckoutRecord checkoutRecord: checkoutRecordList){
             for(CheckoutRecordEntry entry: checkoutRecord.getEntries()){
                 if (entry.getBookCopy().getBookCopyId().equals(bookCopy.getBookCopyId())){

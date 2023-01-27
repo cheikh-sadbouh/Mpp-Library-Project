@@ -349,6 +349,8 @@ public class Ui {
 
     public void calculateBookLateFee() {
 
+        displayScreenHeader(DisplayMenu.Calculate_Late_Fee.toString());
+
         Ui.displayConsole( "Enter ISBN for book: " );
         String isbn = ( String )Ui.userInput( UserInputType.STRING );
 
@@ -369,6 +371,7 @@ public class Ui {
 
 
     public void addLibraryMember() {
+        displayScreenHeader(DisplayMenu.Add_New_Library_Member.toString());
 
         Ui.displayConsole( "-------Add libray member-------" );
 
@@ -410,6 +413,7 @@ public class Ui {
 
 
     public void searchMember() {
+        displayScreenHeader(DisplayMenu.Search_Member.toString());
 
         Ui.displayConsole( "-------Add member id-------" );
 
