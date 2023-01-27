@@ -63,6 +63,23 @@ public class SystemController {
 
     }
 
+    public Response getCheckoutOverDueFee(String memberId, String Isbn){
+        Response response = new Response();
+
+        if ( userService.isMember( memberId ) ) {
+            response.setMessage( memberId + " is  not yet a member \n" );
+        } else if ( userService.isIsbnExist( Isbn ) ) {
+            response.setMessage( Isbn + " there is no book match this ISBN \n" );
+        } else if ( userService.isBookAvailable( Isbn ) ) {
+            response.setMessage( " no available copy at the moment for  Isbn " + Isbn + "\n" );
+        }else{
+            response.setStatus(true);
+            response.setData(userService.calculateOverDueBook(Isbn, memberId));
+        }
+
+        return response;
+    }
+
 
     public Response getBookCopiesWithCheckoutRecord( String isbn ) {
 
