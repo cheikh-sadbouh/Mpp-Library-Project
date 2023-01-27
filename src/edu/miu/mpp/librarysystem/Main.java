@@ -10,6 +10,7 @@ import java.nio.file.Path;
 
 public class Main {
 
+
     public static void main(String[] args) throws IOException {
         // Load data
        if(!Files.exists(Path.of(DataAccessFacade.OUTPUT_DIR))) {
