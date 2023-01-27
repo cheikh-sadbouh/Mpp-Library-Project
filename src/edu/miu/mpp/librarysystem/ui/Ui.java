@@ -157,8 +157,9 @@ public class Ui {
             allList.addAll( libList );
         }
 
-        StringBuilder output = new StringBuilder(
-                "Select from the Menu\nEnter the number to select\n" );
+        StringBuilder output = new StringBuilder( "ROLE: (" +
+                user.getUserRole().name()
+                + ") Select from the Menu\nEnter the number to select\n" );
         for ( int i = 0; i < allList.size(); i++ ) {
             output.append( i + 1 ).append( ". " ).append( allList.get( i ) ).append( "\n" );
         }
