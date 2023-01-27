@@ -9,11 +9,12 @@ import java.util.UUID;
 public class CheckoutRecord implements Serializable {
     private  String checkoutId;
     private String libraryMemberId;
-    private List<CheckoutRecordEntry> entries = new ArrayList<>();
+    private List<CheckoutRecordEntry> entries;
 
-    public CheckoutRecord(String libraryMemberdD) {
-        this.libraryMemberId = libraryMemberdD;
-        this.checkoutId= UUID.randomUUID().toString();
+    public CheckoutRecord(String libraryMemberId) {
+        this.libraryMemberId = libraryMemberId;
+        this.checkoutId = UUID.randomUUID().toString();
+        this.entries = new ArrayList<>();
     }
 
     @Override
