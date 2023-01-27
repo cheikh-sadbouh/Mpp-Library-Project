@@ -287,7 +287,7 @@ public class Ui {
 
     public void addBook() {
 
-        displayScreenHeader( DisplayMenu.Add_a_Book_Copy.toString() );
+        displayScreenHeader( DisplayMenu.Add_Book.toString() );
 
         String title, isbn;
         MaxBookCheckout maxBookCheckout;
