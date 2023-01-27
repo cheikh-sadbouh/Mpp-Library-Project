@@ -447,9 +447,9 @@ public class Ui {
     private void printCheckoutRecordEntries( List<CheckoutRecord> checkoutRecords ) {
 
         for ( CheckoutRecord checkoutRecord : checkoutRecords ) {
-            System.out.println( "Member Id: " + checkoutRecord.getLibraryMemberId() );
-            System.out.println( "Checkout Id: " + checkoutRecord.getCheckoutId() );
-            System.out.println( "***************************************************" );
+            Ui.displayConsole( "Member Id: " + checkoutRecord.getLibraryMemberId() );
+            Ui.displayConsole( "Checkout Id: " + checkoutRecord.getCheckoutId() );
+            Ui.displayConsole( "***************************************************" );
             List<CheckoutRecordEntry> entries = checkoutRecord.getEntries();
 
             for ( CheckoutRecordEntry entry : entries ) {
@@ -462,8 +462,8 @@ public class Ui {
                         entry.getCheckoutDate(),
                         entry.getDueDate() );
             }
-            System.out.println( "\n" );
-            System.out.println(
+            Ui.displayConsole( "\n" );
+            Ui.displayConsole(
                     "******************************************************************************************************" );
         }
 
