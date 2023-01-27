@@ -108,6 +108,7 @@ public class Ui {
         }
     }
 
+
     public LibraryMember getLibraryMemberById( String memberId ) {
 
         return null;
@@ -248,7 +249,7 @@ public class Ui {
 
         Ui.displayConsole( "Enter book ISBN" );
         String bookIsbn = ( String )Ui.userInput( UserInputType.STRING );
-            displayScreenHeader(DisplayMenu.Add_a_Book_Copy.toString());
+        displayScreenHeader( DisplayMenu.Add_a_Book_Copy.toString() );
 
         String bookCopyId = UUID.randomUUID().toString();
         Ui.displayConsole( "a new bookCopy Id has been generated " );
@@ -266,6 +267,7 @@ public class Ui {
         }
 
     }
+
 
     public void addBook() {
 
@@ -325,34 +327,38 @@ public class Ui {
 
     }
 
-    public void calculateBookLateFee(){
-        Ui.displayConsole("Enter ISBN for book: ");
-        String isbn = (String) Ui.userInput(UserInputType.STRING);
 
-        Ui.displayConsole("Enter Member Id: ");
-        String memberId = (String) Ui.userInput(UserInputType.STRING);
+    public void calculateBookLateFee() {
 
-        response = systemController.getCheckoutOverDueFee(memberId, isbn);
+        Ui.displayConsole( "Enter ISBN for book: " );
+        String isbn = ( String )Ui.userInput( UserInputType.STRING );
 
-        if (response.getStatus()){
-            Ui.displayConsole("Fee is $ "+String.format("%.2f", response.getData()));
-        }else{
-            Ui.displayConsole(response.getMessage());
+        Ui.displayConsole( "Enter Member Id: " );
+        String memberId = ( String )Ui.userInput( UserInputType.STRING );
+
+        response = systemController.getCheckoutOverDueFee( memberId, isbn );
+
+        if ( response.getStatus() ) {
+            Ui.displayConsole( "Fee is $ " + String.format( "%.2f", response.getData() ) );
+        }
+        else {
+            Ui.displayConsole( response.getMessage() );
         }
 
     }
 
+
     public void addLibraryMember() {
 
-        System.out.println( "-------Add libray member-------" );
+        Ui.displayConsole( "-------Add libray member-------" );
 
-        System.out.println( "Type memberId:" );
+        Ui.displayConsole( "Type memberId:" );
         String memberId = ( String )Ui.userInput( UserInputType.STRING );
 
         //Check if memberId exists before adding more data
         if ( memberId.length() > 0 ) {
             while ( !userService.isMember( memberId ) ) {
-                System.out.println( "MemberId: " + memberId
+                Ui.displayConsole( "MemberId: " + memberId
                         + " is already taken. Please select another Id. (0 - Menu)" );
                 memberId = ( String )Ui.userInput( UserInputType.STRING );
             }
@@ -364,14 +370,14 @@ public class Ui {
             return;
         }
 
-        System.out.println( "Type member first name:" );
+        Ui.displayConsole( "Type member first name:" );
         String firstName = ( String )Ui.userInput( UserInputType.STRING );
 
         String lastName = ( String )Ui.userInput( UserInputType.STRING );
-        System.out.println( "Type member last name:" );
+        Ui.displayConsole( "Type member last name:" );
 
         String phone = ( String )Ui.userInput( UserInputType.STRING );
-        System.out.println( "Type member phone:" );
+        Ui.displayConsole( "Type member phone:" );
 
         Address address = createAddress();
 
@@ -388,17 +394,18 @@ public class Ui {
         }
     }
 
+
     public void searchMember() {
 
-        System.out.println( "-------Add member id-------" );
+        Ui.displayConsole( "-------Add member id-------" );
 
-        System.out.println( "Type memberId:" );
+        Ui.displayConsole( "Type memberId:" );
         String memberId = ( String )Ui.userInput( UserInputType.STRING );
 
         //Check if memberId exists before adding more data
         if ( memberId.length() > 0 ) {
             while ( userService.isMember( memberId ) ) {
-                System.out.println( "MemberId: " + memberId
+                Ui.displayConsole( "MemberId: " + memberId
                         + " doesn't exist. Try another memberId (0 - Menu)" );
                 memberId = ( String )Ui.userInput( UserInputType.STRING );
             }
@@ -412,7 +419,7 @@ public class Ui {
 
         //response = systemController.findMemberById( memberId );
 
-        System.out.println( "Do you want to show the member's checkout records? (yes/no)" );
+        Ui.displayConsole( "Do you want to show the member's checkout records? (yes/no)" );
         String showCheckoutRecords = ( String )Ui.userInput( UserInputType.STRING );
 
         if ( showCheckoutRecords.equals( "yes" ) ) {
@@ -455,51 +462,25 @@ public class Ui {
     }
 
 
-    private Author addAuthor( Book book ) {
-
-        //Add book
-        List<Book> books = new ArrayList<>();
-        books.add( book );
-
-        System.out.println( "Type author first name:" );
-        String firstName = scanner.nextLine();
-
-        System.out.println( "Type author last name:" );
-        String lastName = scanner.nextLine();
-
-        System.out.println( "Type author biography:" );
-        String bio = scanner.nextLine();
-
-        System.out.println( "Type author phone:" );
-        String phone = scanner.nextLine();
-
-        Address address = null;
-
-        Author author = new Author( firstName, lastName, phone, address, bio, books );
-        return author;
-    }
-
-
     private Address createAddress() {
 
         String street = ( String )Ui.userInput( UserInputType.STRING );
-        System.out.println( "-------Add member address-------" );
-        System.out.println( "Type street:" );
+        Ui.displayConsole( "-------Add member address-------" );
+        Ui.displayConsole( "Type street:" );
 
         String city = ( String )Ui.userInput( UserInputType.STRING );
         System.out.println( "Type city:" );
 
         String state = ( String )Ui.userInput( UserInputType.STRING );
-        System.out.println( "Type state:" );
+        Ui.displayConsole( "Type state:" );
 
         String zip = ( String )Ui.userInput( UserInputType.STRING );
-        System.out.println( "Type zip:" );
+        Ui.displayConsole( "Type zip:" );
 
         //scanner.close();
 
         Address address = new Address( street, city, state, zip );
         return address;
     }
-
 
 }
