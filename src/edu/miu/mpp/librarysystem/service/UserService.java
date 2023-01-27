@@ -1,8 +1,15 @@
+/*
+    =======================================================================================
+    This code is part of mpp project.
+
+    ========================================================================================
+    Authors :Cheikh Sad Bouh Ahmed Brahim, Emmanuel Coffie Debrah, Kasaija Ronald, 
+    ========================================================================================
+*/
 package edu.miu.mpp.librarysystem.service;
 
 import edu.miu.mpp.librarysystem.controller.Response;
 import edu.miu.mpp.librarysystem.dao.DataAccessFacade;
-import edu.miu.mpp.librarysystem.dao.model.*;
 import edu.miu.mpp.librarysystem.dao.model.Address;
 import edu.miu.mpp.librarysystem.dao.model.Author;
 import edu.miu.mpp.librarysystem.dao.model.Book;
@@ -92,43 +99,42 @@ public class UserService implements Librarian, Administrator {
     public String getBookCopiesWithCheckoutRecord( String isbn ) {
 
         StringBuilder responseBuilder = new StringBuilder();
-        if (isIsbnExist(isbn)){
-           //does not exist
-            return  null;
-        } else {
+        if ( isIsbnExist( isbn ) ) {
+            //does not exist
+            return null;
+        }
+        else {
             Book foundBook = dao.getBook( isbn );
 
             responseBuilder
-                    .append("book Isbn = "+foundBook.getIsbn() + "\n")
-                    .append("book Title = "+foundBook.getTitle() + "\n")
-                    .append("Total Copies = "+foundBook.getBookCopies().size() + "\n");
-
-
+                    .append( "book Isbn = " + foundBook.getIsbn() + "\n" )
+                    .append( "book Title = " + foundBook.getTitle() + "\n" )
+                    .append( "Total Copies = " + foundBook.getBookCopies().size() + "\n" );
 
             List<BookCopy> bookCopies = foundBook.getBookCopies();
             bookCopies.forEach( bookCopy -> {
-                HashMap<String, String> bookCopyCheckoutRecord = getBookCopyCheckoutRecord(bookCopy );
+                HashMap<String, String> bookCopyCheckoutRecord = getBookCopyCheckoutRecord(
+                        bookCopy );
 
-                if(bookCopyCheckoutRecord.isEmpty()) {
+                if ( bookCopyCheckoutRecord.isEmpty() ) {
                     responseBuilder
-                            .append("CopyId ="+bookCopy.getBookCopyId()+"\n")
-                            .append("CheckoutBy = Available \n")
-                            .append("Due Date   =  Available\n");
-                }else {
-                    bookCopyCheckoutRecord.forEach((memberName,dueDate)->{
+                            .append( "CopyId =" + bookCopy.getBookCopyId() + "\n" )
+                            .append( "CheckoutBy = Available \n" )
+                            .append( "Due Date   =  Available\n" );
+                }
+                else {
+                    bookCopyCheckoutRecord.forEach( ( memberName, dueDate ) -> {
                         responseBuilder
-                                .append("CopyId ="+bookCopy.getBookCopyId()+"\n")
-                                .append("CheckoutBy ="+memberName+"\n")
-                                .append("Due Date ="+dueDate+"\n");
+                                .append( "CopyId =" + bookCopy.getBookCopyId() + "\n" )
+                                .append( "CheckoutBy =" + memberName + "\n" )
+                                .append( "Due Date =" + dueDate + "\n" );
 
-                    });
+                    } );
                 }
 
             } );
             return responseBuilder.toString();
         }
-
-
 
     }
 
@@ -145,7 +151,8 @@ public class UserService implements Librarian, Administrator {
 
         Book foundBook = dao.getBook( isbn );
         if ( Objects.nonNull( foundBook ) ) {
-            foundBook.getBookCopies().addAll(Collections.singletonList(new BookCopy( UUID.fromString( bookCopyId ), foundBook )));
+            foundBook.getBookCopies().addAll( Collections.singletonList( new BookCopy( UUID
+                    .fromString( bookCopyId ), foundBook ) ) );
             dao.addBookCopy( foundBook );
             return true;
         }
@@ -177,9 +184,9 @@ public class UserService implements Librarian, Administrator {
 
 
     @Override
-    public Response getMemberCheckoutRecords( String MemberId ) {
+    public Response getMemberCheckoutRecords( String memberId ) {
 
-        return dao.getMemberCheckoutRecords( MemberId );
+        return dao.getMemberCheckoutRecords( memberId );
     }
 
 

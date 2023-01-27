@@ -1,3 +1,11 @@
+/*
+    =======================================================================================
+    This code is part of mpp project.
+
+    ========================================================================================
+    Authors :Cheikh Sad Bouh Ahmed Brahim, Emmanuel Coffie Debrah, Kasaija Ronald, 
+    ========================================================================================
+*/
 package edu.miu.mpp.librarysystem.dao;
 
 import edu.miu.mpp.librarysystem.dao.model.*;

@@ -1,8 +1,15 @@
+/*
+    =======================================================================================
+    This code is part of mpp project.
+
+    ========================================================================================
+    Authors :Cheikh Sad Bouh Ahmed Brahim, Emmanuel Coffie Debrah, Kasaija Ronald, 
+    ========================================================================================
+*/
 package edu.miu.mpp.librarysystem.controller;
 
 import edu.miu.mpp.librarysystem.dao.model.Address;
 import edu.miu.mpp.librarysystem.dao.model.Author;
-import edu.miu.mpp.librarysystem.dao.model.CheckoutRecord;
 import edu.miu.mpp.librarysystem.dao.model.MaxBookCheckout;
 import edu.miu.mpp.librarysystem.dao.model.User;
 import edu.miu.mpp.librarysystem.service.UserService;
@@ -106,7 +113,7 @@ public class SystemController {
     }
 
 
-    public Response findMember( String memberId ) {
+    public Response findMemberById( String memberId ) {
 
         Response response = userService.findMemberById( memberId );
         return response;

@@ -76,11 +76,17 @@ public class Ui {
     }
 
 
-    public  static  void displayScreenHeader(String currentScreen){
-        Ui.displayConsole("+-------------------------------------------------------------------------------------------------------------+");
-        Ui.displayConsole("|  Current Screen : "+currentScreen+" | 0. Navigate Back                                                     |");
-        Ui.displayConsole("+-------------------------------------------------------------------------------------------------------------+");
+    public static void displayScreenHeader( String currentScreen ) {
+
+        Ui.displayConsole(
+                "+-------------------------------------------------------------------------------------------------------------+" );
+        Ui.displayConsole( "|  Current Screen : " + currentScreen
+                + " | 0. Navigate Back                                                     |" );
+        Ui.displayConsole(
+                "+-------------------------------------------------------------------------------------------------------------+" );
     }
+
+
     public static Object userInput( UserInputType inputType ) {
 
         //Redirect user to the main menu if input is zero
@@ -188,88 +194,81 @@ public class Ui {
 
     public void checkOut() {
 
-            displayScreenHeader(DisplayMenu.Check_Out_Book.toString());
+        displayScreenHeader( DisplayMenu.Check_Out_Book.toString() );
 
-            Ui.displayConsole("Enter MemberId");
+        Ui.displayConsole( "Enter MemberId" );
 
-           String memberId = ( String )Ui.userInput( UserInputType.STRING );
+        String memberId = ( String )Ui.userInput( UserInputType.STRING );
 
-            Ui.displayConsole( "Enter book ISBN" );
-            String bookIsbn = ( String )Ui.userInput( UserInputType.STRING );
-            Response recordResponse = systemController.Checkout( memberId, bookIsbn );
-            if ( recordResponse.getStatus() ) {
-                Ui.displayConsole( recordResponse.getData().toString() );
-                checkOut();
-            }
-            else {
-                Ui.displayConsole( recordResponse.getMessage() );
-
-            }
+        Ui.displayConsole( "Enter book ISBN" );
+        String bookIsbn = ( String )Ui.userInput( UserInputType.STRING );
+        Response recordResponse = systemController.Checkout( memberId, bookIsbn );
+        if ( recordResponse.getStatus() ) {
+            Ui.displayConsole( recordResponse.getData().toString() );
+            checkOut();
         }
+        else {
+            Ui.displayConsole( recordResponse.getMessage() );
 
-
-
+        }
+    }
 
 
     public void findOverDueBookCopies() {
-        displayScreenHeader(DisplayMenu.Find_Over_Due_Book.toString());
 
+        displayScreenHeader( DisplayMenu.Find_Over_Due_Book.toString() );
 
         Ui.displayConsole( "Enter book ISBN" );
         String bookIsbn = ( String )Ui.userInput( UserInputType.STRING );
 
+        Response recordResponse = systemController.getBookCopiesWithCheckoutRecord( bookIsbn );
+        if ( recordResponse.getStatus() ) {
 
-            Response recordResponse = systemController.getBookCopiesWithCheckoutRecord( bookIsbn );
-            if ( recordResponse.getStatus() ) {
-
-                StringBuilder sb = new StringBuilder(recordResponse.getData().toString());
-                int newLineCount = 0;
-                int index = sb.indexOf("\n");
-                while (index != -1) {
-                    newLineCount++;
-                    if (newLineCount  == 3) {
-                        sb.insert(index + 1, "---------------------------------------------------------\n");
-                        newLineCount = -1;
-                    }
-                    index = sb.indexOf("\n", index + 1);
+            StringBuilder sb = new StringBuilder( recordResponse.getData().toString() );
+            int newLineCount = 0;
+            int index = sb.indexOf( "\n" );
+            while ( index != -1 ) {
+                newLineCount++;
+                if ( newLineCount == 3 ) {
+                    sb.insert( index + 1,
+                            "---------------------------------------------------------\n" );
+                    newLineCount = -1;
                 }
-                sb.insert(0,"---------------------Book CheckOut Record ---------------"+ "\n");
-
-                Ui.displayConsole(sb.toString());
-                findOverDueBookCopies();
+                index = sb.indexOf( "\n", index + 1 );
             }
-            else {
-                Ui.displayConsole( recordResponse.getMessage() );
-            }
+            sb.insert( 0, "---------------------Book CheckOut Record ---------------" + "\n" );
 
+            Ui.displayConsole( sb.toString() );
+            findOverDueBookCopies();
+        }
+        else {
+            Ui.displayConsole( recordResponse.getMessage() );
         }
 
-
+    }
 
 
     public void addBookCopy() {
 
+        displayScreenHeader( DisplayMenu.Add_a_Book_Copy.toString() );
 
-            displayScreenHeader(DisplayMenu.Add_a_Book_Copy.toString());
+        Ui.displayConsole( "Enter book ISBN" );
+        String bookIsbn = ( String )Ui.userInput( UserInputType.STRING );
 
-            Ui.displayConsole( "Enter book ISBN" );
-            String bookIsbn = ( String )Ui.userInput( UserInputType.STRING );
+        String bookCopyId = UUID.randomUUID().toString();
+        Ui.displayConsole( "a new bookCopy Id has been generated " );
+        Ui.displayConsole( "bookCopyId = " + bookCopyId );
+        Ui.displayConsole( "---------------------------------------------------------" );
+        Response recordResponse = systemController.addNewBookCopy( bookIsbn, bookCopyId );
+        if ( recordResponse.getStatus() ) {
+            Ui.displayConsole( recordResponse.getData().toString() );
+            Ui.displayConsole( "---------------------------------------------------------" );
 
-            String bookCopyId = UUID.randomUUID().toString();
-            Ui.displayConsole( "a new bookCopy Id has been generated " );
-            Ui.displayConsole( "bookCopyId = "+bookCopyId );
-            Ui.displayConsole("---------------------------------------------------------");
-            Response recordResponse = systemController.addNewBookCopy( bookIsbn, bookCopyId );
-            if ( recordResponse.getStatus() ) {
-                Ui.displayConsole( recordResponse.getData().toString() );
-                Ui.displayConsole("---------------------------------------------------------");
-
-                addBookCopy();
-            }
-            else {
-                Ui.displayConsole( recordResponse.getMessage() );
-            }
-
+            addBookCopy();
+        }
+        else {
+            Ui.displayConsole( recordResponse.getMessage() );
+        }
 
     }
 
@@ -402,25 +401,21 @@ public class Ui {
             return;
         }
 
-        response = systemController.findMember( memberId );
+        //response = systemController.findMemberById( memberId );
 
-        if ( response.getStatus() ) {
-            Ui.displayConsole( response.getMessage() + "\n" );
+        System.out.println( "Do you want to show the member's checkout records? (yes/no)" );
+        String showCheckoutRecords = ( String )Ui.userInput( UserInputType.STRING );
 
-            System.out.println( "Do you want to show the member's checkout records? (yes/no)" );
-            String showCheckoutRecords = ( String )Ui.userInput( UserInputType.STRING );
+        if ( showCheckoutRecords.equals( "yes" ) ) {
+            response = systemController.getCheckoutRecordsMemberById( memberId );
 
-            if ( showCheckoutRecords.equals( "yes" ) ) {
-                response = systemController.getCheckoutRecordsMemberById( memberId );
+            List<CheckoutRecord> checkoutRecords = ( List<CheckoutRecord> )response.getData();
 
-                List<CheckoutRecord> checkoutRecords = ( List<CheckoutRecord> )response.getData();
-
-                printCheckoutRecordEntries( checkoutRecords );
-            }
-            else {
-                displayUserMenu();
-                return;
-            }
+            printCheckoutRecordEntries( checkoutRecords );
+        }
+        else {
+            displayUserMenu();
+            return;
         }
     }
 

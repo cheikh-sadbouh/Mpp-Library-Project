@@ -1,11 +1,17 @@
+/*
+    =======================================================================================
+    This code is part of mpp project.
+
+    ========================================================================================
+    Authors :Cheikh Sad Bouh Ahmed Brahim, Emmanuel Coffie Debrah, Kasaija Ronald, 
+    ========================================================================================
+*/
 package edu.miu.mpp.librarysystem.service;
 
 import edu.miu.mpp.librarysystem.controller.Response;
 import edu.miu.mpp.librarysystem.dao.model.BookCopy;
-import edu.miu.mpp.librarysystem.dao.model.CheckoutRecord;
 
 import java.util.HashMap;
-import java.util.List;
 
 public interface Librarian {
 
