@@ -62,8 +62,8 @@ public class UserService implements Librarian, Administrator {
     public String createCheckoutRecord( String Isbn, String memberId ) {
 
         BookCopy bookCopy = dao.getBookCopy( Isbn );
-        CheckoutRecordEntry checkoutRecordEntry = new CheckoutRecordEntry( dao.getBookCopy(
-                Isbn ) );
+        bookCopy.changeAvailability();
+        CheckoutRecordEntry checkoutRecordEntry = new CheckoutRecordEntry(bookCopy);
         LibraryMember member = dao.getLibraryMember( memberId );
         CheckoutRecord checkoutRecord = new CheckoutRecord( memberId );
         checkoutRecord.getEntries().add( checkoutRecordEntry );

@@ -197,7 +197,8 @@ public class DataAccessFacade implements DataAccess {
         for ( Book b : books.values() ) {
             for ( BookCopy bc : b.getBookCopies() ) {
                 if ( bc.getBookCopyId().toString().equals( bookCopyId ) ) {
-                    bc.changeAvailability();
+                    bc.setAvailable(false);
+                    books.replace(b.getIsbn(),b);
                     saveToStorage( StorageType.BOOKS, books );
                     return true;
                 }
