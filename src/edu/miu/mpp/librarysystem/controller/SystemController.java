@@ -78,7 +78,7 @@ public class SystemController {
         Response response = new Response();
 
         if ( userService.addNewBookCopy( isbn, bookCopyId ) ) {
-            response.setMessage( "mew Book Copy has been added ! with copy Number = "
+            response.setData( "mew Book Copy has been added ! with copy Number = "
                     + bookCopyId );
             response.setStatus( true );
         }

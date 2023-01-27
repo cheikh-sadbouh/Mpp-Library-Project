@@ -19,9 +19,9 @@ public class Book implements Serializable {
         this.maxBookCheckout = maxBookCheckout;
         this.authors = authors;
         if(maxBookCheckout.equals(MaxBookCheckout.TWENTY_ONE_DAYS))
-             this.bookCopies = Arrays.asList(new BookCopy(UUID.randomUUID(),this));
+             this.bookCopies = new ArrayList<>(Arrays.asList(new BookCopy(UUID.randomUUID(),this)));
         else
-            this.bookCopies = Arrays.asList(new BookCopy(UUID.randomUUID(),this),new BookCopy(UUID.randomUUID(),this));
+            this.bookCopies = new ArrayList<>(Arrays.asList(new BookCopy(UUID.randomUUID(),this),new BookCopy(UUID.randomUUID(),this)));
     }
 
     public Book(String isbn, String title, MaxBookCheckout maxBookCheckout, List<Author> authors, Integer numberOfCopies){

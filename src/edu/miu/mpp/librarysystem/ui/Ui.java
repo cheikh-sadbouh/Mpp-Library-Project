@@ -2,6 +2,7 @@ package edu.miu.mpp.librarysystem.ui;
 
 import java.util.*;
 
+import edu.miu.mpp.librarysystem.Main;
 import edu.miu.mpp.librarysystem.controller.SystemController;
 import edu.miu.mpp.librarysystem.controller.Response;
 import edu.miu.mpp.librarysystem.dao.model.*;
@@ -64,6 +65,7 @@ public class Ui {
         }
         else {
             Ui.displayConsole( response.getMessage() );
+            userLogin();
         }
     }
 
@@ -74,6 +76,11 @@ public class Ui {
     }
 
 
+    public  static  void displayScreenHeader(String currentScreen){
+        Ui.displayConsole("+-------------------------------------------------------------------------------------------------------------+");
+        Ui.displayConsole("|  Current Screen : "+currentScreen+" | 0. Navigate Back                                                     |");
+        Ui.displayConsole("+-------------------------------------------------------------------------------------------------------------+");
+    }
     public static Object userInput( UserInputType inputType ) {
 
         //Redirect user to the main menu if input is zero
@@ -88,7 +95,8 @@ public class Ui {
                 String inputString = scanner.next();
 
                 if ( inputString.equals( "0" ) ) {
-                    //ui.displayUserMenu();
+                    /** to be reviewed */
+                    Main.app.displayUserMenu();
                 }
                 return inputString;
         }
@@ -180,51 +188,55 @@ public class Ui {
 
     public void checkOut() {
 
-        Ui.displayConsole( "+---------------------------------------------+" );
-        Ui.displayConsole( "| Current Screen :CheckOut | 0. Navigate Back |" );
-        Ui.displayConsole( "+---------------------------------------------+" );
+            displayScreenHeader(DisplayMenu.Check_Out_Book.toString());
 
-        Ui.displayConsole( "Enter MemberId" );
-        scanner.skip( "(\n)?" );//consume \n from previous line
+            Ui.displayConsole("Enter MemberId");
 
-        String memberId = ( String )Ui.userInput( UserInputType.STRING );
-        if ( memberId.equalsIgnoreCase( "0" ) ) {
+           String memberId = ( String )Ui.userInput( UserInputType.STRING );
 
-            displayUserMenu();
-        }
-        else {
             Ui.displayConsole( "Enter book ISBN" );
             String bookIsbn = ( String )Ui.userInput( UserInputType.STRING );
             Response recordResponse = systemController.Checkout( memberId, bookIsbn );
             if ( recordResponse.getStatus() ) {
                 Ui.displayConsole( recordResponse.getData().toString() );
+                checkOut();
             }
             else {
                 Ui.displayConsole( recordResponse.getMessage() );
 
             }
         }
-        checkOut();
 
-    }
+
+
 
 
     public void findOverDueBookCopies() {
+        displayScreenHeader(DisplayMenu.Find_Over_Due_Book.toString());
 
-        Ui.displayConsole( "Current Screen :Find Over Due Book\n" );
-        Ui.displayConsole( "0. Navigate Back\n" );
 
-        Ui.displayConsole( "Enter book ISBN\n" );
+        Ui.displayConsole( "Enter book ISBN" );
         String bookIsbn = ( String )Ui.userInput( UserInputType.STRING );
 
-        if ( bookIsbn.equalsIgnoreCase( "0" ) ) {
-            // call main screen
-            displayUserMenu();
-        }
-        else {
+
             Response recordResponse = systemController.getBookCopiesWithCheckoutRecord( bookIsbn );
             if ( recordResponse.getStatus() ) {
-                Ui.displayConsole( recordResponse.getData().toString() );
+
+                StringBuilder sb = new StringBuilder(recordResponse.getData().toString());
+                int newLineCount = 0;
+                int index = sb.indexOf("\n");
+                while (index != -1) {
+                    newLineCount++;
+                    if (newLineCount  == 3) {
+                        sb.insert(index + 1, "---------------------------------------------------------\n");
+                        newLineCount = -1;
+                    }
+                    index = sb.indexOf("\n", index + 1);
+                }
+                sb.insert(0,"---------------------Book CheckOut Record ---------------"+ "\n");
+
+                Ui.displayConsole(sb.toString());
+                findOverDueBookCopies();
             }
             else {
                 Ui.displayConsole( recordResponse.getMessage() );
@@ -232,31 +244,33 @@ public class Ui {
 
         }
 
-    }
+
 
 
     public void addBookCopy() {
 
-        Ui.displayConsole( "Current Screen : Add a  Book Copy\n" );
-        Ui.displayConsole( "0. Navigate Back\n" );
 
-        Ui.displayConsole( "Enter book ISBN\n" );
-        String bookIsbn = ( String )Ui.userInput( UserInputType.STRING );
-        if ( bookIsbn.equalsIgnoreCase( "0" ) ) {
-            // call main screen
-            displayUserMenu();
-        }
-        else {
-            Response recordResponse = systemController.addNewBookCopy( bookIsbn, UUID.randomUUID()
-                    .toString() );
+            displayScreenHeader(DisplayMenu.Add_a_Book_Copy.toString());
+
+            Ui.displayConsole( "Enter book ISBN" );
+            String bookIsbn = ( String )Ui.userInput( UserInputType.STRING );
+
+            String bookCopyId = UUID.randomUUID().toString();
+            Ui.displayConsole( "a new bookCopy Id has been generated " );
+            Ui.displayConsole( "bookCopyId = "+bookCopyId );
+            Ui.displayConsole("---------------------------------------------------------");
+            Response recordResponse = systemController.addNewBookCopy( bookIsbn, bookCopyId );
             if ( recordResponse.getStatus() ) {
                 Ui.displayConsole( recordResponse.getData().toString() );
+                Ui.displayConsole("---------------------------------------------------------");
+
+                addBookCopy();
             }
             else {
                 Ui.displayConsole( recordResponse.getMessage() );
             }
 
-        }
+
     }
 
 
@@ -416,18 +430,22 @@ public class Ui {
         for ( CheckoutRecord checkoutRecord : checkoutRecords ) {
             System.out.println( "Member Id: " + checkoutRecord.getLibraryMemberId() );
             System.out.println( "Checkout Id: " + checkoutRecord.getCheckoutId() );
-
+            System.out.println( "***************************************************" );
             List<CheckoutRecordEntry> entries = checkoutRecord.getEntries();
 
             for ( CheckoutRecordEntry entry : entries ) {
-                System.out.printf( "%-22s%-22s%-22s\n", "Book Copy Id", "Checkout date",
-                        "Due Date" );
+                System.out.printf( "%-50s%-22s%-22s%-22s\n", "Book Copy Id", "Available",
+                        "Checkout date", "Due Date" );
 
-                System.out.printf( "%-22s%-22s%-22s\n",
-                        entry.getBookCopy(),
+                System.out.printf( "%-50s%-22s%-22s%-22s\n",
+                        entry.getBookCopy().getBookCopyId(),
+                        entry.getBookCopy().isAvailable(),
                         entry.getCheckoutDate(),
-                        entry.getCheckoutDate() );
+                        entry.getDueDate() );
             }
+            System.out.println( "\n" );
+            System.out.println(
+                    "******************************************************************************************************" );
         }
 
     }
