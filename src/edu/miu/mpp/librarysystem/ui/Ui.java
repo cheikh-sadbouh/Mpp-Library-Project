@@ -267,16 +267,14 @@ public class Ui {
 
         Ui.displayConsole( "Enter book ISBN" );
         String bookIsbn = ( String )Ui.userInput( UserInputType.STRING );
-        displayScreenHeader( DisplayMenu.Add_a_Book_Copy.toString() );
 
         String bookCopyId = UUID.randomUUID().toString();
-        Ui.displayConsole( "a new bookCopy Id has been generated " );
-        Ui.displayConsole( "bookCopyId = " + bookCopyId );
-        Ui.displayConsole( "---------------------------------------------------------" );
+
         Response recordResponse = systemController.addNewBookCopy( bookIsbn, bookCopyId );
         if ( recordResponse.getStatus() ) {
+            Ui.displayConsole( "+-------------------------------------------------------------------------------------------------------------+" );
             Ui.displayConsole( recordResponse.getData().toString() );
-            Ui.displayConsole( "---------------------------------------------------------" );
+            Ui.displayConsole( "+-------------------------------------------------------------------------------------------------------------+" );
 
         }
         else {
@@ -302,6 +300,13 @@ public class Ui {
         Ui.displayConsole( "ISBN: " );
         isbn = ( String )Ui.userInput( UserInputType.STRING );
 
+        if ( isbn.length() > 0 ) {
+            while ( !userService.isIsbnExist( isbn ) ) {
+                Ui.displayConsole( "isbn: " + isbn
+                        + " is already exists. Please enter another isbn" );
+                isbn = ( String )Ui.userInput( UserInputType.STRING );
+            }
+        }
         Ui.displayConsole( "Title: " );
         title = ( String )Ui.userInput( UserInputType.STRING );
 
@@ -375,7 +380,7 @@ public class Ui {
 
         displayScreenHeader( DisplayMenu.Add_New_Library_Member.toString() );
 
-        Ui.displayConsole( "-------Add libray member-------" );
+        Ui.displayConsole( "-------Add library member-------" );
 
         Ui.displayConsole( "Type memberId:" );
         String memberId = ( String )Ui.userInput( UserInputType.STRING );
@@ -392,11 +397,11 @@ public class Ui {
         Ui.displayConsole( "Type member first name:" );
         String firstName = ( String )Ui.userInput( UserInputType.STRING );
 
-        String lastName = ( String )Ui.userInput( UserInputType.STRING );
         Ui.displayConsole( "Type member last name:" );
+        String lastName = ( String )Ui.userInput( UserInputType.STRING );
 
-        String phone = ( String )Ui.userInput( UserInputType.STRING );
         Ui.displayConsole( "Type member phone:" );
+        String phone = ( String )Ui.userInput( UserInputType.STRING );
 
         Address address = createAddress();
 
@@ -479,19 +484,19 @@ public class Ui {
 
 
     private Address createAddress() {
-
-        String street = ( String )Ui.userInput( UserInputType.STRING );
         Ui.displayConsole( "-------Add member address-------" );
         Ui.displayConsole( "Type street:" );
 
-        String city = ( String )Ui.userInput( UserInputType.STRING );
+        String street = ( String )Ui.userInput( UserInputType.STRING );
+
         System.out.println( "Type city:" );
+        String city = ( String )Ui.userInput( UserInputType.STRING );
 
-        String state = ( String )Ui.userInput( UserInputType.STRING );
         Ui.displayConsole( "Type state:" );
+        String state = ( String )Ui.userInput( UserInputType.STRING );
 
-        String zip = ( String )Ui.userInput( UserInputType.STRING );
         Ui.displayConsole( "Type zip:" );
+        String zip = ( String )Ui.userInput( UserInputType.STRING );
 
         //scanner.close();
 
