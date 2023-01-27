@@ -12,8 +12,10 @@ import edu.miu.mpp.librarysystem.dao.model.Address;
 import edu.miu.mpp.librarysystem.dao.model.Author;
 import edu.miu.mpp.librarysystem.dao.model.MaxBookCheckout;
 import edu.miu.mpp.librarysystem.dao.model.User;
+import edu.miu.mpp.librarysystem.service.Auth;
 import edu.miu.mpp.librarysystem.service.UserService;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -21,7 +23,7 @@ import java.util.Optional;
 public class SystemController {
 
     private UserService userService;
-
+     private   Optional<User> user;
     public SystemController() {
 
         userService = new UserService();
@@ -30,18 +32,37 @@ public class SystemController {
 
     public Response authenticateUser( String Id, String password ) {
 
-        Optional<User> user = userService.authenticateUser( Id, password );
+         user = userService.authenticateUser( Id, password );
         if ( user.isPresent() )
             return new Response( "Successfully Logged In", true, user.get() );
         return new Response( "Invalid Credentials", false, null );
     }
 
+     public  Response isAuthorized(List<Auth> list) {
 
+         Response response = new Response();
+         boolean hasAnyPermission =false;
+         for(Auth permission : list){
+             if (user.get().getUserRole().equals(permission)){
+                 hasAnyPermission=true;
+             }
+         }
+         if(hasAnyPermission)
+             response.setStatus(true);
+         else
+             response.setMessage( user.get().getUsername()+" You Are Not Authorized to Access This Resource" );
+
+         return response;
+     }
     public Response Checkout( String memberId, String Isbn ) {
-
         //check permission
+        Response  response = isAuthorized(Arrays.asList(Auth.LIBRARIAN,Auth.BOTH));
 
-        Response response = new Response();
+       if(!response.getStatus())
+              return  response;
+        else response = new Response();
+
+
 
         if ( userService.isMember( memberId ) ) {
             response.setMessage( memberId + " is  not yet a member \n" );
@@ -84,7 +105,12 @@ public class SystemController {
     public Response getBookCopiesWithCheckoutRecord( String isbn ) {
 
         //check permission
-        Response response = new Response();
+        Response  response = isAuthorized(Arrays.asList(Auth.LIBRARIAN,Auth.BOTH));
+
+        if(!response.getStatus())
+            return  response;
+        else response = new Response();
+
         String serviceResponse = userService.getBookCopiesWithCheckoutRecord( isbn );
         if ( Objects.isNull( serviceResponse ) )
             response.setMessage( "book was not found" );
@@ -99,7 +125,11 @@ public class SystemController {
     public Response addNewBookCopy( String isbn, String bookCopyId ) {
 
         //check permission
-        Response response = new Response();
+        Response  response = isAuthorized(Arrays.asList(Auth.ADMIN,Auth.BOTH));
+
+        if(!response.getStatus())
+            return  response;
+        else response = new Response();
 
         if ( userService.addNewBookCopy( isbn, bookCopyId ) ) {
             response.setData( "mew Book Copy has been added ! with copy Number = "

@@ -60,7 +60,7 @@ public class Ui {
         if ( response.getStatus() ) {
             Ui.displayConsole( response.getMessage() + "\n" );
             user = ( User )response.getData();
-            Ui.displayConsole("Welcome "+user.getUsername());
+            Ui.displayConsole( "Welcome " + user.getUsername() );
             displayUserMenu();
         }
         else {
@@ -76,22 +76,29 @@ public class Ui {
     }
 
 
-    public  static  void displayScreenHeader(String currentScreen){
-        Ui.displayConsole("+-------------------------------------------------------------------------------------------------------------+");
-        Ui.displayConsole("|  Current Screen : "+currentScreen+"  | 0.Back to Main Screen                                                  ");
-        Ui.displayConsole("+-------------------------------------------------------------------------------------------------------------+");
+    public static void displayScreenHeader( String currentScreen ) {
+
+        Ui.displayConsole(
+                "+-------------------------------------------------------------------------------------------------------------+" );
+        Ui.displayConsole( "|  Current Screen : " + currentScreen
+                + "  | 0.Back to Main Screen                                                  " );
+        Ui.displayConsole(
+                "+-------------------------------------------------------------------------------------------------------------+" );
     }
 
-    public void displayLogout(){
+
+    public void displayLogout() {
+
         Ui.displayConsole(
                 "+-------------------------------------------------------------------------------------------------------------+" );
-        Ui.displayConsole( "Select Option to Continue\n1. Logout and Exit Program \n2. Continue to Menu" );
+        Ui.displayConsole(
+                "Select Option to Continue\n1. Logout and Exit Program \n2. Continue to Menu" );
         Ui.displayConsole(
                 "+-------------------------------------------------------------------------------------------------------------+" );
 
-        if ((Integer) Ui.userInput(UserInputType.INTEGER) == 1){
-            Ui.displayConsole("Logging Out from System.");
-            System.exit(1);
+        if ( ( Integer )Ui.userInput( UserInputType.INTEGER ) == 1 ) {
+            Ui.displayConsole( "Logging Out from System." );
+            System.exit( 1 );
         }
         displayUserMenu();
     }
@@ -131,7 +138,7 @@ public class Ui {
     public void displayUserMenu() {
 
         List<DisplayMenu> allList = new ArrayList<>();
-        Collections.addAll( allList, DisplayMenu.Calculate_Late_Fee);
+        Collections.addAll( allList, DisplayMenu.Calculate_Late_Fee );
 
         List<DisplayMenu> adminList = Arrays.asList( DisplayMenu.Add_Book,
                 DisplayMenu.Add_New_Library_Member, DisplayMenu.Add_a_Book_Copy );
@@ -203,15 +210,15 @@ public class Ui {
 
         String memberId = ( String )Ui.userInput( UserInputType.STRING );
 
-            Ui.displayConsole( "Enter book ISBN" );
-            String bookIsbn = ( String )Ui.userInput( UserInputType.STRING );
-            Response recordResponse = systemController.Checkout( memberId, bookIsbn );
-            if ( recordResponse.getStatus() ) {
-                Ui.displayConsole( recordResponse.getData().toString() );
+        Ui.displayConsole( "Enter book ISBN" );
+        String bookIsbn = ( String )Ui.userInput( UserInputType.STRING );
+        Response recordResponse = systemController.Checkout( memberId, bookIsbn );
+        if ( recordResponse.getStatus() ) {
+            Ui.displayConsole( recordResponse.getData().toString() );
 
-            }
-            else {
-                Ui.displayConsole( recordResponse.getMessage() );
+        }
+        else {
+            Ui.displayConsole( recordResponse.getMessage() );
 
         }
 
@@ -281,7 +288,7 @@ public class Ui {
 
     public void addBook() {
 
-        displayScreenHeader(DisplayMenu.Add_a_Book_Copy.toString());
+        displayScreenHeader( DisplayMenu.Add_a_Book_Copy.toString() );
 
         String title, isbn;
         MaxBookCheckout maxBookCheckout;
@@ -427,8 +434,13 @@ public class Ui {
         if ( showCheckoutRecords.equals( "yes" ) ) {
             response = systemController.getCheckoutRecordsMemberById( memberId );
 
-            List<CheckoutRecord> checkoutRecords = ( List<CheckoutRecord> )response.getData();
+            if ( response.getData() == null ) {
+                Ui.displayConsole( "The member has no checkout records" );
+                displayUserMenu();
+                return;
+            }
 
+            List<CheckoutRecord> checkoutRecords = ( List<CheckoutRecord> )response.getData();
             printCheckoutRecordEntries( checkoutRecords );
         }
 
