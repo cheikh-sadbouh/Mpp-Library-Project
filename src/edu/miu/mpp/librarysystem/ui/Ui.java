@@ -20,7 +20,6 @@ enum DisplayMenu {
     Check_Out_Book,
     Search_Member,
     Calculate_Late_Fee,
-    Check_Book_Status,
     Find_Over_Due_Book
 }
 
@@ -78,7 +77,7 @@ public class Ui {
 
     public  static  void displayScreenHeader(String currentScreen){
         Ui.displayConsole("+-------------------------------------------------------------------------------------------------------------+");
-        Ui.displayConsole("|  Current Screen : "+currentScreen+"                                                                         |");
+        Ui.displayConsole("|  Current Screen : "+currentScreen+"  | 0.Back to Main Screen                                                  ");
         Ui.displayConsole("+-------------------------------------------------------------------------------------------------------------+");
     }
 
@@ -117,8 +116,7 @@ public class Ui {
     public void displayUserMenu() {
 
         List<DisplayMenu> allList = new ArrayList<>();
-        Collections.addAll( allList, DisplayMenu.Calculate_Late_Fee,
-                DisplayMenu.Check_Book_Status );
+        Collections.addAll( allList, DisplayMenu.Calculate_Late_Fee);
 
         List<DisplayMenu> adminList = Arrays.asList( DisplayMenu.Add_Book,
                 DisplayMenu.Add_New_Library_Member, DisplayMenu.Add_a_Book_Copy );
