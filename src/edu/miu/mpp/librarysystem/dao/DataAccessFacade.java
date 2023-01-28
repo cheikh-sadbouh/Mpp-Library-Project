@@ -133,10 +133,10 @@ public class DataAccessFacade implements DataAccess {
         checkoutRecordMap.forEach( ( key, record ) -> record.getEntries().forEach( entry -> {
             if ( entry.getBookCopy().getBookCopyId().equals( bookCopy.getBookCopyId() ) ) {
                 LibraryMember member = getLibraryMember( record.getLibraryMemberId() );
-                foundBookCopyCheckoutRecord.put(
-                        member.getFirstName()
+                foundBookCopyCheckoutRecord.put(member.getFirstName()
                                 .concat( " " )
-                                .concat( member.getLastName() ), entry.getDueDate().toString() );
+                                .concat( member.getLastName().concat("( id ="+member.getMemberId()+" )") ), entry.getDueDate().toString() );
+
             }
         } ) );
 
