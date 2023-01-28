@@ -272,9 +272,11 @@ public class Ui {
 
         Response recordResponse = systemController.addNewBookCopy( bookIsbn, bookCopyId );
         if ( recordResponse.getStatus() ) {
-            Ui.displayConsole( "+-------------------------------------------------------------------------------------------------------------+" );
+            Ui.displayConsole(
+                    "+-------------------------------------------------------------------------------------------------------------+" );
             Ui.displayConsole( recordResponse.getData().toString() );
-            Ui.displayConsole( "+-------------------------------------------------------------------------------------------------------------+" );
+            Ui.displayConsole(
+                    "+-------------------------------------------------------------------------------------------------------------+" );
 
         }
         else {
@@ -430,7 +432,7 @@ public class Ui {
 
         //Check if memberId exists before adding more data
         if ( memberId.length() > 0 ) {
-            while ( userService.isMember( memberId ) ) {
+            while ( !systemController.findMemberById( memberId ).getStatus() ) {
                 Ui.displayConsole( "MemberId: " + memberId
                         + " doesn't exist. Try another memberId (0 - Menu)" );
                 memberId = ( String )Ui.userInput( UserInputType.STRING );
@@ -484,6 +486,7 @@ public class Ui {
 
 
     private Address createAddress() {
+
         Ui.displayConsole( "-------Add member address-------" );
         Ui.displayConsole( "Type street:" );
 

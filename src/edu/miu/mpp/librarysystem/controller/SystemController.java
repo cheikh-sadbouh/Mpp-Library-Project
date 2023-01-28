@@ -23,7 +23,8 @@ import java.util.Optional;
 public class SystemController {
 
     private UserService userService;
-     private   Optional<User> user;
+    private Optional<User> user;
+
     public SystemController() {
 
         userService = new UserService();
@@ -32,37 +33,41 @@ public class SystemController {
 
     public Response authenticateUser( String Id, String password ) {
 
-         user = userService.authenticateUser( Id, password );
+        user = userService.authenticateUser( Id, password );
         if ( user.isPresent() )
             return new Response( "Successfully Logged In", true, user.get() );
         return new Response( "Invalid Credentials", false, null );
     }
 
-     public  Response isAuthorized(List<Auth> list) {
 
-         Response response = new Response();
-         boolean hasAnyPermission =false;
-         for(Auth permission : list){
-             if (user.get().getUserRole().equals(permission)){
-                 hasAnyPermission=true;
-             }
-         }
-         if(hasAnyPermission)
-             response.setStatus(true);
-         else
-             response.setMessage( user.get().getUsername()+" You Are Not Authorized to Access This Resource" );
+    public Response isAuthorized( List<Auth> list ) {
 
-         return response;
-     }
+        Response response = new Response();
+        boolean hasAnyPermission = false;
+        for ( Auth permission : list ) {
+            if ( user.get().getUserRole().equals( permission ) ) {
+                hasAnyPermission = true;
+            }
+        }
+        if ( hasAnyPermission )
+            response.setStatus( true );
+        else
+            response.setMessage( user.get().getUsername()
+                    + " You Are Not Authorized to Access This Resource" );
+
+        return response;
+    }
+
+
     public Response Checkout( String memberId, String Isbn ) {
+
         //check permission
-        Response  response = isAuthorized(Arrays.asList(Auth.LIBRARIAN,Auth.BOTH));
+        Response response = isAuthorized( Arrays.asList( Auth.LIBRARIAN, Auth.BOTH ) );
 
-       if(!response.getStatus())
-              return  response;
-        else response = new Response();
-
-
+        if ( !response.getStatus() )
+            return response;
+        else
+            response = new Response();
 
         if ( userService.isMember( memberId ) ) {
             response.setMessage( memberId + " is  not yet a member \n" );
@@ -84,24 +89,29 @@ public class SystemController {
 
     }
 
-    public Response getCheckoutOverDueFee(String memberId, String Isbn){
+
+    public Response getCheckoutOverDueFee( String memberId, String Isbn ) {
 
         //check permission
-        Response  response = isAuthorized(Arrays.asList(Auth.ADMIN,Auth.LIBRARIAN,Auth.BOTH));
+        Response response = isAuthorized( Arrays.asList( Auth.ADMIN, Auth.LIBRARIAN, Auth.BOTH ) );
 
-        if(!response.getStatus())
-            return  response;
-        else response = new Response();
+        if ( !response.getStatus() )
+            return response;
+        else
+            response = new Response();
 
         if ( userService.isMember( memberId ) ) {
             response.setMessage( memberId + " is  not yet a member \n" );
-        } else if ( userService.isIsbnExist( Isbn ) ) {
+        }
+        else if ( userService.isIsbnExist( Isbn ) ) {
             response.setMessage( Isbn + " there is no book match this ISBN \n" );
-        } else if ( userService.isBookAvailable( Isbn ) ) {
+        }
+        else if ( userService.isBookAvailable( Isbn ) ) {
             response.setMessage( " no available copy at the moment for  Isbn " + Isbn + "\n" );
-        }else{
-            response.setStatus(true);
-            response.setData(userService.calculateOverDueBook(Isbn, memberId));
+        }
+        else {
+            response.setStatus( true );
+            response.setData( userService.calculateOverDueBook( Isbn, memberId ) );
         }
 
         return response;
@@ -111,11 +121,12 @@ public class SystemController {
     public Response getBookCopiesWithCheckoutRecord( String isbn ) {
 
         //check permission
-        Response  response = isAuthorized(Arrays.asList(Auth.LIBRARIAN,Auth.BOTH));
+        Response response = isAuthorized( Arrays.asList( Auth.LIBRARIAN, Auth.BOTH ) );
 
-        if(!response.getStatus())
-            return  response;
-        else response = new Response();
+        if ( !response.getStatus() )
+            return response;
+        else
+            response = new Response();
 
         String serviceResponse = userService.getBookCopiesWithCheckoutRecord( isbn );
         if ( Objects.isNull( serviceResponse ) )
@@ -131,11 +142,12 @@ public class SystemController {
     public Response addNewBookCopy( String isbn, String bookCopyId ) {
 
         //check permission
-        Response  response = isAuthorized(Arrays.asList(Auth.ADMIN,Auth.BOTH));
+        Response response = isAuthorized( Arrays.asList( Auth.ADMIN, Auth.BOTH ) );
 
-        if(!response.getStatus())
-            return  response;
-        else response = new Response();
+        if ( !response.getStatus() )
+            return response;
+        else
+            response = new Response();
 
         if ( userService.addNewBookCopy( isbn, bookCopyId ) ) {
             response.setData( "mew Book Copy has been added ! with copy Number = "
@@ -152,13 +164,14 @@ public class SystemController {
 
     public Response addLibraryMember( String memberId, String firstName, String lastName,
             String phone, Address address ) {
+
         //check permission
-        Response  response = isAuthorized(Arrays.asList(Auth.ADMIN,Auth.BOTH));
+        Response response = isAuthorized( Arrays.asList( Auth.ADMIN, Auth.BOTH ) );
 
-        if(!response.getStatus())
-            return  response;
+        if ( !response.getStatus() )
+            return response;
 
-         response = userService.addLibraryMember( memberId, firstName, lastName, phone, address );
+        response = userService.addLibraryMember( memberId, firstName, lastName, phone, address );
         return response;
     }
 
@@ -172,7 +185,15 @@ public class SystemController {
 
     public Response findMemberById( String memberId ) {
 
-        Response response = userService.findMemberById( memberId );
+        //check permission
+        Response response = isAuthorized( Arrays.asList( Auth.LIBRARIAN, Auth.BOTH ) );
+
+        if ( !response.getStatus() )
+            return response;
+        else
+            response = new Response();
+
+        response.setStatus( userService.isMember( memberId ) );
         return response;
     }
 
@@ -181,10 +202,10 @@ public class SystemController {
             List<Author> authors, Integer numberOfCopies ) {
 
         //check permission
-        Response  response = isAuthorized(Arrays.asList(Auth.ADMIN,Auth.BOTH));
+        Response response = isAuthorized( Arrays.asList( Auth.ADMIN, Auth.BOTH ) );
 
-        if(!response.getStatus())
-            return  response;
+        if ( !response.getStatus() )
+            return response;
 
         if ( userService.addBook( isbn, title, maxBookCheckout, authors, numberOfCopies ) ) {
             return new Response( "Successfully added new Book", true, null );
